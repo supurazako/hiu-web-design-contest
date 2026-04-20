@@ -9,15 +9,19 @@ const themeByMode = JSON.parse(document.getElementById("theme-data")!.textConten
 const root = document.querySelector(".map-shell") as HTMLElement;
 const mapElement = document.getElementById("map") as HTMLElement;
 const cardElement = document.getElementById("spot-card") as HTMLElement;
+const languageMenuTrigger = document.querySelector("[data-language-menu-trigger]") as HTMLButtonElement;
+const languageMenu = document.querySelector("[data-language-menu]") as HTMLElement;
 
 const state: {
   locale: "ja" | "en";
   mode: TimeMode;
   selectedSpotId: string | null;
+  isLanguageMenuOpen: boolean;
 } = {
   locale: "ja",
   mode: "day",
   selectedSpotId: null,
+  isLanguageMenuOpen: false,
 };
 
 const map = L.map(mapElement, {
@@ -176,9 +180,15 @@ const updateButtons = () => {
   document.querySelectorAll<HTMLElement>("[data-mode]").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.mode === state.mode);
   });
-  document.querySelectorAll<HTMLElement>("[data-locale]").forEach((button) => {
+  document.querySelectorAll<HTMLElement>("[data-language-option]").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.locale === state.locale);
   });
+};
+
+const updateLanguageMenu = () => {
+  languageMenu.hidden = !state.isLanguageMenuOpen;
+  languageMenu.classList.toggle("is-open", state.isLanguageMenuOpen);
+  languageMenuTrigger.setAttribute("aria-expanded", String(state.isLanguageMenuOpen));
 };
 
 const renderMarkers = () => {
@@ -238,11 +248,12 @@ const renderStaticText = () => {
   (document.querySelector(".map-header .eyebrow") as HTMLElement).textContent = ui.siteTagline;
   (document.querySelector(".map-header h1") as HTMLElement).textContent = ui.mapOverlayTitle;
   (document.querySelector(".map-header__title p") as HTMLElement).textContent = ui.mapOverlayBody;
-  (document.querySelectorAll(".control-label")[0] as HTMLElement).textContent = ui.timeLabel;
-  (document.querySelectorAll(".control-label")[1] as HTMLElement).textContent = ui.languageLabel;
+  (document.querySelector(".control-label") as HTMLElement).textContent = ui.timeLabel;
   (document.querySelector('[data-mode="day"]') as HTMLElement).textContent = ui.dayLabel;
   (document.querySelector('[data-mode="night"]') as HTMLElement).textContent = ui.nightLabel;
   (document.querySelector(".map-attribution span") as HTMLElement).textContent = ui.mapDataAttribution;
+  languageMenuTrigger.setAttribute("aria-label", ui.languageLabel);
+  languageMenu.setAttribute("aria-label", ui.languageLabel);
 };
 
 const applyTheme = () => {
@@ -257,6 +268,7 @@ const applyTheme = () => {
 const render = () => {
   renderMarkers();
   updateButtons();
+  updateLanguageMenu();
   renderStaticText();
   applyTheme();
   renderCard();
@@ -269,11 +281,38 @@ document.querySelectorAll<HTMLElement>("[data-mode]").forEach((button) => {
   });
 });
 
-document.querySelectorAll<HTMLElement>("[data-locale]").forEach((button) => {
+document.querySelectorAll<HTMLElement>("[data-language-option]").forEach((button) => {
   button.addEventListener("click", () => {
     state.locale = button.dataset.locale as "ja" | "en";
+    state.isLanguageMenuOpen = false;
     render();
   });
+});
+
+languageMenuTrigger.addEventListener("click", (event) => {
+  event.stopPropagation();
+  state.isLanguageMenuOpen = !state.isLanguageMenuOpen;
+  render();
+});
+
+languageMenu.addEventListener("click", (event) => {
+  event.stopPropagation();
+});
+
+document.addEventListener("click", (event) => {
+  const target = event.target as Node | null;
+  if (!target) return;
+  if (state.isLanguageMenuOpen && !languageMenu.contains(target) && !languageMenuTrigger.contains(target)) {
+    state.isLanguageMenuOpen = false;
+    render();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && state.isLanguageMenuOpen) {
+    state.isLanguageMenuOpen = false;
+    render();
+  }
 });
 
 initGeoJson().then(render);

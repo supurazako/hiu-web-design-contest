@@ -500,6 +500,76 @@ img {
   pointer-events: auto;
 }
 
+.map-language {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 410;
+}
+
+.map-language__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  line-height: 0;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--md-sys-color-surface-container-highest) 92%, transparent);
+  box-shadow: var(--md-elevation-2);
+  color: var(--md-sys-color-on-surface);
+  cursor: pointer;
+}
+
+.map-language__trigger svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.map-language__menu {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  min-width: 92px;
+  display: grid;
+  gap: 4px;
+  padding: 8px;
+  border-radius: 18px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  background: color-mix(in srgb, var(--md-sys-color-surface-container-highest) 96%, transparent);
+  box-shadow: var(--md-elevation-3);
+}
+
+.map-language__menu[hidden] {
+  display: none;
+}
+
+.map-language__option {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--md-sys-color-on-surface);
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.map-language__option:hover,
+.map-language__option:focus-visible {
+  background: var(--md-sys-color-state-hover);
+  outline: none;
+}
+
+.map-language__option.is-active {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container, var(--md-sys-color-on-surface));
+}
+
 .map-attribution {
   align-self: flex-end;
   display: inline-flex;
@@ -729,6 +799,11 @@ img {
     padding: 24px;
   }
 
+  .map-language {
+    top: 24px;
+    right: 24px;
+  }
+
   .sheet-host--floating {
     justify-content: flex-end;
     align-items: flex-end;
@@ -745,6 +820,7 @@ img {
 @media (max-width: 767px) {
   .map-header--floating {
     width: 100%;
+    padding-top: 56px;
   }
 
   .map-layout {
