@@ -582,7 +582,7 @@ img {
 .map-attribution {
   position: absolute;
   right: 16px;
-  bottom: 128px;
+  bottom: 16px;
   display: inline-flex;
   gap: 8px;
   align-items: center;
@@ -781,7 +781,7 @@ img {
   box-shadow:
     0 0 0 4px color-mix(in srgb, var(--md-sys-color-surface) 82%, transparent),
     0 4px 12px rgba(20, 24, 32, 0.26);
-  cursor: pointer;
+  cursor: default;
   transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
 }
 
@@ -888,6 +888,6 @@ img {
 
   .map-attribution {
     right: 16px;
-    bottom: 108px;
+    bottom: 16px;
   }
 }

@@ -1,7 +1,6 @@
 ---
 import "leaflet/dist/leaflet.css";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import SpotCard from "../components/SpotCard.astro";
 import TimeToggle from "../components/TimeToggle.astro";
 import mapPageScript from "../scripts/map-page.ts?url";
 import { spots, themeByMode, uiCopy } from "../data/site";
@@ -65,10 +64,6 @@ const ui = uiCopy[initialLocale];
       <div class="map-attribution">
         <span>{ui.mapDataAttribution}</span>
         <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">ODbL</a>
-      </div>
-
-      <div class="sheet-host sheet-host--floating">
-        <SpotCard locale={initialLocale} ui={ui} />
       </div>
     </div>
   </main>

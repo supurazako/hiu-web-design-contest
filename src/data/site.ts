@@ -47,10 +47,10 @@ export const uiCopy = {
         footerNote:
             "写真は後から差し替え可能なプレースホルダー構成です。初版では体験設計と情報構造を優先しています。",
         mapPageTitle: "Map View",
-    mapPageLead:
-      "ピンを選ぶと、時間帯に応じた体験カードが表示されます。背景はナビ地図ではなく、時間の雰囲気を伝えるための抽象マップです。",
+	    mapPageLead:
+	      "時間帯ごとに切り替わる雰囲気を見比べながら、定山渓の流れを地図上で眺めるためのビューです。",
     mapOverlayTitle: "Jozankei",
-    mapOverlayBody: "地図をドラッグして温泉街を巡り、気になるピンを選んで体験を見つける。",
+	    mapOverlayBody: "地図をドラッグしながら温泉街を巡り、時間帯ごとの雰囲気の違いを眺める。",
     languageLabel: "言語",
     timeLabel: "時間帯",
     viewMap: "地図を見る",
@@ -97,10 +97,10 @@ export const uiCopy = {
         footerNote:
             "Images are placeholders designed for later replacement. The first release prioritizes narrative and structure.",
         mapPageTitle: "Map View",
-    mapPageLead:
-      "Select a pin to reveal a time-based experience card. The background is an abstract map, not a navigation map.",
+	    mapPageLead:
+	      "A map view for comparing how Jozankei changes across the day. The background is an abstract map rather than a navigation map.",
     mapOverlayTitle: "Jozankei",
-    mapOverlayBody: "Drag the map to explore the town and select a pin to open the matching experience.",
+	    mapOverlayBody: "Drag the map through the town and explore how its atmosphere changes by time of day.",
     languageLabel: "Language",
     timeLabel: "Time",
     viewMap: "View map",

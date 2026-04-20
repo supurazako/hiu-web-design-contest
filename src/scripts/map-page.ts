@@ -8,19 +8,16 @@ const themeByMode = JSON.parse(document.getElementById("theme-data")!.textConten
 
 const root = document.querySelector(".map-shell") as HTMLElement;
 const mapElement = document.getElementById("map") as HTMLElement;
-const cardElement = document.getElementById("spot-card") as HTMLElement;
 const languageMenuTrigger = document.querySelector("[data-language-menu-trigger]") as HTMLButtonElement;
 const languageMenu = document.querySelector("[data-language-menu]") as HTMLElement;
 
 const state: {
   locale: "ja" | "en";
   mode: TimeMode;
-  selectedSpotId: string | null;
   isLanguageMenuOpen: boolean;
 } = {
   locale: "ja",
   mode: "day",
-  selectedSpotId: null,
   isLanguageMenuOpen: false,
 };
 
@@ -141,45 +138,6 @@ const initGeoJson = async () => {
   }
 };
 
-const renderCard = () => {
-  const ui = uiCopy[state.locale];
-  const selectedSpot = spots.find((spot: (typeof spots)[number]) => spot.id === state.selectedSpotId && isVisible(spot));
-  const modeLabel = {
-    day: ui.dayLabel,
-    night: ui.nightLabel,
-    both: ui.bothLabel,
-  };
-
-  if (!selectedSpot) {
-    cardElement.classList.add("is-empty-sheet");
-    cardElement.classList.remove("is-selected-sheet");
-    cardElement.innerHTML = `
-      <div class="spot-card__body is-empty">
-        <p class="spot-card__empty-title">${ui.cardEmptyTitle}</p>
-        <p>${ui.cardEmptyHint}</p>
-      </div>
-    `;
-    return;
-  }
-
-  cardElement.classList.remove("is-empty-sheet");
-  cardElement.classList.add("is-selected-sheet");
-  cardElement.innerHTML = `
-    <div class="spot-card__visual placeholder-${selectedSpot.image.placeholderVariant}" aria-hidden="true">
-      <div class="spot-card__visual-overlay"></div>
-    </div>
-    <div class="spot-card__body">
-      <div class="spot-card__meta">
-        <span class="spot-card__pill">${ui.categoryLabel}: ${selectedSpot.category[state.locale]}</span>
-        <span class="spot-card__pill">${ui.routeHint}: ${modeLabel[selectedSpot.timeMode]}</span>
-      </div>
-      <h2>${selectedSpot.name[state.locale]}</h2>
-      <p>${selectedSpot.description[state.locale]}</p>
-      <p class="spot-card__detail-label">${ui.detailsLabel}</p>
-    </div>
-  `;
-};
-
 const updateButtons = () => {
   document.querySelectorAll<HTMLElement>("[data-mode]").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.mode === state.mode);
@@ -203,23 +161,15 @@ const renderMarkers = () => {
       marker = L.marker(spot.coordinates, {
         icon: L.divIcon({
           className: "time-pin-wrapper",
-          html: `<button class="time-pin" type="button" style="--pin-color: ${spot.accent}"><span></span></button>`,
+          html: `<span class="time-pin" style="--pin-color: ${spot.accent}"><span></span></span>`,
           iconSize: [28, 28],
           iconAnchor: [14, 14],
         }),
-      });
-      marker.on("click", () => {
-        state.selectedSpotId = spot.id;
-        map.flyTo(spot.coordinates, Math.max(map.getZoom(), 15), {
-          duration: 0.7,
-        });
-        render();
       });
       markerMap.set(spot.id, marker);
     }
 
     const visible = isVisible(spot);
-    const isSelected = state.selectedSpotId === spot.id;
 
     if (visible && !map.hasLayer(marker)) {
       marker.addTo(map);
@@ -228,21 +178,7 @@ const renderMarkers = () => {
     if (!visible && map.hasLayer(marker)) {
       map.removeLayer(marker);
     }
-
-    if (visible) {
-      const element = marker.getElement();
-      if (element) {
-        element.querySelector(".time-pin")?.classList.toggle("is-selected", isSelected);
-      }
-    }
   });
-
-  const selectedSpotStillVisible = spots.some(
-    (spot: (typeof spots)[number]) => spot.id === state.selectedSpotId && isVisible(spot),
-  );
-  if (!selectedSpotStillVisible) {
-    state.selectedSpotId = null;
-  }
 };
 
 const renderStaticText = () => {
@@ -275,7 +211,6 @@ const render = () => {
   updateLanguageMenu();
   renderStaticText();
   applyTheme();
-  renderCard();
 };
 
 document.querySelectorAll<HTMLElement>("[data-mode]").forEach((button) => {
