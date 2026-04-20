@@ -49,9 +49,13 @@ export const uiCopy = {
         mapPageTitle: "Map View",
 	    mapPageLead:
 	      "時間帯ごとに切り替わる雰囲気を見比べながら、定山渓の流れを地図上で眺めるためのビューです。",
-    mapOverlayTitle: "Jozankei",
+        mapOverlayTitle: "Jozankei",
 	    mapOverlayBody: "地図をドラッグしながら温泉街を巡り、時間帯ごとの雰囲気の違いを眺める。",
     languageLabel: "言語",
+    displayModeLabel: "表示モード",
+    singleModeLabel: "単独表示モード",
+    compareModeLabel: "比較表示モード",
+    compareHandleLabel: "昼夜比較の境界を動かす",
     timeLabel: "時間帯",
     viewMap: "地図を見る",
     backHome: "トップへ戻る",
@@ -99,9 +103,13 @@ export const uiCopy = {
         mapPageTitle: "Map View",
 	    mapPageLead:
 	      "A map view for comparing how Jozankei changes across the day. The background is an abstract map rather than a navigation map.",
-    mapOverlayTitle: "Jozankei",
+        mapOverlayTitle: "Jozankei",
 	    mapOverlayBody: "Drag the map through the town and explore how its atmosphere changes by time of day.",
     languageLabel: "Language",
+    displayModeLabel: "Display mode",
+    singleModeLabel: "Single view mode",
+    compareModeLabel: "Compare view mode",
+    compareHandleLabel: "Adjust the day-night comparison divider",
     timeLabel: "Time",
     viewMap: "View map",
     backHome: "Back to home",
@@ -128,6 +136,10 @@ export const themeByMode = {
     night: {
         className: "theme-night",
         glow: "rgba(93, 168, 255, 0.18)",
+    },
+    compare: {
+        className: "theme-compare",
+        glow: "rgba(162, 185, 212, 0.2)",
     },
 } as const;
 

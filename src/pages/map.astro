@@ -15,6 +15,26 @@ const ui = uiCopy[initialLocale];
     <div id="map" class="map-canvas map-canvas--full" aria-label={ui.mapPageTitle}></div>
 
     <div class="map-overlay">
+      <div class="map-compare" data-compare-overlay hidden>
+        <div class="map-compare__divider" data-split-divider>
+          <div class="map-compare__line" aria-hidden="true"></div>
+          <button
+            class="map-compare__handle"
+            type="button"
+            data-split-handle
+            aria-label={ui.compareHandleLabel}
+            aria-orientation="horizontal"
+            aria-valuemin="10"
+            aria-valuemax="90"
+            aria-valuenow="50"
+            aria-valuetext="50%"
+            role="slider"
+          >
+            <span aria-hidden="true">↔</span>
+          </button>
+        </div>
+      </div>
+
       <div class="map-back">
         <a class="map-toolbar__button" href="/" data-back-home-link aria-label={ui.backHome}>
           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
@@ -45,21 +65,53 @@ const ui = uiCopy[initialLocale];
         </div>
       </div>
 
-      <header class="map-header map-header--floating">
-        <div class="map-header__topline">
-          <p class="eyebrow">{ui.siteTagline}</p>
+      <div class="map-control-stack">
+        <div data-time-toggle-group>
+          <TimeToggle mode={initialMode} ui={ui} />
         </div>
-        <div class="map-header__title">
-          <h1>{ui.mapOverlayTitle}</h1>
-          <p>{ui.mapOverlayBody}</p>
+
+        <div class="map-mode-switch" role="group" aria-label={ui.displayModeLabel} data-display-mode-group>
+          <button
+            class="map-mode-switch__button is-active"
+            type="button"
+            data-display-mode="single"
+            aria-label={ui.singleModeLabel}
+            title={ui.singleModeLabel}
+          >
+            A
+          </button>
+          <button
+            class="map-mode-switch__button"
+            type="button"
+            data-display-mode="compare"
+            aria-label={ui.compareModeLabel}
+            title={ui.compareModeLabel}
+          >
+            B
+          </button>
         </div>
-        <div class="map-header__controls">
-          <div>
-            <p class="control-label">{ui.timeLabel}</p>
-            <TimeToggle mode={initialMode} ui={ui} />
+      </div>
+
+      <div class="sheet-host sheet-host--floating">
+        <section class="spot-card is-empty-sheet" id="spot-card" data-spot-card>
+          <div class="spot-card__visual placeholder-river" data-spot-visual aria-hidden="true" hidden>
+            <div class="spot-card__visual-overlay"></div>
           </div>
-        </div>
-      </header>
+          <div class="spot-card__body">
+            <div class="spot-card__meta" data-spot-meta hidden>
+              <span class="spot-card__pill" data-spot-category></span>
+              <span class="spot-card__pill" data-spot-route></span>
+            </div>
+            <h2 data-spot-title hidden></h2>
+            <p data-spot-description hidden></p>
+            <p class="spot-card__detail-label" data-spot-detail-label hidden></p>
+            <div data-spot-empty>
+              <p class="spot-card__empty-title" data-spot-empty-title>{ui.cardEmptyTitle}</p>
+              <p data-spot-empty-hint>{ui.cardEmptyHint}</p>
+            </div>
+          </div>
+        </section>
+      </div>
 
       <div class="map-attribution">
         <span>{ui.mapDataAttribution}</span>
