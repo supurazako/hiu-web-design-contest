@@ -248,7 +248,7 @@ const renderMarkers = () => {
 const renderStaticText = () => {
   const ui = uiCopy[state.locale];
   document.title = `${ui.siteTitle} | ${ui.mapPageTitle}`;
-  (document.querySelector(".text-link") as HTMLElement).textContent = ui.backHome;
+  (document.querySelector("[data-back-home-link]") as HTMLElement).setAttribute("aria-label", ui.backHome);
   (document.querySelector(".map-header .eyebrow") as HTMLElement).textContent = ui.siteTagline;
   (document.querySelector(".map-header h1") as HTMLElement).textContent = ui.mapOverlayTitle;
   (document.querySelector(".map-header__title p") as HTMLElement).textContent = ui.mapOverlayBody;

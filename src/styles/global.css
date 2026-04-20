@@ -500,14 +500,22 @@ img {
   pointer-events: auto;
 }
 
+.map-back,
 .map-language {
   position: absolute;
   top: 16px;
-  right: 16px;
   z-index: 410;
 }
 
-.map-language__trigger {
+.map-back {
+  left: 16px;
+}
+
+.map-language {
+  right: 16px;
+}
+
+.map-toolbar__button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -520,9 +528,10 @@ img {
   box-shadow: var(--md-elevation-2);
   color: var(--md-sys-color-on-surface);
   cursor: pointer;
+  text-decoration: none;
 }
 
-.map-language__trigger svg {
+.map-toolbar__button svg {
   display: block;
   width: 24px;
   height: 24px;
@@ -819,8 +828,16 @@ img {
     padding: 24px;
   }
 
+  .map-back,
   .map-language {
     top: 24px;
+  }
+
+  .map-back {
+    left: 24px;
+  }
+
+  .map-language {
     right: 24px;
   }
 
