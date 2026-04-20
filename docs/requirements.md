@@ -135,6 +135,7 @@
 - 外部リンクを使用しない
 - 著作権を侵害しない
 - 個人情報を扱わない
+- 地図データを利用する場合は、ライセンス条件に従った attribution を画面上に表示する
 
 ---
 
@@ -224,12 +225,20 @@
 
 ### 10.1 形式
 - TypeScript or JSON
+- 地図データは GeoJSON を利用可能とする
 
 ---
 
 ### 10.2 画像
 - 自分で撮影した写真
 - ロゴ・人物は避ける
+
+---
+
+### 10.3 地図データ
+- OpenStreetMap 系データを利用可能とする
+- 初版では Geofabrik 由来の GeoJSON を採用する
+- 公開時は OpenStreetMap contributors / Geofabrik の attribution を表示する
 
 ---
 

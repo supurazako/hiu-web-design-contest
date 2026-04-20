@@ -4,6 +4,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import LanguageToggle from "../components/LanguageToggle.astro";
 import SpotCard from "../components/SpotCard.astro";
 import TimeToggle from "../components/TimeToggle.astro";
+import mapPageScript from "../scripts/map-page.ts?url";
 import { spots, themeByMode, uiCopy } from "../data/site";
 
 const initialLocale = "ja";
@@ -12,269 +13,44 @@ const ui = uiCopy[initialLocale];
 ---
 
 <BaseLayout title={`${ui.siteTitle} | ${ui.mapPageTitle}`} description={ui.mapPageLead}>
-  <main class={`page-shell map-shell ${themeByMode[initialMode].className}`}>
-    <header class="map-header">
-      <div>
-        <a class="text-link" href="/">{ui.backHome}</a>
-        <p class="eyebrow">{ui.siteTagline}</p>
-        <h1>{ui.mapPageTitle}</h1>
-        <p>{ui.mapPageLead}</p>
-      </div>
-      <div class="map-header__controls">
-        <div>
-          <p class="control-label">{ui.timeLabel}</p>
-          <TimeToggle mode={initialMode} ui={ui} />
-        </div>
-        <div>
-          <p class="control-label">{ui.languageLabel}</p>
-          <LanguageToggle locale={initialLocale} ui={ui} />
-        </div>
-      </div>
-    </header>
+  <main class={`page-shell map-shell map-shell--immersive ${themeByMode[initialMode].className}`}>
+    <div id="map" class="map-canvas map-canvas--full" aria-label={ui.mapPageTitle}></div>
 
-    <section class="map-layout">
-      <div class="map-panel">
-        <div class="map-legend">
-          <span>{ui.legendRiver}</span>
-          <span>{ui.legendSteam}</span>
-          <span>{ui.legendLight}</span>
+    <div class="map-overlay">
+      <header class="map-header map-header--floating">
+        <div class="map-header__topline">
+          <a class="text-link" href="/">{ui.backHome}</a>
+          <p class="eyebrow">{ui.siteTagline}</p>
         </div>
-        <div id="map" class="map-canvas" aria-label={ui.mapPageTitle}></div>
+        <div class="map-header__title">
+          <h1>{ui.mapOverlayTitle}</h1>
+          <p>{ui.mapOverlayBody}</p>
+        </div>
+        <div class="map-header__controls">
+          <div>
+            <p class="control-label">{ui.timeLabel}</p>
+            <TimeToggle mode={initialMode} ui={ui} />
+          </div>
+          <div>
+            <p class="control-label">{ui.languageLabel}</p>
+            <LanguageToggle locale={initialLocale} ui={ui} />
+          </div>
+        </div>
+      </header>
+
+      <div class="map-attribution">
+        <span>{ui.mapDataAttribution}</span>
+        <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">ODbL</a>
       </div>
-      <div class="sheet-host">
+
+      <div class="sheet-host sheet-host--floating">
         <SpotCard locale={initialLocale} ui={ui} />
       </div>
-    </section>
+    </div>
   </main>
 
   <script id="spots-data" type="application/json" set:html={JSON.stringify(spots)}></script>
   <script id="ui-data" type="application/json" set:html={JSON.stringify(uiCopy)}></script>
   <script id="theme-data" type="application/json" set:html={JSON.stringify(themeByMode)}></script>
-
-  <script type="module">
-    import L from "leaflet";
-
-    const spots = JSON.parse(document.getElementById("spots-data").textContent);
-    const uiCopy = JSON.parse(document.getElementById("ui-data").textContent);
-    const themeByMode = JSON.parse(document.getElementById("theme-data").textContent);
-
-    const root = document.querySelector(".map-shell");
-    const mapElement = document.getElementById("map");
-    const cardElement = document.getElementById("spot-card");
-    const bounds = [[0, 0], [100, 100]];
-    const state = {
-      locale: "ja",
-      mode: "day",
-      selectedSpotId: null,
-    };
-
-    const map = L.map(mapElement, {
-      attributionControl: false,
-      zoomControl: false,
-      dragging: true,
-      scrollWheelZoom: false,
-      minZoom: 0,
-      maxZoom: 3,
-      crs: L.CRS.Simple,
-    });
-
-    map.fitBounds(bounds, { padding: [8, 8] });
-
-    L.rectangle(bounds, {
-      color: "transparent",
-      fillColor: "rgba(255,255,255,0.02)",
-      fillOpacity: 1,
-      interactive: false,
-    }).addTo(map);
-
-    L.polyline(
-      [
-        [12, 8],
-        [22, 18],
-        [34, 26],
-        [46, 42],
-        [61, 58],
-        [75, 70],
-        [92, 86],
-      ],
-      {
-        color: "#8fd1ff",
-        weight: 8,
-        opacity: 0.45,
-        interactive: false,
-        lineCap: "round",
-      }
-    ).addTo(map);
-
-    const steamZones = [
-      { center: [48, 44], radius: 12 },
-      { center: [58, 55], radius: 10 },
-    ];
-
-    steamZones.forEach(({ center, radius }) => {
-      L.circle(center, {
-        radius,
-        color: "transparent",
-        fillColor: "#fff1d6",
-        fillOpacity: 0.16,
-        interactive: false,
-      }).addTo(map);
-    });
-
-    const glowCluster = [
-      [70, 48],
-      [75, 52],
-      [80, 60],
-      [84, 72],
-    ];
-
-    glowCluster.forEach((center) => {
-      L.circle(center, {
-        radius: 4.5,
-        color: "transparent",
-        fillColor: "#ffd7a8",
-        fillOpacity: 0.28,
-        interactive: false,
-      }).addTo(map);
-    });
-
-    const markerMap = new Map();
-
-    const isVisible = (spot) => spot.timeMode === "both" || spot.timeMode === state.mode;
-
-    const renderCard = () => {
-      const ui = uiCopy[state.locale];
-      const selectedSpot = spots.find((spot) => spot.id === state.selectedSpotId && isVisible(spot));
-      const modeLabel = {
-        day: ui.dayLabel,
-        night: ui.nightLabel,
-        both: ui.bothLabel,
-      };
-
-      if (!selectedSpot) {
-        cardElement.innerHTML = `
-          <div class="spot-card__body is-empty">
-            <p class="spot-card__empty-title">${ui.cardEmptyTitle}</p>
-            <p>${ui.cardEmptyBody}</p>
-          </div>
-        `;
-        return;
-      }
-
-      cardElement.innerHTML = `
-        <div class="spot-card__visual placeholder-${selectedSpot.image.placeholderVariant}" aria-hidden="true">
-          <div class="spot-card__visual-overlay"></div>
-        </div>
-        <div class="spot-card__body">
-          <div class="spot-card__meta">
-            <span class="spot-card__pill">${ui.categoryLabel}: ${selectedSpot.category[state.locale]}</span>
-            <span class="spot-card__pill">${ui.routeHint}: ${modeLabel[selectedSpot.timeMode]}</span>
-          </div>
-          <h2>${selectedSpot.name[state.locale]}</h2>
-          <p>${selectedSpot.description[state.locale]}</p>
-          <p class="spot-card__detail-label">${ui.detailsLabel}</p>
-        </div>
-      `;
-    };
-
-    const updateButtons = () => {
-      document.querySelectorAll("[data-mode]").forEach((button) => {
-        button.classList.toggle("is-active", button.dataset.mode === state.mode);
-      });
-      document.querySelectorAll("[data-locale]").forEach((button) => {
-        button.classList.toggle("is-active", button.dataset.locale === state.locale);
-      });
-    };
-
-    const renderMarkers = () => {
-      spots.forEach((spot) => {
-        let marker = markerMap.get(spot.id);
-
-        if (!marker) {
-          marker = L.marker(spot.coordinates, {
-            icon: L.divIcon({
-              className: "time-pin-wrapper",
-              html: `<button class="time-pin" type="button" style="--pin-color: ${spot.accent}"><span></span></button>`,
-              iconSize: [28, 28],
-              iconAnchor: [14, 14],
-            }),
-          });
-          marker.on("click", () => {
-            state.selectedSpotId = spot.id;
-            render();
-          });
-          markerMap.set(spot.id, marker);
-        }
-
-        const visible = isVisible(spot);
-        const isSelected = state.selectedSpotId === spot.id;
-
-        if (visible && !map.hasLayer(marker)) {
-          marker.addTo(map);
-        }
-
-        if (!visible && map.hasLayer(marker)) {
-          map.removeLayer(marker);
-        }
-
-        if (visible) {
-          const element = marker.getElement();
-          if (element) {
-            element.querySelector(".time-pin").classList.toggle("is-selected", isSelected);
-          }
-        }
-      });
-
-      const selectedSpotStillVisible = spots.some((spot) => spot.id === state.selectedSpotId && isVisible(spot));
-      if (!selectedSpotStillVisible) {
-        state.selectedSpotId = null;
-      }
-    };
-
-    const renderStaticText = () => {
-      const ui = uiCopy[state.locale];
-      document.title = `${ui.siteTitle} | ${ui.mapPageTitle}`;
-      document.querySelector(".text-link").textContent = ui.backHome;
-      document.querySelector(".map-header .eyebrow").textContent = ui.siteTagline;
-      document.querySelector(".map-header h1").textContent = ui.mapPageTitle;
-      document.querySelector(".map-header > div p:last-of-type").textContent = ui.mapPageLead;
-      document.querySelectorAll(".control-label")[0].textContent = ui.timeLabel;
-      document.querySelectorAll(".control-label")[1].textContent = ui.languageLabel;
-      document.querySelectorAll(".map-legend span")[0].textContent = ui.legendRiver;
-      document.querySelectorAll(".map-legend span")[1].textContent = ui.legendSteam;
-      document.querySelectorAll(".map-legend span")[2].textContent = ui.legendLight;
-      document.querySelector('[data-mode="day"]').textContent = ui.dayLabel;
-      document.querySelector('[data-mode="night"]').textContent = ui.nightLabel;
-    };
-
-    const applyTheme = () => {
-      root.classList.remove(themeByMode.day.className, themeByMode.night.className);
-      root.classList.add(themeByMode[state.mode].className);
-      root.style.setProperty("--theme-glow", themeByMode[state.mode].glow);
-    };
-
-    const render = () => {
-      renderMarkers();
-      updateButtons();
-      renderStaticText();
-      applyTheme();
-      renderCard();
-    };
-
-    document.querySelectorAll("[data-mode]").forEach((button) => {
-      button.addEventListener("click", () => {
-        state.mode = button.dataset.mode;
-        render();
-      });
-    });
-
-    document.querySelectorAll("[data-locale]").forEach((button) => {
-      button.addEventListener("click", () => {
-        state.locale = button.dataset.locale;
-        render();
-      });
-    });
-
-    render();
-  </script>
+  <script type="module" src={mapPageScript}></script>
 </BaseLayout>

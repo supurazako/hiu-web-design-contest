@@ -4,12 +4,12 @@ export type TimeMode = "day" | "night" | "both";
 export type LocalizedText = Record<Locale, string>;
 
 export type Spot = {
-    id: string;
-    name: LocalizedText;
-    description: LocalizedText;
-    category: LocalizedText;
-    timeMode: TimeMode;
-    coordinates: [number, number];
+  id: string;
+  name: LocalizedText;
+  description: LocalizedText;
+  category: LocalizedText;
+  timeMode: TimeMode;
+  coordinates: [number, number];
     image: {
         alt: LocalizedText;
         placeholderVariant: "river" | "steam" | "forest" | "light";
@@ -47,15 +47,18 @@ export const uiCopy = {
         footerNote:
             "写真は後から差し替え可能なプレースホルダー構成です。初版では体験設計と情報構造を優先しています。",
         mapPageTitle: "Map View",
-        mapPageLead:
-            "ピンを選ぶと、時間帯に応じた体験カードが表示されます。背景はナビ地図ではなく、時間の雰囲気を伝えるための抽象マップです。",
-        languageLabel: "言語",
-        timeLabel: "時間帯",
-        viewMap: "地図を見る",
-        backHome: "トップへ戻る",
-        cardEmptyTitle: "ピンを選択",
-        cardEmptyBody:
-            "地図上のスポットをタップすると、その時間帯に合う体験が下部カードに表示されます。",
+    mapPageLead:
+      "ピンを選ぶと、時間帯に応じた体験カードが表示されます。背景はナビ地図ではなく、時間の雰囲気を伝えるための抽象マップです。",
+    mapOverlayTitle: "Jozankei",
+    mapOverlayBody: "地図をドラッグして温泉街を巡り、気になるピンを選んで体験を見つける。",
+    languageLabel: "言語",
+    timeLabel: "時間帯",
+    viewMap: "地図を見る",
+    backHome: "トップへ戻る",
+    mapDataAttribution: "地図データ: OpenStreetMap contributors / Geofabrik",
+    cardEmptyTitle: "ピンを選択",
+    cardEmptyBody:
+      "地図上のスポットをタップすると、その時間帯に合う体験が下部カードに表示されます。",
         detailsLabel: "体験メモ",
         routeHint: "この時間に表示中",
         legendRiver: "渓流ライン",
@@ -93,15 +96,18 @@ export const uiCopy = {
         footerNote:
             "Images are placeholders designed for later replacement. The first release prioritizes narrative and structure.",
         mapPageTitle: "Map View",
-        mapPageLead:
-            "Select a pin to reveal a time-based experience card. The background is an abstract map, not a navigation map.",
-        languageLabel: "Language",
-        timeLabel: "Time",
-        viewMap: "View map",
-        backHome: "Back to home",
-        cardEmptyTitle: "Select a pin",
-        cardEmptyBody:
-            "Tap any visible spot on the map to open the matching experience card below.",
+    mapPageLead:
+      "Select a pin to reveal a time-based experience card. The background is an abstract map, not a navigation map.",
+    mapOverlayTitle: "Jozankei",
+    mapOverlayBody: "Drag the map to explore the town and select a pin to open the matching experience.",
+    languageLabel: "Language",
+    timeLabel: "Time",
+    viewMap: "View map",
+    backHome: "Back to home",
+    mapDataAttribution: "Map data: OpenStreetMap contributors / Geofabrik",
+    cardEmptyTitle: "Select a pin",
+    cardEmptyBody:
+      "Tap any visible spot on the map to open the matching experience card below.",
         detailsLabel: "Experience note",
         routeHint: "Visible in this time mode",
         legendRiver: "River line",
@@ -136,7 +142,7 @@ export const spots: Spot[] = [
         },
         category: { ja: "自然", en: "Nature" },
         timeMode: "day",
-        coordinates: [28, 26],
+        coordinates: [42.952045, 141.1517204],
         image: {
             alt: {
                 ja: "渓流沿いのテラスを表現したプレースホルダー",
@@ -158,7 +164,7 @@ export const spots: Spot[] = [
         },
         category: { ja: "共通", en: "Shared" },
         timeMode: "both",
-        coordinates: [46, 42],
+        coordinates: [42.9652119, 141.1651837],
         image: {
             alt: {
                 ja: "湯けむりの足湯を表現したプレースホルダー",
@@ -180,7 +186,7 @@ export const spots: Spot[] = [
         },
         category: { ja: "カフェ", en: "Cafe" },
         timeMode: "day",
-        coordinates: [62, 24],
+        coordinates: [42.966489, 141.169688],
         image: {
             alt: {
                 ja: "森際のカフェを表現したプレースホルダー",
@@ -202,7 +208,7 @@ export const spots: Spot[] = [
         },
         category: { ja: "ライトアップ", en: "Light-up" },
         timeMode: "night",
-        coordinates: [72, 48],
+        coordinates: [42.9654265, 141.1619854],
         image: {
             alt: {
                 ja: "灯りがにじむ路地を表現したプレースホルダー",
@@ -224,7 +230,7 @@ export const spots: Spot[] = [
         },
         category: { ja: "フォトスポット", en: "Photo spot" },
         timeMode: "night",
-        coordinates: [39, 58],
+        coordinates: [42.9707756, 141.1780424],
         image: {
             alt: {
                 ja: "夜の橋を表現したプレースホルダー",
@@ -246,7 +252,7 @@ export const spots: Spot[] = [
         },
         category: { ja: "昼夜で意味が変わる場所", en: "Changes with time" },
         timeMode: "both",
-        coordinates: [57, 55],
+        coordinates: [42.9654832, 141.1662765],
         image: {
             alt: {
                 ja: "湯気の庭を表現したプレースホルダー",
@@ -268,7 +274,7 @@ export const spots: Spot[] = [
         },
         category: { ja: "散策", en: "Walk" },
         timeMode: "day",
-        coordinates: [18, 60],
+        coordinates: [42.9667041, 141.1524599],
         image: {
             alt: {
                 ja: "朝光の坂道を表現したプレースホルダー",
@@ -290,7 +296,7 @@ export const spots: Spot[] = [
         },
         category: { ja: "夜の休憩", en: "Night rest" },
         timeMode: "night",
-        coordinates: [82, 72],
+        coordinates: [42.9678956, 141.1687088],
         image: {
             alt: {
                 ja: "夜のラウンジを表現したプレースホルダー",
@@ -312,7 +318,7 @@ export const spots: Spot[] = [
         },
         category: { ja: "共通", en: "Shared" },
         timeMode: "both",
-        coordinates: [30, 76],
+        coordinates: [42.9690384, 141.1698124],
         image: {
             alt: {
                 ja: "川辺のベンチを表現したプレースホルダー",

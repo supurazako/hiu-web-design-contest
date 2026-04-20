@@ -47,3 +47,7 @@ pids
 # OS / editor files
 .DS_Store
 .vscode-test
+
+# Geodata
+*.osm.pbf
+
