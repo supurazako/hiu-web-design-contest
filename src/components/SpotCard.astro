@@ -1,0 +1,52 @@
+---
+import type { Locale, Spot } from "../data/site";
+
+type Props = {
+  spot?: Spot;
+  locale: Locale;
+  ui: {
+    cardEmptyTitle: string;
+    cardEmptyBody: string;
+    categoryLabel: string;
+    detailsLabel: string;
+    routeHint: string;
+    dayLabel: string;
+    nightLabel: string;
+    bothLabel: string;
+  };
+};
+
+const { spot, locale, ui } = Astro.props;
+
+const labelByMode = {
+  day: ui.dayLabel,
+  night: ui.nightLabel,
+  both: ui.bothLabel,
+};
+---
+
+<section class="spot-card" id="spot-card">
+  {
+    spot ? (
+      <>
+        <div class={`spot-card__visual placeholder-${spot.image.placeholderVariant}`} aria-hidden="true">
+          <div class="spot-card__visual-overlay"></div>
+        </div>
+        <div class="spot-card__body">
+          <div class="spot-card__meta">
+            <span class="spot-card__pill">{ui.categoryLabel}: {spot.category[locale]}</span>
+            <span class="spot-card__pill">{ui.routeHint}: {labelByMode[spot.timeMode]}</span>
+          </div>
+          <h2>{spot.name[locale]}</h2>
+          <p>{spot.description[locale]}</p>
+          <p class="spot-card__detail-label">{ui.detailsLabel}</p>
+        </div>
+      </>
+    ) : (
+      <div class="spot-card__body is-empty">
+        <p class="spot-card__empty-title">{ui.cardEmptyTitle}</p>
+        <p>{ui.cardEmptyBody}</p>
+      </div>
+    )
+  }
+</section>

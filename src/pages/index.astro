@@ -1,0 +1,56 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SceneSplit from "../components/SceneSplit.astro";
+import { uiCopy } from "../data/site";
+
+const locale = "ja";
+const ui = uiCopy[locale];
+---
+
+<BaseLayout title={`${ui.siteTitle} | ${ui.siteTagline}`} description={ui.landingLead}>
+  <main class="page-shell landing-shell theme-day">
+    <section class="hero">
+      <div class="hero__content">
+        <p class="eyebrow">{ui.landingEyebrow}</p>
+        <h1>
+          <span>時間で表情が変わる</span>
+          <span>温泉街を</span>
+          <span>ひとつの地図で。</span>
+        </h1>
+        <p class="lead">{ui.landingLead}</p>
+        <div class="hero__actions">
+          <a class="button button--primary" href="/map">{ui.landingPrimaryCta}</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-block" id="contrast">
+      <div class="section-heading">
+        <p class="eyebrow">{ui.exploreLabel}</p>
+        <h2>{ui.conceptTitle}</h2>
+        <p>{ui.conceptBody}</p>
+      </div>
+      <SceneSplit
+        dayLabel={ui.dayLabel}
+        nightLabel={ui.nightLabel}
+        dayMood={ui.dayMood}
+        nightMood={ui.nightMood}
+      />
+    </section>
+
+    <section class="content-block">
+      <div class="section-heading">
+        <p class="eyebrow">{ui.sectionsTitle}</p>
+        <h2>{ui.mapIntroTitle}</h2>
+      </div>
+      <div class="steps-grid">
+        {ui.steps.map((step, index) => (
+          <article class="step-card">
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <p>{step}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  </main>
+</BaseLayout>

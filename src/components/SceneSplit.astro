@@ -1,0 +1,21 @@
+---
+type Props = {
+  dayLabel: string;
+  nightLabel: string;
+  dayMood: string;
+  nightMood: string;
+};
+
+const { dayLabel, nightLabel, dayMood, nightMood } = Astro.props;
+---
+
+<div class="scene-split">
+  <article class="scene-split__panel scene-split__panel--day">
+    <p class="scene-split__label">{dayLabel}</p>
+    <h3>{dayMood}</h3>
+  </article>
+  <article class="scene-split__panel scene-split__panel--night">
+    <p class="scene-split__label">{nightLabel}</p>
+    <h3>{nightMood}</h3>
+  </article>
+</div>

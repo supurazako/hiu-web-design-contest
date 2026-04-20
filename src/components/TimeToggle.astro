@@ -1,0 +1,21 @@
+---
+type Props = {
+  mode: "day" | "night";
+  ui: {
+    dayLabel: string;
+    nightLabel: string;
+    timeLabel: string;
+  };
+};
+
+const { mode, ui } = Astro.props;
+---
+
+<div class="segmented-control" role="group" aria-label={ui.timeLabel}>
+  <button class:list={["segmented-control__button", mode === "day" && "is-active"]} data-mode="day" type="button">
+    {ui.dayLabel}
+  </button>
+  <button class:list={["segmented-control__button", mode === "night" && "is-active"]} data-mode="night" type="button">
+    {ui.nightLabel}
+  </button>
+</div>
