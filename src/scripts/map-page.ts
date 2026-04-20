@@ -151,15 +151,19 @@ const renderCard = () => {
   };
 
   if (!selectedSpot) {
+    cardElement.classList.add("is-empty-sheet");
+    cardElement.classList.remove("is-selected-sheet");
     cardElement.innerHTML = `
       <div class="spot-card__body is-empty">
         <p class="spot-card__empty-title">${ui.cardEmptyTitle}</p>
-        <p>${ui.cardEmptyBody}</p>
+        <p>${ui.cardEmptyHint}</p>
       </div>
     `;
     return;
   }
 
+  cardElement.classList.remove("is-empty-sheet");
+  cardElement.classList.add("is-selected-sheet");
   cardElement.innerHTML = `
     <div class="spot-card__visual placeholder-${selectedSpot.image.placeholderVariant}" aria-hidden="true">
       <div class="spot-card__visual-overlay"></div>

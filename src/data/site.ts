@@ -55,10 +55,11 @@ export const uiCopy = {
     timeLabel: "時間帯",
     viewMap: "地図を見る",
     backHome: "トップへ戻る",
-    mapDataAttribution: "地図データ: OpenStreetMap contributors / Geofabrik",
-    cardEmptyTitle: "ピンを選択",
-    cardEmptyBody:
-      "地図上のスポットをタップすると、その時間帯に合う体験が下部カードに表示されます。",
+	    mapDataAttribution: "地図データ: OpenStreetMap contributors / Geofabrik",
+	    cardEmptyTitle: "ピンを選択",
+	    cardEmptyHint: "気になるスポットをひとつ選ぶと、ここに体験が表示されます。",
+	    cardEmptyBody:
+	      "地図上のスポットをタップすると、その時間帯に合う体験が下部カードに表示されます。",
         detailsLabel: "体験メモ",
         routeHint: "この時間に表示中",
         legendRiver: "渓流ライン",
@@ -104,10 +105,11 @@ export const uiCopy = {
     timeLabel: "Time",
     viewMap: "View map",
     backHome: "Back to home",
-    mapDataAttribution: "Map data: OpenStreetMap contributors / Geofabrik",
-    cardEmptyTitle: "Select a pin",
-    cardEmptyBody:
-      "Tap any visible spot on the map to open the matching experience card below.",
+	    mapDataAttribution: "Map data: OpenStreetMap contributors / Geofabrik",
+	    cardEmptyTitle: "Select a pin",
+	    cardEmptyHint: "Choose any visible spot to reveal its matching experience here.",
+	    cardEmptyBody:
+	      "Tap any visible spot on the map to open the matching experience card below.",
         detailsLabel: "Experience note",
         routeHint: "Visible in this time mode",
         legendRiver: "River line",

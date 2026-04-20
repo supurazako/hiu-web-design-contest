@@ -571,7 +571,9 @@ img {
 }
 
 .map-attribution {
-  align-self: flex-end;
+  position: absolute;
+  right: 16px;
+  bottom: 128px;
   display: inline-flex;
   gap: 8px;
   align-items: center;
@@ -629,15 +631,36 @@ img {
 }
 
 .sheet-host--floating {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
   display: flex;
   justify-content: center;
+  width: min(calc(100% - 32px), 560px);
+  transform: translateX(-50%);
 }
 
 .sheet-host--floating .spot-card {
-  width: min(100%, 720px);
-  border-top-left-radius: var(--md-shape-corner-extra-large);
-  border-top-right-radius: var(--md-shape-corner-extra-large);
+  width: 100%;
+  border-radius: 28px;
   box-shadow: 0 -8px 24px rgba(20, 24, 32, 0.18), var(--md-elevation-2);
+}
+
+.spot-card.is-empty-sheet {
+  gap: 0;
+}
+
+.spot-card.is-empty-sheet .spot-card__body.is-empty {
+  min-height: auto;
+  display: grid;
+  gap: 8px;
+  padding: 22px 24px 24px;
+  text-align: left;
+}
+
+.spot-card.is-selected-sheet {
+  max-height: min(58vh, 520px);
+  overflow: auto;
 }
 
 .spot-card__visual {
@@ -716,10 +739,7 @@ img {
 }
 
 .spot-card__body.is-empty {
-  min-height: 220px;
-  display: grid;
-  place-items: center;
-  text-align: center;
+  margin: 0;
 }
 
 .leaflet-container {
@@ -804,16 +824,19 @@ img {
     right: 24px;
   }
 
+  .map-attribution {
+    right: 24px;
+    bottom: 24px;
+  }
+
   .sheet-host--floating {
-    justify-content: flex-end;
     align-items: flex-end;
+    bottom: 24px;
+    width: min(calc(100% - 48px), 560px);
   }
 
   .sheet-host--floating .spot-card {
-    width: min(420px, 100%);
-    max-height: min(58vh, 520px);
-    overflow: auto;
-    border-radius: 28px;
+    width: 100%;
   }
 }
 
@@ -831,6 +854,11 @@ img {
     margin-top: -8px;
   }
 
+  .sheet-host--floating {
+    bottom: 16px;
+    width: min(calc(100% - 32px), 520px);
+  }
+
   .spot-card {
     border-top-left-radius: var(--md-shape-corner-extra-large);
     border-top-right-radius: var(--md-shape-corner-extra-large);
@@ -842,7 +870,7 @@ img {
   }
 
   .map-attribution {
-    align-self: flex-start;
-    margin-bottom: 12px;
+    right: 16px;
+    bottom: 108px;
   }
 }
