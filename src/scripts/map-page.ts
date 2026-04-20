@@ -18,6 +18,7 @@ const root = document.querySelector(".map-shell") as HTMLElement;
 const mapElement = document.getElementById("map") as HTMLElement;
 const languageMenuTrigger = document.querySelector("[data-language-menu-trigger]") as HTMLButtonElement;
 const languageMenu = document.querySelector("[data-language-menu]") as HTMLElement;
+const controlShell = document.querySelector("[data-control-shell]") as HTMLElement;
 const timeToggleGroup = document.querySelector("[data-time-toggle-group]") as HTMLElement;
 const compareOverlay = document.querySelector("[data-compare-overlay]") as HTMLElement;
 const splitDivider = document.querySelector("[data-split-divider]") as HTMLElement;
@@ -346,15 +347,19 @@ const updateCompareUI = () => {
   splitHandle.setAttribute("aria-valuenow", String(Math.round(state.splitRatio * 100)));
   splitHandle.setAttribute("aria-valuetext", `${Math.round(state.splitRatio * 100)}%`);
   compareOverlay.hidden = state.displayMode !== "compare";
-  timeToggleGroup.hidden = state.displayMode !== "single";
+  const isSingle = state.displayMode === "single";
+  controlShell.classList.toggle("is-compare", !isSingle);
+  timeToggleGroup.setAttribute("aria-hidden", String(!isSingle));
 };
 
 const renderStaticText = () => {
   const ui = uiCopy[state.locale];
   document.title = `${ui.siteTitle} | ${ui.mapPageTitle}`;
   (document.querySelector("[data-back-home-link]") as HTMLElement).setAttribute("aria-label", ui.backHome);
-  (document.querySelector('[data-time-mode="day"]') as HTMLElement).textContent = ui.dayLabel;
-  (document.querySelector('[data-time-mode="night"]') as HTMLElement).textContent = ui.nightLabel;
+  (document.querySelector('[data-time-mode="day"]') as HTMLElement).setAttribute("aria-label", ui.dayLabel);
+  (document.querySelector('[data-time-mode="day"]') as HTMLElement).setAttribute("title", ui.dayLabel);
+  (document.querySelector('[data-time-mode="night"]') as HTMLElement).setAttribute("aria-label", ui.nightLabel);
+  (document.querySelector('[data-time-mode="night"]') as HTMLElement).setAttribute("title", ui.nightLabel);
   (document.querySelector(".map-attribution span") as HTMLElement).textContent = ui.mapDataAttribution;
   (document.querySelector("[data-display-mode-group]") as HTMLElement).setAttribute("aria-label", ui.displayModeLabel);
   (document.querySelector('[data-display-mode="single"]') as HTMLElement).setAttribute("aria-label", ui.singleModeLabel);

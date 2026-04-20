@@ -676,42 +676,71 @@ img {
   bottom: 16px;
   z-index: 410;
   display: grid;
-  gap: 10px;
-}
-
-.map-control-stack [data-time-toggle-group][hidden] {
-  display: none;
-}
-
-.map-control-stack .segmented-control {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 6px;
+  gap: 8px;
+  width: 84px;
   padding: 6px;
-  border-radius: 18px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 24px;
   background: color-mix(in srgb, var(--md-sys-color-surface-container-highest) 92%, transparent);
   box-shadow: var(--md-elevation-2);
 }
 
+.map-control-stack__section {
+  min-width: 0;
+}
+
+.map-control-stack__section--mode {
+  padding-top: 2px;
+}
+
+.map-control-stack [data-time-toggle-group] {
+  overflow: hidden;
+  min-height: 100px;
+  opacity: 1;
+  transition: min-height 180ms ease, opacity 180ms ease, margin 180ms ease;
+}
+
+.map-control-stack.is-compare [data-time-toggle-group] {
+  min-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.map-control-stack .segmented-control {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
 .map-control-stack .segmented-control__button {
+  width: 100%;
+  min-width: 0;
   border-radius: 12px;
 }
 
 .map-mode-switch {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   align-items: stretch;
   gap: 6px;
-  padding: 6px;
-  border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: 18px;
-  background: color-mix(in srgb, var(--md-sys-color-surface-container-highest) 92%, transparent);
-  box-shadow: var(--md-elevation-2);
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .map-mode-switch__button {
-  min-width: 52px;
+  width: 100%;
+  min-width: 0;
   min-height: 44px;
   padding: 0 14px;
   border: 0;
@@ -721,6 +750,14 @@ img {
   font-weight: 700;
   cursor: pointer;
   transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.map-mode-switch__button svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+  margin-inline: auto;
+  fill: currentColor;
 }
 
 .map-mode-switch__button:hover {
@@ -754,6 +791,14 @@ img {
   cursor: pointer;
   font-weight: 600;
   transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+.segmented-control__button svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+  margin-inline: auto;
+  fill: currentColor;
 }
 
 .segmented-control__button.is-active {
