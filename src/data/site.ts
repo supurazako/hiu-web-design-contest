@@ -55,7 +55,9 @@ export const uiCopy = {
     displayModeLabel: "表示モード",
     singleModeLabel: "単独表示モード",
     compareModeLabel: "比較表示モード",
+    scratchModeLabel: "スクラッチ表示モード",
     compareHandleLabel: "昼夜比較の境界を動かす",
+    scratchResetLabel: "スクラッチをリセット",
     timeLabel: "時間帯",
     viewMap: "地図を見る",
     backHome: "トップへ戻る",
@@ -109,7 +111,9 @@ export const uiCopy = {
     displayModeLabel: "Display mode",
     singleModeLabel: "Single view mode",
     compareModeLabel: "Compare view mode",
+    scratchModeLabel: "Scratch view mode",
     compareHandleLabel: "Adjust the day-night comparison divider",
+    scratchResetLabel: "Reset scratch reveal",
     timeLabel: "Time",
     viewMap: "View map",
     backHome: "Back to home",
@@ -140,6 +144,10 @@ export const themeByMode = {
     compare: {
         className: "theme-compare",
         glow: "rgba(162, 185, 212, 0.2)",
+    },
+    scratch: {
+        className: "theme-scratch",
+        glow: "rgba(129, 176, 237, 0.16)",
     },
 } as const;
 

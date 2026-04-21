@@ -13,6 +13,7 @@ const ui = uiCopy[initialLocale];
 <BaseLayout title={`${ui.siteTitle} | ${ui.mapPageTitle}`} description={ui.mapPageLead}>
   <main class={`page-shell map-shell map-shell--immersive ${themeByMode[initialMode].className}`}>
     <div id="map" class="map-canvas map-canvas--full" aria-label={ui.mapPageTitle}></div>
+    <canvas class="map-scratch-surface" data-scratch-surface hidden aria-hidden="true"></canvas>
 
     <div class="map-overlay">
       <div class="map-compare" data-compare-overlay hidden>
@@ -90,6 +91,28 @@ const ui = uiCopy[initialLocale];
           >
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" aria-hidden="true"><path d="M200-160q-33 0-56.5-23.5T120-240v-480q0-33 23.5-56.5T200-800h160v80H200v480h160v80H200Zm240 80v-800h80v80h240q33 0 56.5 23.5T840-720v480q0 33-23.5 56.5T760-160H520v80h-80Zm80-160h240v-480H520v480Zm-320 0v-480 480Zm560 0v-480 480Z"/></svg>
           </button>
+          <div class="map-mode-switch__scratch-group" data-scratch-group>
+            <button
+              class="map-mode-switch__button"
+              type="button"
+              data-display-mode="scratch"
+              aria-label={ui.scratchModeLabel}
+              title={ui.scratchModeLabel}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f" aria-hidden="true"><path d="M80-80v-60h81q-59-72-90-159T40-480q0-94 31-181t90-159H80v-60h200v200h-60v-116q-58 66-89 147t-31 169q0 88 31 169t89 147v-116h60v200H80Zm578-47q-23 8-46.5 7.5T566-131L304-253l18-40q10-20 28-32.5t40-14.5l68-5-112-307q-6-16 1-30.5t23-20.5q16-6 30.5 1t20.5 23l148 407-100 7 131 61q7 3 15 3.5t15-1.5l157-57q31-11 45-41.5t3-61.5l-55-150q-6-16 1-30.5t23-20.5q16-6 30.5 1t20.5 23l55 150q23 63-4.5 122.5T815-184l-157 57Zm-90-265-54-151q-6-16 1-30.5t23-20.5q16-6 30.5 1t20.5 23l55 150-76 28Zm113-41-41-113q-6-16 1-30.5t23-20.5q16-6 30.5 1t20.5 23l41 112-75 28Zm8 88Z"/></svg>
+            </button>
+            <button
+              class="map-scratch-reset"
+              type="button"
+              data-scratch-reset
+              aria-label={ui.scratchResetLabel}
+              title={ui.scratchResetLabel}
+              aria-hidden="true"
+              tabindex="-1"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f" aria-hidden="true"><path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/></svg>
+            </button>
+          </div>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import L from "leaflet";
 
 type TimeMode = "day" | "night";
-type DisplayMode = "single" | "compare";
+type DisplayMode = "single" | "compare" | "scratch";
 type Locale = "ja" | "en";
 type Spot = (typeof spots)[number];
 type MarkerEntry = {
@@ -9,6 +9,7 @@ type MarkerEntry = {
   spot: Spot;
   mode: TimeMode;
 };
+type ScratchPoint = { x: number; y: number };
 
 const spots = JSON.parse(document.getElementById("spots-data")!.textContent!) as Spot[];
 const uiCopy = JSON.parse(document.getElementById("ui-data")!.textContent!);
@@ -23,6 +24,9 @@ const timeToggleGroup = document.querySelector("[data-time-toggle-group]") as HT
 const compareOverlay = document.querySelector("[data-compare-overlay]") as HTMLElement;
 const splitDivider = document.querySelector("[data-split-divider]") as HTMLElement;
 const splitHandle = document.querySelector("[data-split-handle]") as HTMLButtonElement;
+const scratchSurface = document.querySelector("[data-scratch-surface]") as HTMLCanvasElement;
+const scratchGroup = document.querySelector("[data-scratch-group]") as HTMLElement;
+const scratchResetButton = document.querySelector("[data-scratch-reset]") as HTMLButtonElement;
 const floatingSheet = document.querySelector(".sheet-host--floating") as HTMLElement;
 
 const spotCard = document.querySelector("[data-spot-card]") as HTMLElement;
@@ -55,6 +59,8 @@ const state: {
   selectedSpotMode: TimeMode | null;
   isLanguageMenuOpen: boolean;
   isDraggingSplit: boolean;
+  isScratching: boolean;
+  scratchLastPoint: ScratchPoint | null;
 } = {
   locale: "ja",
   displayMode: "single",
@@ -64,6 +70,8 @@ const state: {
   selectedSpotMode: null,
   isLanguageMenuOpen: false,
   isDraggingSplit: false,
+  isScratching: false,
+  scratchLastPoint: null,
 };
 
 const map = L.map(mapElement, {
@@ -96,6 +104,8 @@ paneByMode.day.marker.style.zIndex = "620";
 paneByMode.night.marker.style.zIndex = "621";
 
 const customPanes = [paneByMode.day.geo, paneByMode.night.geo, paneByMode.day.marker, paneByMode.night.marker];
+const scratchContext = scratchSurface.getContext("2d");
+const scratchBrushRadius = 48;
 
 const syncCustomPaneBounds = () => {
   const { width, height } = mapElement.getBoundingClientRect();
@@ -105,9 +115,65 @@ const syncCustomPaneBounds = () => {
     pane.style.left = "0";
     pane.style.top = "0";
   });
+  const pixelRatio = window.devicePixelRatio || 1;
+  scratchSurface.width = Math.round(width * pixelRatio);
+  scratchSurface.height = Math.round(height * pixelRatio);
+  scratchSurface.style.width = `${Math.round(width)}px`;
+  scratchSurface.style.height = `${Math.round(height)}px`;
+  if (scratchContext) {
+    scratchContext.setTransform(1, 0, 0, 1, 0, 0);
+    scratchContext.scale(pixelRatio, pixelRatio);
+  }
 };
 
 syncCustomPaneBounds();
+
+const paintScratchOverlay = () => {
+  if (!scratchContext) return;
+  const { width, height } = mapElement.getBoundingClientRect();
+  scratchContext.globalCompositeOperation = "source-over";
+  scratchContext.clearRect(0, 0, width, height);
+
+  const gradient = scratchContext.createLinearGradient(0, 0, width, height);
+  gradient.addColorStop(0, "rgba(255, 248, 241, 0.98)");
+  gradient.addColorStop(1, "rgba(244, 236, 224, 0.96)");
+  scratchContext.fillStyle = gradient;
+  scratchContext.fillRect(0, 0, width, height);
+
+  const glow = scratchContext.createRadialGradient(width * 0.18, height * 0.2, 0, width * 0.18, height * 0.2, width * 0.28);
+  glow.addColorStop(0, "rgba(255, 226, 171, 0.26)");
+  glow.addColorStop(1, "rgba(255, 226, 171, 0)");
+  scratchContext.fillStyle = glow;
+  scratchContext.fillRect(0, 0, width, height);
+};
+
+const resetScratch = () => {
+  state.scratchLastPoint = null;
+  state.isScratching = false;
+  paintScratchOverlay();
+};
+
+const eraseScratchAtPoint = (point: ScratchPoint) => {
+  if (!scratchContext) return;
+  scratchContext.globalCompositeOperation = "destination-out";
+  scratchContext.lineCap = "round";
+  scratchContext.lineJoin = "round";
+  scratchContext.lineWidth = scratchBrushRadius * 2;
+  scratchContext.strokeStyle = "rgba(0, 0, 0, 1)";
+
+  if (!state.scratchLastPoint) {
+    scratchContext.beginPath();
+    scratchContext.arc(point.x, point.y, scratchBrushRadius, 0, Math.PI * 2);
+    scratchContext.fill();
+  } else {
+    scratchContext.beginPath();
+    scratchContext.moveTo(state.scratchLastPoint.x, state.scratchLastPoint.y);
+    scratchContext.lineTo(point.x, point.y);
+    scratchContext.stroke();
+  }
+
+  state.scratchLastPoint = point;
+};
 
 const geoRendererByMode = {
   day: L.svg({ pane: "day-geojson-pane" }),
@@ -242,6 +308,14 @@ const applyPaneVisibility = () => {
     return;
   }
 
+  if (state.displayMode === "scratch") {
+    setPaneState(paneByMode.day.geo, { visible: true, clipPath: "none" });
+    setPaneState(paneByMode.day.marker, { visible: true, clipPath: "none" });
+    setPaneState(paneByMode.night.geo, { visible: true, clipPath: "none" });
+    setPaneState(paneByMode.night.marker, { visible: true, clipPath: "none" });
+    return;
+  }
+
   const mapRect = mapElement.getBoundingClientRect();
   const splitX = mapRect.width * state.splitRatio;
   const clipPathForPane = (pane: HTMLElement, side: "left" | "right") => {
@@ -319,7 +393,7 @@ const renderCard = () => {
   }
 
   const activeTimeMode =
-    state.displayMode === "compare" ? state.selectedSpotMode ?? state.timeMode : state.timeMode;
+    state.displayMode === "single" ? state.timeMode : state.selectedSpotMode ?? state.timeMode;
   const activeTimeLabel =
     activeTimeMode === "day" ? ui.dayLabel : activeTimeMode === "night" ? ui.nightLabel : ui.bothLabel;
 
@@ -347,8 +421,13 @@ const updateCompareUI = () => {
   splitHandle.setAttribute("aria-valuenow", String(Math.round(state.splitRatio * 100)));
   splitHandle.setAttribute("aria-valuetext", `${Math.round(state.splitRatio * 100)}%`);
   compareOverlay.hidden = state.displayMode !== "compare";
+  const isScratch = state.displayMode === "scratch";
+  scratchGroup.classList.toggle("is-expanded", isScratch);
+  scratchResetButton.setAttribute("aria-hidden", String(!isScratch));
+  scratchResetButton.tabIndex = isScratch ? 0 : -1;
   const isSingle = state.displayMode === "single";
-  controlShell.classList.toggle("is-compare", !isSingle);
+  controlShell.classList.toggle("is-compare", state.displayMode === "compare");
+  controlShell.classList.toggle("is-scratch", isScratch);
   timeToggleGroup.setAttribute("aria-hidden", String(!isSingle));
 };
 
@@ -366,16 +445,50 @@ const renderStaticText = () => {
   (document.querySelector('[data-display-mode="single"]') as HTMLElement).setAttribute("title", ui.singleModeLabel);
   (document.querySelector('[data-display-mode="compare"]') as HTMLElement).setAttribute("aria-label", ui.compareModeLabel);
   (document.querySelector('[data-display-mode="compare"]') as HTMLElement).setAttribute("title", ui.compareModeLabel);
+  (document.querySelector('[data-display-mode="scratch"]') as HTMLElement).setAttribute("aria-label", ui.scratchModeLabel);
+  (document.querySelector('[data-display-mode="scratch"]') as HTMLElement).setAttribute("title", ui.scratchModeLabel);
   splitHandle.setAttribute("aria-label", ui.compareHandleLabel);
   languageMenuTrigger.setAttribute("aria-label", ui.languageLabel);
   languageMenu.setAttribute("aria-label", ui.languageLabel);
+  scratchResetButton.setAttribute("aria-label", ui.scratchResetLabel);
+  scratchResetButton.setAttribute("title", ui.scratchResetLabel);
 };
 
 const applyTheme = () => {
-  root.classList.remove(themeByMode.day.className, themeByMode.night.className, themeByMode.compare.className);
-  const themeKey = state.displayMode === "compare" ? "compare" : state.timeMode;
+  root.classList.remove(
+    themeByMode.day.className,
+    themeByMode.night.className,
+    themeByMode.compare.className,
+    themeByMode.scratch.className,
+  );
+  const themeKey = state.displayMode === "compare" ? "compare" : state.displayMode === "scratch" ? "scratch" : state.timeMode;
   root.classList.add(themeByMode[themeKey].className);
   root.style.setProperty("--theme-glow", themeByMode[themeKey].glow);
+};
+
+const applyScratchState = () => {
+  const isScratch = state.displayMode === "scratch";
+  scratchSurface.hidden = !isScratch;
+  root.classList.toggle("is-scratch-active", isScratch);
+  mapElement.style.pointerEvents = isScratch ? "none" : "auto";
+
+  paneByMode.day.geo.style.zIndex = "340";
+  paneByMode.night.geo.style.zIndex = "341";
+  paneByMode.day.marker.style.zIndex = "620";
+  paneByMode.night.marker.style.zIndex = "621";
+
+  if (!isScratch) {
+    map.dragging.enable();
+    map.touchZoom.enable();
+    map.doubleClickZoom.enable();
+    map.boxZoom.disable();
+  } else {
+    map.dragging.disable();
+    map.touchZoom.disable();
+    map.doubleClickZoom.disable();
+    map.boxZoom.disable();
+    paintScratchOverlay();
+  }
 };
 
 const ensureSelectionVisibility = () => {
@@ -391,6 +504,10 @@ const ensureSelectionVisibility = () => {
     state.selectedSpotId = null;
     state.selectedSpotMode = null;
   }
+
+  if (state.displayMode === "scratch" && state.selectedSpotMode && !isSpotVisibleForMode(spot, state.selectedSpotMode)) {
+    state.selectedSpotMode = isSpotVisibleForMode(spot, "day") ? "day" : "night";
+  }
 };
 
 const render = () => {
@@ -401,6 +518,7 @@ const render = () => {
   renderStaticText();
   updateCompareUI();
   applyTheme();
+  applyScratchState();
   applyPaneVisibility();
   updateMarkerVisibility();
   renderCard();
@@ -412,6 +530,40 @@ const setSplitRatioFromPointer = (clientX: number) => {
   state.splitRatio = nextRatio;
   applyPaneVisibility();
   updateCompareUI();
+};
+
+const getScratchPointFromPointer = (clientX: number, clientY: number): ScratchPoint | null => {
+  const bounds = mapElement.getBoundingClientRect();
+  if (clientX < bounds.left || clientX > bounds.right || clientY < bounds.top || clientY > bounds.bottom) {
+    return null;
+  }
+  return {
+    x: clientX - bounds.left,
+    y: clientY - bounds.top,
+  };
+};
+
+const beginScratch = (clientX: number, clientY: number) => {
+  const point = getScratchPointFromPointer(clientX, clientY);
+  if (!point) return;
+  state.isScratching = true;
+  state.scratchLastPoint = null;
+  eraseScratchAtPoint(point);
+};
+
+const moveScratch = (clientX: number, clientY: number) => {
+  if (!state.isScratching) return;
+  const point = getScratchPointFromPointer(clientX, clientY);
+  if (!point) {
+    state.scratchLastPoint = null;
+    return;
+  }
+  eraseScratchAtPoint(point);
+};
+
+const endScratch = () => {
+  state.isScratching = false;
+  state.scratchLastPoint = null;
 };
 
 const getFitBoundsPadding = () => {
@@ -464,7 +616,16 @@ document.querySelectorAll<HTMLElement>("[data-time-mode]").forEach((button) => {
 
 document.querySelectorAll<HTMLElement>("[data-display-mode]").forEach((button) => {
   button.addEventListener("click", () => {
-    state.displayMode = button.dataset.displayMode as DisplayMode;
+    const nextMode = button.dataset.displayMode as DisplayMode;
+    if (nextMode === "scratch" && state.displayMode !== "scratch") {
+      resetScratch();
+      state.timeMode = "day";
+      state.selectedSpotMode = state.selectedSpotMode ?? "day";
+    }
+    if (state.displayMode === "scratch" && nextMode !== "scratch") {
+      resetScratch();
+    }
+    state.displayMode = nextMode;
     render();
   });
 });
@@ -529,6 +690,39 @@ splitHandle.addEventListener("keydown", (event) => {
   }
 });
 
+scratchResetButton.addEventListener("click", () => {
+  resetScratch();
+  render();
+});
+
+scratchSurface.addEventListener("pointerdown", (event) => {
+  if (state.displayMode !== "scratch") return;
+  event.preventDefault();
+  scratchSurface.setPointerCapture(event.pointerId);
+  beginScratch(event.clientX, event.clientY);
+});
+
+scratchSurface.addEventListener("pointermove", (event) => {
+  if (state.displayMode !== "scratch") return;
+  moveScratch(event.clientX, event.clientY);
+});
+
+scratchSurface.addEventListener("pointerup", (event) => {
+  if (!state.isScratching) return;
+  if (scratchSurface.hasPointerCapture(event.pointerId)) {
+    scratchSurface.releasePointerCapture(event.pointerId);
+  }
+  endScratch();
+});
+
+scratchSurface.addEventListener("pointercancel", (event) => {
+  if (!state.isScratching) return;
+  if (scratchSurface.hasPointerCapture(event.pointerId)) {
+    scratchSurface.releasePointerCapture(event.pointerId);
+  }
+  endScratch();
+});
+
 document.addEventListener("click", (event) => {
   const target = event.target as Node | null;
   if (!target) return;
@@ -557,6 +751,9 @@ initGeoJson().then(() => {
 
 window.addEventListener("resize", () => {
   syncCustomPaneBounds();
+  if (state.displayMode === "scratch") {
+    paintScratchOverlay();
+  }
   applyPaneVisibility();
 });
 
