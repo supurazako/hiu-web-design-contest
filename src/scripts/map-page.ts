@@ -1,7 +1,7 @@
 import L from "leaflet";
 
 type TimeMode = "day" | "night";
-type DisplayMode = "single" | "compare" | "scratch";
+type DisplayMode = "single" | "compare" | "magnifier" | "scratch";
 type Locale = "ja" | "en";
 type Spot = (typeof spots)[number];
 type MarkerEntry = {
@@ -24,6 +24,7 @@ const timeToggleGroup = document.querySelector("[data-time-toggle-group]") as HT
 const compareOverlay = document.querySelector("[data-compare-overlay]") as HTMLElement;
 const splitDivider = document.querySelector("[data-split-divider]") as HTMLElement;
 const splitHandle = document.querySelector("[data-split-handle]") as HTMLButtonElement;
+const magnifierOverlay = document.querySelector("[data-magnifier-overlay]") as HTMLElement;
 const scratchSurface = document.querySelector("[data-scratch-surface]") as HTMLCanvasElement;
 const scratchGroup = document.querySelector("[data-scratch-group]") as HTMLElement;
 const scratchResetButton = document.querySelector("[data-scratch-reset]") as HTMLButtonElement;
@@ -44,6 +45,7 @@ const spotEmptyHint = document.querySelector("[data-spot-empty-hint]") as HTMLEl
 const placeholderClasses = ["placeholder-river", "placeholder-steam", "placeholder-forest", "placeholder-light"];
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+const oppositeTimeMode = (mode: TimeMode): TimeMode => (mode === "day" ? "night" : "day");
 
 const getInitialTimeMode = (): TimeMode => {
   const hour = new Date().getHours();
@@ -59,7 +61,11 @@ const state: {
   selectedSpotMode: TimeMode | null;
   isLanguageMenuOpen: boolean;
   isDraggingSplit: boolean;
+  hasMagnifierPoint: boolean;
+  magnifierPoint: ScratchPoint;
   isScratching: boolean;
+  scratchStrokes: ScratchPoint[][];
+  currentScratchStroke: ScratchPoint[] | null;
   scratchLastPoint: ScratchPoint | null;
 } = {
   locale: "ja",
@@ -70,7 +76,11 @@ const state: {
   selectedSpotMode: null,
   isLanguageMenuOpen: false,
   isDraggingSplit: false,
+  hasMagnifierPoint: false,
+  magnifierPoint: { x: 0, y: 0 },
   isScratching: false,
+  scratchStrokes: [],
+  currentScratchStroke: null,
   scratchLastPoint: null,
 };
 
@@ -97,13 +107,21 @@ const paneByMode = {
     marker: map.createPane("night-marker-pane"),
   },
 } as const;
+const magnifierBackgroundPane = map.createPane("magnifier-background-pane");
 
 paneByMode.day.geo.style.zIndex = "340";
 paneByMode.night.geo.style.zIndex = "341";
 paneByMode.day.marker.style.zIndex = "620";
 paneByMode.night.marker.style.zIndex = "621";
+magnifierBackgroundPane.style.zIndex = "341";
 
-const customPanes = [paneByMode.day.geo, paneByMode.night.geo, paneByMode.day.marker, paneByMode.night.marker];
+const customPanes = [
+  paneByMode.day.geo,
+  paneByMode.night.geo,
+  paneByMode.day.marker,
+  paneByMode.night.marker,
+  magnifierBackgroundPane,
+];
 const scratchContext = scratchSurface.getContext("2d");
 const scratchBrushRadius = 48;
 
@@ -115,15 +133,25 @@ const syncCustomPaneBounds = () => {
     pane.style.left = "0";
     pane.style.top = "0";
   });
+  const backgroundOverscan = Math.round(Math.max(width, height));
+  magnifierBackgroundPane.style.width = `${Math.round(width + backgroundOverscan * 2)}px`;
+  magnifierBackgroundPane.style.height = `${Math.round(height + backgroundOverscan * 2)}px`;
+  magnifierBackgroundPane.style.left = `${-backgroundOverscan}px`;
+  magnifierBackgroundPane.style.top = `${-backgroundOverscan}px`;
   const pixelRatio = window.devicePixelRatio || 1;
-  scratchSurface.width = Math.round(width * pixelRatio);
-  scratchSurface.height = Math.round(height * pixelRatio);
+  const nextWidth = Math.round(width * pixelRatio);
+  const nextHeight = Math.round(height * pixelRatio);
+  const sizeChanged = scratchSurface.width !== nextWidth || scratchSurface.height !== nextHeight;
+  if (!sizeChanged) return false;
+  scratchSurface.width = nextWidth;
+  scratchSurface.height = nextHeight;
   scratchSurface.style.width = `${Math.round(width)}px`;
   scratchSurface.style.height = `${Math.round(height)}px`;
   if (scratchContext) {
     scratchContext.setTransform(1, 0, 0, 1, 0, 0);
     scratchContext.scale(pixelRatio, pixelRatio);
   }
+  return true;
 };
 
 syncCustomPaneBounds();
@@ -147,31 +175,50 @@ const paintScratchOverlay = () => {
   scratchContext.fillRect(0, 0, width, height);
 };
 
-const resetScratch = () => {
-  state.scratchLastPoint = null;
-  state.isScratching = false;
-  paintScratchOverlay();
-};
-
-const eraseScratchAtPoint = (point: ScratchPoint) => {
-  if (!scratchContext) return;
+const eraseScratchStroke = (points: ScratchPoint[]) => {
+  if (!scratchContext || points.length === 0) return;
   scratchContext.globalCompositeOperation = "destination-out";
   scratchContext.lineCap = "round";
   scratchContext.lineJoin = "round";
   scratchContext.lineWidth = scratchBrushRadius * 2;
   scratchContext.strokeStyle = "rgba(0, 0, 0, 1)";
 
-  if (!state.scratchLastPoint) {
+  if (points.length === 1) {
     scratchContext.beginPath();
-    scratchContext.arc(point.x, point.y, scratchBrushRadius, 0, Math.PI * 2);
+    scratchContext.arc(points[0].x, points[0].y, scratchBrushRadius, 0, Math.PI * 2);
     scratchContext.fill();
-  } else {
-    scratchContext.beginPath();
-    scratchContext.moveTo(state.scratchLastPoint.x, state.scratchLastPoint.y);
-    scratchContext.lineTo(point.x, point.y);
-    scratchContext.stroke();
+    return;
   }
 
+  scratchContext.beginPath();
+  scratchContext.moveTo(points[0].x, points[0].y);
+  points.slice(1).forEach((point) => {
+    scratchContext.lineTo(point.x, point.y);
+  });
+  scratchContext.stroke();
+};
+
+const redrawScratchSurface = () => {
+  paintScratchOverlay();
+  state.scratchStrokes.forEach((stroke) => eraseScratchStroke(stroke));
+};
+
+const resetScratch = () => {
+  state.scratchStrokes = [];
+  state.currentScratchStroke = null;
+  state.scratchLastPoint = null;
+  state.isScratching = false;
+  redrawScratchSurface();
+};
+
+const eraseScratchAtPoint = (point: ScratchPoint) => {
+  if (!state.currentScratchStroke) {
+    state.currentScratchStroke = [point];
+    state.scratchStrokes.push(state.currentScratchStroke);
+  } else {
+    state.currentScratchStroke.push(point);
+  }
+  eraseScratchStroke(state.currentScratchStroke);
   state.scratchLastPoint = point;
 };
 
@@ -297,7 +344,38 @@ const setPaneState = (pane: HTMLElement, options: { visible: boolean; clipPath: 
   pane.style.clipPath = options.visible ? options.clipPath : "none";
 };
 
+const clearPaneBackgrounds = () => {
+  customPanes.forEach((pane) => {
+    pane.style.background = "";
+  });
+  magnifierBackgroundPane.style.opacity = "0";
+  magnifierBackgroundPane.style.visibility = "hidden";
+  magnifierBackgroundPane.style.clipPath = "none";
+};
+
+const mapBackgroundForMode = (mode: TimeMode) =>
+  mode === "night"
+    ? "radial-gradient(circle at 20% 20%, rgba(133, 188, 255, 0.16), transparent 18%), linear-gradient(160deg, rgba(23, 38, 53, 0.98), rgba(17, 28, 41, 0.96))"
+    : "radial-gradient(circle at 20% 20%, rgba(143, 209, 255, 0.14), transparent 20%), linear-gradient(160deg, rgba(255, 250, 244, 0.9), rgba(236, 244, 249, 0.76))";
+
+const ensureMagnifierPoint = () => {
+  if (state.hasMagnifierPoint) return;
+  const { width, height } = mapElement.getBoundingClientRect();
+  state.magnifierPoint = { x: width / 2, y: height / 2 };
+  state.hasMagnifierPoint = true;
+};
+
+const clipPathForCircle = (pane: HTMLElement, point: ScratchPoint, radius: number) => {
+  const mapRect = mapElement.getBoundingClientRect();
+  const paneRect = pane.getBoundingClientRect();
+  const x = clamp(mapRect.left - paneRect.left + point.x, 0, paneRect.width);
+  const y = clamp(mapRect.top - paneRect.top + point.y, 0, paneRect.height);
+  return `circle(${radius}px at ${x}px ${y}px)`;
+};
+
 const applyPaneVisibility = () => {
+  clearPaneBackgrounds();
+
   if (state.displayMode === "single") {
     const activeMode = state.timeMode;
     const inactiveMode: TimeMode = activeMode === "day" ? "night" : "day";
@@ -305,6 +383,30 @@ const applyPaneVisibility = () => {
     setPaneState(paneByMode[activeMode].marker, { visible: true, clipPath: "none" });
     setPaneState(paneByMode[inactiveMode].geo, { visible: false, clipPath: "none" });
     setPaneState(paneByMode[inactiveMode].marker, { visible: false, clipPath: "none" });
+    return;
+  }
+
+  if (state.displayMode === "magnifier") {
+    ensureMagnifierPoint();
+    const activeMode = state.timeMode;
+    const revealMode = oppositeTimeMode(activeMode);
+    const radius = Number.parseFloat(getComputedStyle(root).getPropertyValue("--magnifier-radius")) || 90;
+    const revealClipPath = clipPathForCircle(paneByMode[revealMode].geo, state.magnifierPoint, radius);
+    const revealMarkerClipPath = clipPathForCircle(paneByMode[revealMode].marker, state.magnifierPoint, radius);
+    const backgroundClipPath = clipPathForCircle(magnifierBackgroundPane, state.magnifierPoint, radius);
+    paneByMode[activeMode].geo.style.zIndex = "340";
+    magnifierBackgroundPane.style.zIndex = "341";
+    paneByMode[revealMode].geo.style.zIndex = "342";
+    paneByMode[activeMode].marker.style.zIndex = "620";
+    paneByMode[revealMode].marker.style.zIndex = "621";
+    magnifierBackgroundPane.style.background = mapBackgroundForMode(revealMode);
+    magnifierBackgroundPane.style.opacity = "1";
+    magnifierBackgroundPane.style.visibility = "visible";
+    magnifierBackgroundPane.style.clipPath = backgroundClipPath;
+    setPaneState(paneByMode[activeMode].geo, { visible: true, clipPath: "none" });
+    setPaneState(paneByMode[activeMode].marker, { visible: true, clipPath: "none" });
+    setPaneState(paneByMode[revealMode].geo, { visible: true, clipPath: revealClipPath });
+    setPaneState(paneByMode[revealMode].marker, { visible: true, clipPath: revealMarkerClipPath });
     return;
   }
 
@@ -421,12 +523,19 @@ const updateCompareUI = () => {
   splitHandle.setAttribute("aria-valuenow", String(Math.round(state.splitRatio * 100)));
   splitHandle.setAttribute("aria-valuetext", `${Math.round(state.splitRatio * 100)}%`);
   compareOverlay.hidden = state.displayMode !== "compare";
+  magnifierOverlay.hidden = state.displayMode !== "magnifier";
+  if (state.displayMode === "magnifier") {
+    ensureMagnifierPoint();
+    root.style.setProperty("--magnifier-x", `${state.magnifierPoint.x}px`);
+    root.style.setProperty("--magnifier-y", `${state.magnifierPoint.y}px`);
+  }
   const isScratch = state.displayMode === "scratch";
   scratchGroup.classList.toggle("is-expanded", isScratch);
   scratchResetButton.setAttribute("aria-hidden", String(!isScratch));
   scratchResetButton.tabIndex = isScratch ? 0 : -1;
   const isSingle = state.displayMode === "single";
   controlShell.classList.toggle("is-compare", state.displayMode === "compare");
+  controlShell.classList.toggle("is-magnifier", state.displayMode === "magnifier");
   controlShell.classList.toggle("is-scratch", isScratch);
   timeToggleGroup.setAttribute("aria-hidden", String(!isSingle));
 };
@@ -445,6 +554,8 @@ const renderStaticText = () => {
   (document.querySelector('[data-display-mode="single"]') as HTMLElement).setAttribute("title", ui.singleModeLabel);
   (document.querySelector('[data-display-mode="compare"]') as HTMLElement).setAttribute("aria-label", ui.compareModeLabel);
   (document.querySelector('[data-display-mode="compare"]') as HTMLElement).setAttribute("title", ui.compareModeLabel);
+  (document.querySelector('[data-display-mode="magnifier"]') as HTMLElement).setAttribute("aria-label", ui.magnifierModeLabel);
+  (document.querySelector('[data-display-mode="magnifier"]') as HTMLElement).setAttribute("title", ui.magnifierModeLabel);
   (document.querySelector('[data-display-mode="scratch"]') as HTMLElement).setAttribute("aria-label", ui.scratchModeLabel);
   (document.querySelector('[data-display-mode="scratch"]') as HTMLElement).setAttribute("title", ui.scratchModeLabel);
   splitHandle.setAttribute("aria-label", ui.compareHandleLabel);
@@ -461,33 +572,45 @@ const applyTheme = () => {
     themeByMode.compare.className,
     themeByMode.scratch.className,
   );
-  const themeKey = state.displayMode === "compare" ? "compare" : state.displayMode === "scratch" ? "scratch" : state.timeMode;
+  const themeKey =
+    state.displayMode === "compare"
+      ? "compare"
+      : state.displayMode === "scratch"
+        ? "scratch"
+        : state.timeMode;
   root.classList.add(themeByMode[themeKey].className);
   root.style.setProperty("--theme-glow", themeByMode[themeKey].glow);
 };
 
 const applyScratchState = () => {
   const isScratch = state.displayMode === "scratch";
+  const isMagnifier = state.displayMode === "magnifier";
   scratchSurface.hidden = !isScratch;
   root.classList.toggle("is-scratch-active", isScratch);
-  mapElement.style.pointerEvents = isScratch ? "none" : "auto";
+  root.classList.toggle("is-magnifier-active", isMagnifier);
+  mapElement.style.pointerEvents = isScratch || isMagnifier ? "none" : "auto";
 
   paneByMode.day.geo.style.zIndex = "340";
   paneByMode.night.geo.style.zIndex = "341";
   paneByMode.day.marker.style.zIndex = "620";
   paneByMode.night.marker.style.zIndex = "621";
 
-  if (!isScratch) {
+  if (!isScratch && !isMagnifier) {
     map.dragging.enable();
     map.touchZoom.enable();
     map.doubleClickZoom.enable();
     map.boxZoom.disable();
+  } else if (isScratch) {
+    map.dragging.disable();
+    map.touchZoom.disable();
+    map.doubleClickZoom.disable();
+    map.boxZoom.disable();
+    redrawScratchSurface();
   } else {
     map.dragging.disable();
     map.touchZoom.disable();
     map.doubleClickZoom.disable();
     map.boxZoom.disable();
-    paintScratchOverlay();
   }
 };
 
@@ -543,10 +666,30 @@ const getScratchPointFromPointer = (clientX: number, clientY: number): ScratchPo
   };
 };
 
+const clampMagnifierPoint = () => {
+  if (!state.hasMagnifierPoint) return;
+  const { width, height } = mapElement.getBoundingClientRect();
+  state.magnifierPoint = {
+    x: clamp(state.magnifierPoint.x, 0, width),
+    y: clamp(state.magnifierPoint.y, 0, height),
+  };
+};
+
+const setMagnifierPointFromPointer = (clientX: number, clientY: number) => {
+  const point = getScratchPointFromPointer(clientX, clientY);
+  if (!point) return;
+  state.magnifierPoint = point;
+  state.hasMagnifierPoint = true;
+  root.style.setProperty("--magnifier-x", `${point.x}px`);
+  root.style.setProperty("--magnifier-y", `${point.y}px`);
+  applyPaneVisibility();
+};
+
 const beginScratch = (clientX: number, clientY: number) => {
   const point = getScratchPointFromPointer(clientX, clientY);
   if (!point) return;
   state.isScratching = true;
+  state.currentScratchStroke = null;
   state.scratchLastPoint = null;
   eraseScratchAtPoint(point);
 };
@@ -555,6 +698,7 @@ const moveScratch = (clientX: number, clientY: number) => {
   if (!state.isScratching) return;
   const point = getScratchPointFromPointer(clientX, clientY);
   if (!point) {
+    state.currentScratchStroke = null;
     state.scratchLastPoint = null;
     return;
   }
@@ -563,6 +707,7 @@ const moveScratch = (clientX: number, clientY: number) => {
 
 const endScratch = () => {
   state.isScratching = false;
+  state.currentScratchStroke = null;
   state.scratchLastPoint = null;
 };
 
@@ -617,6 +762,10 @@ document.querySelectorAll<HTMLElement>("[data-time-mode]").forEach((button) => {
 document.querySelectorAll<HTMLElement>("[data-display-mode]").forEach((button) => {
   button.addEventListener("click", () => {
     const nextMode = button.dataset.displayMode as DisplayMode;
+    if (nextMode === "magnifier" && state.displayMode !== "magnifier") {
+      ensureMagnifierPoint();
+      state.timeMode = "day";
+    }
     if (nextMode === "scratch" && state.displayMode !== "scratch") {
       resetScratch();
       state.timeMode = "day";
@@ -628,6 +777,30 @@ document.querySelectorAll<HTMLElement>("[data-display-mode]").forEach((button) =
     state.displayMode = nextMode;
     render();
   });
+});
+
+magnifierOverlay.addEventListener("pointerdown", (event) => {
+  if (state.displayMode !== "magnifier") return;
+  event.preventDefault();
+  magnifierOverlay.setPointerCapture(event.pointerId);
+  setMagnifierPointFromPointer(event.clientX, event.clientY);
+});
+
+magnifierOverlay.addEventListener("pointermove", (event) => {
+  if (state.displayMode !== "magnifier") return;
+  setMagnifierPointFromPointer(event.clientX, event.clientY);
+});
+
+magnifierOverlay.addEventListener("pointerup", (event) => {
+  if (magnifierOverlay.hasPointerCapture(event.pointerId)) {
+    magnifierOverlay.releasePointerCapture(event.pointerId);
+  }
+});
+
+magnifierOverlay.addEventListener("pointercancel", (event) => {
+  if (magnifierOverlay.hasPointerCapture(event.pointerId)) {
+    magnifierOverlay.releasePointerCapture(event.pointerId);
+  }
 });
 
 document.querySelectorAll<HTMLElement>("[data-language-option]").forEach((button) => {
@@ -744,20 +917,29 @@ initGeoJson().then(() => {
   render();
   requestAnimationFrame(() => {
     map.invalidateSize();
-    syncCustomPaneBounds();
+    const sizeChanged = syncCustomPaneBounds();
+    if (sizeChanged && state.displayMode === "scratch") {
+      redrawScratchSurface();
+    }
+    clampMagnifierPoint();
     applyPaneVisibility();
   });
 });
 
 window.addEventListener("resize", () => {
-  syncCustomPaneBounds();
-  if (state.displayMode === "scratch") {
-    paintScratchOverlay();
+  const sizeChanged = syncCustomPaneBounds();
+  if (sizeChanged && state.displayMode === "scratch") {
+    redrawScratchSurface();
   }
+  clampMagnifierPoint();
   applyPaneVisibility();
 });
 
 map.on("move zoom resize", () => {
-  syncCustomPaneBounds();
+  const sizeChanged = syncCustomPaneBounds();
+  if (sizeChanged && state.displayMode === "scratch") {
+    redrawScratchSurface();
+  }
+  clampMagnifierPoint();
   applyPaneVisibility();
 });

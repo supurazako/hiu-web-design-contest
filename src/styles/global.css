@@ -478,6 +478,10 @@ img {
 }
 
 .map-shell {
+  --magnifier-size: 180px;
+  --magnifier-radius: 90;
+  --magnifier-x: 50vw;
+  --magnifier-y: 50vh;
   transition: background 240ms ease, color 240ms ease;
 }
 
@@ -575,6 +579,31 @@ img {
 
 .map-compare[hidden] {
   display: none;
+}
+
+.map-magnifier {
+  position: absolute;
+  inset: 0;
+  z-index: 406;
+  pointer-events: auto;
+  touch-action: none;
+  cursor: crosshair;
+  transition: opacity 140ms ease;
+}
+
+.map-magnifier[hidden] {
+  display: none;
+}
+
+.map-magnifier::before {
+  content: "";
+  position: absolute;
+  top: var(--magnifier-y);
+  left: var(--magnifier-x);
+  width: var(--magnifier-size);
+  height: var(--magnifier-size);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .map-compare__divider {
@@ -759,6 +788,12 @@ img {
   pointer-events: none;
 }
 
+.map-control-stack.is-magnifier [data-time-toggle-group] {
+  min-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .map-control-stack .segmented-control {
   display: flex;
   flex-direction: column;
@@ -890,6 +925,11 @@ img {
 
 .is-scratch-active .map-canvas {
   cursor: crosshair;
+}
+
+.is-magnifier-active .map-canvas {
+  cursor: crosshair;
+  touch-action: none;
 }
 
 .is-scratch-active .map-scratch-surface {
@@ -1175,6 +1215,19 @@ img {
 
   .sheet-host--floating .spot-card {
     width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .map-shell {
+    --magnifier-size: 132px;
+    --magnifier-radius: 66;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-magnifier {
+    transition: none;
   }
 }
 
