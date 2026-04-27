@@ -482,6 +482,7 @@ img {
   --magnifier-radius: 90;
   --magnifier-x: 50vw;
   --magnifier-y: 50vh;
+  --clock-night-ratio: 0;
   transition: background 240ms ease, color 240ms ease;
 }
 
@@ -579,6 +580,74 @@ img {
 
 .map-compare[hidden] {
   display: none;
+}
+
+.map-clock {
+  position: absolute;
+  right: 16px;
+  bottom: 74px;
+  z-index: 407;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 80%, transparent);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--md-sys-color-surface-container-highest) 92%, transparent);
+  box-shadow: var(--md-elevation-2);
+}
+
+.map-clock[hidden] {
+  display: none;
+}
+
+.map-clock__dial {
+  position: relative;
+  width: 74px;
+  height: 74px;
+  padding: 0;
+  border: 2px solid var(--md-sys-color-outline);
+  border-radius: 50%;
+  background:
+    linear-gradient(180deg, rgba(255, 248, 241, 0.9), rgba(255, 248, 241, 0.36)),
+    conic-gradient(from 180deg, rgba(18, 28, 39, 0.88), rgba(18, 28, 39, 0.88) 50%, rgba(255, 222, 169, 0.92) 50%, rgba(255, 222, 169, 0.92));
+  color: var(--md-sys-color-on-surface);
+  cursor: grab;
+  touch-action: none;
+}
+
+.map-clock__dial:active {
+  cursor: grabbing;
+}
+
+.map-clock__hand {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: 3px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--md-sys-color-primary);
+  transform: translateX(-50%) rotate(180deg);
+  transform-origin: center bottom;
+}
+
+.map-clock__center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--md-sys-color-primary);
+  transform: translate(-50%, -50%);
+}
+
+.map-clock__time {
+  color: var(--md-sys-color-on-surface);
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .map-magnifier {
@@ -794,6 +863,12 @@ img {
   pointer-events: none;
 }
 
+.map-control-stack.is-clock [data-time-toggle-group] {
+  min-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .map-control-stack .segmented-control {
   display: flex;
   flex-direction: column;
@@ -930,6 +1005,25 @@ img {
 .is-magnifier-active .map-canvas {
   cursor: crosshair;
   touch-action: none;
+}
+
+.is-clock-active .map-control-stack,
+.is-clock-active .sheet-host--floating .spot-card,
+.is-clock-active .map-attribution,
+.is-clock-active .map-toolbar__button,
+.is-clock-active .map-language__menu,
+.is-clock-active .map-clock {
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container-highest) calc((1 - var(--clock-night-ratio)) * 100%),
+    rgba(35, 49, 66, 0.96)
+  );
+}
+
+.is-clock-active .map-clock,
+.is-clock-active .map-control-stack,
+.is-clock-active .map-toolbar__button {
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) calc((1 - var(--clock-night-ratio)) * 100%), #edf2f7);
 }
 
 .is-scratch-active .map-scratch-surface {
@@ -1200,6 +1294,11 @@ img {
   .map-attribution {
     right: 24px;
     bottom: 24px;
+  }
+
+  .map-clock {
+    right: 24px;
+    bottom: 82px;
   }
 
   .map-control-stack {

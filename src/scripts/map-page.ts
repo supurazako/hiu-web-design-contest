@@ -1,7 +1,7 @@
 import L from "leaflet";
 
 type TimeMode = "day" | "night";
-type DisplayMode = "single" | "compare" | "magnifier" | "scratch";
+type DisplayMode = "single" | "compare" | "magnifier" | "clock" | "scratch";
 type Locale = "ja" | "en";
 type Spot = (typeof spots)[number];
 type MarkerEntry = {
@@ -25,6 +25,10 @@ const compareOverlay = document.querySelector("[data-compare-overlay]") as HTMLE
 const splitDivider = document.querySelector("[data-split-divider]") as HTMLElement;
 const splitHandle = document.querySelector("[data-split-handle]") as HTMLButtonElement;
 const magnifierOverlay = document.querySelector("[data-magnifier-overlay]") as HTMLElement;
+const clockPanel = document.querySelector("[data-clock-panel]") as HTMLElement;
+const clockDial = document.querySelector("[data-clock-dial]") as HTMLButtonElement;
+const clockHand = document.querySelector("[data-clock-hand]") as HTMLElement;
+const clockTime = document.querySelector("[data-clock-time]") as HTMLElement;
 const scratchSurface = document.querySelector("[data-scratch-surface]") as HTMLCanvasElement;
 const scratchGroup = document.querySelector("[data-scratch-group]") as HTMLElement;
 const scratchResetButton = document.querySelector("[data-scratch-reset]") as HTMLButtonElement;
@@ -46,6 +50,27 @@ const placeholderClasses = ["placeholder-river", "placeholder-steam", "placehold
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 const oppositeTimeMode = (mode: TimeMode): TimeMode => (mode === "day" ? "night" : "day");
+const smoothstep = (edge0: number, edge1: number, value: number) => {
+  const x = clamp((value - edge0) / (edge1 - edge0), 0, 1);
+  return x * x * (3 - 2 * x);
+};
+
+const nightRatioForHour = (hour: number) => {
+  const normalizedHour = ((hour % 24) + 24) % 24;
+  if (normalizedHour >= 20 || normalizedHour < 4) return 1;
+  if (normalizedHour >= 8 && normalizedHour < 16) return 0;
+  if (normalizedHour >= 4 && normalizedHour < 8) return 1 - smoothstep(4, 8, normalizedHour);
+  return smoothstep(16, 20, normalizedHour);
+};
+
+const formatClockHour = (hour: number) => {
+  const normalizedHour = ((hour % 24) + 24) % 24;
+  const wholeHour = Math.floor(normalizedHour);
+  const minutes = Math.round((normalizedHour - wholeHour) * 60);
+  const adjustedHour = (wholeHour + Math.floor(minutes / 60)) % 24;
+  const adjustedMinutes = minutes % 60;
+  return `${String(adjustedHour).padStart(2, "0")}:${String(adjustedMinutes).padStart(2, "0")}`;
+};
 
 const getInitialTimeMode = (): TimeMode => {
   const hour = new Date().getHours();
@@ -63,6 +88,8 @@ const state: {
   isDraggingSplit: boolean;
   hasMagnifierPoint: boolean;
   magnifierPoint: ScratchPoint;
+  clockHour: number;
+  isDraggingClock: boolean;
   isScratching: boolean;
   scratchStrokes: ScratchPoint[][];
   currentScratchStroke: ScratchPoint[] | null;
@@ -78,6 +105,8 @@ const state: {
   isDraggingSplit: false,
   hasMagnifierPoint: false,
   magnifierPoint: { x: 0, y: 0 },
+  clockHour: 12,
+  isDraggingClock: false,
   isScratching: false,
   scratchStrokes: [],
   currentScratchStroke: null,
@@ -353,6 +382,12 @@ const clearPaneBackgrounds = () => {
   magnifierBackgroundPane.style.clipPath = "none";
 };
 
+const setBlendPaneState = (pane: HTMLElement, opacity: number, clipPath = "none") => {
+  pane.style.opacity = String(opacity);
+  pane.style.visibility = opacity > 0 ? "visible" : "hidden";
+  pane.style.clipPath = clipPath;
+};
+
 const mapBackgroundForMode = (mode: TimeMode) =>
   mode === "night"
     ? "radial-gradient(circle at 20% 20%, rgba(133, 188, 255, 0.16), transparent 18%), linear-gradient(160deg, rgba(23, 38, 53, 0.98), rgba(17, 28, 41, 0.96))"
@@ -407,6 +442,24 @@ const applyPaneVisibility = () => {
     setPaneState(paneByMode[activeMode].marker, { visible: true, clipPath: "none" });
     setPaneState(paneByMode[revealMode].geo, { visible: true, clipPath: revealClipPath });
     setPaneState(paneByMode[revealMode].marker, { visible: true, clipPath: revealMarkerClipPath });
+    return;
+  }
+
+  if (state.displayMode === "clock") {
+    const nightRatio = nightRatioForHour(state.clockHour);
+    magnifierBackgroundPane.style.zIndex = "341";
+    magnifierBackgroundPane.style.background = mapBackgroundForMode("night");
+    magnifierBackgroundPane.style.opacity = String(nightRatio);
+    magnifierBackgroundPane.style.visibility = nightRatio > 0 ? "visible" : "hidden";
+    magnifierBackgroundPane.style.clipPath = "none";
+    paneByMode.day.geo.style.zIndex = "340";
+    paneByMode.night.geo.style.zIndex = "342";
+    paneByMode.day.marker.style.zIndex = "620";
+    paneByMode.night.marker.style.zIndex = "621";
+    setPaneState(paneByMode.day.geo, { visible: true, clipPath: "none" });
+    setBlendPaneState(paneByMode.night.geo, nightRatio);
+    setBlendPaneState(paneByMode.day.marker, 1 - nightRatio);
+    setBlendPaneState(paneByMode.night.marker, nightRatio);
     return;
   }
 
@@ -518,12 +571,21 @@ const renderCard = () => {
 
 const updateCompareUI = () => {
   const splitPercent = `${state.splitRatio * 100}%`;
+  const clockTimeText = formatClockHour(state.clockHour);
+  const clockAngle = state.clockHour * 15;
+  const clockNightRatio = nightRatioForHour(state.clockHour);
   root.style.setProperty("--compare-split", splitPercent);
+  root.style.setProperty("--clock-night-ratio", String(clockNightRatio));
   splitDivider.style.left = splitPercent;
   splitHandle.setAttribute("aria-valuenow", String(Math.round(state.splitRatio * 100)));
   splitHandle.setAttribute("aria-valuetext", `${Math.round(state.splitRatio * 100)}%`);
   compareOverlay.hidden = state.displayMode !== "compare";
   magnifierOverlay.hidden = state.displayMode !== "magnifier";
+  clockPanel.hidden = state.displayMode !== "clock";
+  clockHand.style.transform = `translateX(-50%) rotate(${clockAngle}deg)`;
+  clockTime.textContent = clockTimeText;
+  clockDial.setAttribute("aria-valuenow", String(Math.round(state.clockHour * 10) / 10));
+  clockDial.setAttribute("aria-valuetext", clockTimeText);
   if (state.displayMode === "magnifier") {
     ensureMagnifierPoint();
     root.style.setProperty("--magnifier-x", `${state.magnifierPoint.x}px`);
@@ -536,6 +598,7 @@ const updateCompareUI = () => {
   const isSingle = state.displayMode === "single";
   controlShell.classList.toggle("is-compare", state.displayMode === "compare");
   controlShell.classList.toggle("is-magnifier", state.displayMode === "magnifier");
+  controlShell.classList.toggle("is-clock", state.displayMode === "clock");
   controlShell.classList.toggle("is-scratch", isScratch);
   timeToggleGroup.setAttribute("aria-hidden", String(!isSingle));
 };
@@ -556,9 +619,12 @@ const renderStaticText = () => {
   (document.querySelector('[data-display-mode="compare"]') as HTMLElement).setAttribute("title", ui.compareModeLabel);
   (document.querySelector('[data-display-mode="magnifier"]') as HTMLElement).setAttribute("aria-label", ui.magnifierModeLabel);
   (document.querySelector('[data-display-mode="magnifier"]') as HTMLElement).setAttribute("title", ui.magnifierModeLabel);
+  (document.querySelector('[data-display-mode="clock"]') as HTMLElement).setAttribute("aria-label", ui.clockModeLabel);
+  (document.querySelector('[data-display-mode="clock"]') as HTMLElement).setAttribute("title", ui.clockModeLabel);
   (document.querySelector('[data-display-mode="scratch"]') as HTMLElement).setAttribute("aria-label", ui.scratchModeLabel);
   (document.querySelector('[data-display-mode="scratch"]') as HTMLElement).setAttribute("title", ui.scratchModeLabel);
   splitHandle.setAttribute("aria-label", ui.compareHandleLabel);
+  clockDial.setAttribute("aria-label", ui.clockDialLabel);
   languageMenuTrigger.setAttribute("aria-label", ui.languageLabel);
   languageMenu.setAttribute("aria-label", ui.languageLabel);
   scratchResetButton.setAttribute("aria-label", ui.scratchResetLabel);
@@ -585,9 +651,11 @@ const applyTheme = () => {
 const applyScratchState = () => {
   const isScratch = state.displayMode === "scratch";
   const isMagnifier = state.displayMode === "magnifier";
+  const isClock = state.displayMode === "clock";
   scratchSurface.hidden = !isScratch;
   root.classList.toggle("is-scratch-active", isScratch);
   root.classList.toggle("is-magnifier-active", isMagnifier);
+  root.classList.toggle("is-clock-active", isClock);
   mapElement.style.pointerEvents = isScratch || isMagnifier ? "none" : "auto";
 
   paneByMode.day.geo.style.zIndex = "340";
@@ -685,6 +753,23 @@ const setMagnifierPointFromPointer = (clientX: number, clientY: number) => {
   applyPaneVisibility();
 };
 
+const setClockHourFromPointer = (clientX: number, clientY: number) => {
+  const bounds = clockDial.getBoundingClientRect();
+  const centerX = bounds.left + bounds.width / 2;
+  const centerY = bounds.top + bounds.height / 2;
+  const angle = Math.atan2(clientY - centerY, clientX - centerX);
+  const degrees = (angle * 180) / Math.PI;
+  state.clockHour = ((degrees + 90 + 360) % 360) / 15;
+  applyPaneVisibility();
+  updateCompareUI();
+};
+
+const adjustClockHour = (delta: number) => {
+  state.clockHour = (state.clockHour + delta + 24) % 24;
+  applyPaneVisibility();
+  updateCompareUI();
+};
+
 const beginScratch = (clientX: number, clientY: number) => {
   const point = getScratchPointFromPointer(clientX, clientY);
   if (!point) return;
@@ -766,6 +851,10 @@ document.querySelectorAll<HTMLElement>("[data-display-mode]").forEach((button) =
       ensureMagnifierPoint();
       state.timeMode = "day";
     }
+    if (nextMode === "clock" && state.displayMode !== "clock") {
+      state.clockHour = 12;
+      state.timeMode = "day";
+    }
     if (nextMode === "scratch" && state.displayMode !== "scratch") {
       resetScratch();
       state.timeMode = "day";
@@ -800,6 +889,45 @@ magnifierOverlay.addEventListener("pointerup", (event) => {
 magnifierOverlay.addEventListener("pointercancel", (event) => {
   if (magnifierOverlay.hasPointerCapture(event.pointerId)) {
     magnifierOverlay.releasePointerCapture(event.pointerId);
+  }
+});
+
+clockDial.addEventListener("pointerdown", (event) => {
+  if (state.displayMode !== "clock") return;
+  event.preventDefault();
+  state.isDraggingClock = true;
+  clockDial.setPointerCapture(event.pointerId);
+  setClockHourFromPointer(event.clientX, event.clientY);
+});
+
+clockDial.addEventListener("pointermove", (event) => {
+  if (!state.isDraggingClock) return;
+  setClockHourFromPointer(event.clientX, event.clientY);
+});
+
+clockDial.addEventListener("pointerup", (event) => {
+  state.isDraggingClock = false;
+  if (clockDial.hasPointerCapture(event.pointerId)) {
+    clockDial.releasePointerCapture(event.pointerId);
+  }
+});
+
+clockDial.addEventListener("pointercancel", (event) => {
+  state.isDraggingClock = false;
+  if (clockDial.hasPointerCapture(event.pointerId)) {
+    clockDial.releasePointerCapture(event.pointerId);
+  }
+});
+
+clockDial.addEventListener("keydown", (event) => {
+  if (state.displayMode !== "clock") return;
+  if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
+    event.preventDefault();
+    adjustClockHour(-0.25);
+  }
+  if (event.key === "ArrowRight" || event.key === "ArrowUp") {
+    event.preventDefault();
+    adjustClockHour(0.25);
   }
 });
 
