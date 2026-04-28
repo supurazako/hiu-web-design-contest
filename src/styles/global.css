@@ -544,6 +544,10 @@ img {
     linear-gradient(160deg, rgba(22, 35, 49, 0.98), rgba(16, 26, 39, 0.98));
 }
 
+.night-light-tile-layer {
+  mix-blend-mode: screen;
+}
+
 .map-scratch-surface {
   position: absolute;
   inset: 0;

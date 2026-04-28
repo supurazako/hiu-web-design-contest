@@ -132,20 +132,39 @@ const paneByMode = {
     marker: map.createPane("day-marker-pane"),
   },
   night: {
+    light: map.createPane("night-light-pane"),
     geo: map.createPane("night-geojson-pane"),
     marker: map.createPane("night-marker-pane"),
   },
 } as const;
 const magnifierBackgroundPane = map.createPane("magnifier-background-pane");
 
-paneByMode.day.geo.style.zIndex = "340";
-paneByMode.night.geo.style.zIndex = "341";
-paneByMode.day.marker.style.zIndex = "620";
-paneByMode.night.marker.style.zIndex = "621";
-magnifierBackgroundPane.style.zIndex = "341";
+const setLayerZIndexes = () => {
+  paneByMode.day.geo.style.zIndex = "340";
+  magnifierBackgroundPane.style.zIndex = "341";
+  paneByMode.night.light.style.zIndex = "342";
+  paneByMode.night.geo.style.zIndex = "343";
+  paneByMode.day.marker.style.zIndex = "620";
+  paneByMode.night.marker.style.zIndex = "621";
+};
+
+setLayerZIndexes();
+
+const nightLightBounds = L.latLngBounds([42.893114, 140.990503], [43.100698, 141.357103]);
+L.tileLayer("/tiles/night-lights/{z}/{x}/{y}.png", {
+  pane: "night-light-pane",
+  bounds: nightLightBounds,
+  minZoom: 10,
+  maxZoom: 18,
+  maxNativeZoom: 15,
+  noWrap: true,
+  opacity: 0.68,
+  className: "night-light-tile-layer",
+}).addTo(map);
 
 const customPanes = [
   paneByMode.day.geo,
+  paneByMode.night.light,
   paneByMode.night.geo,
   paneByMode.day.marker,
   paneByMode.night.marker,
@@ -418,6 +437,7 @@ const applyPaneVisibility = () => {
     setPaneState(paneByMode[activeMode].marker, { visible: true, clipPath: "none" });
     setPaneState(paneByMode[inactiveMode].geo, { visible: false, clipPath: "none" });
     setPaneState(paneByMode[inactiveMode].marker, { visible: false, clipPath: "none" });
+    setPaneState(paneByMode.night.light, { visible: activeMode === "night", clipPath: "none" });
     return;
   }
 
@@ -428,12 +448,10 @@ const applyPaneVisibility = () => {
     const radius = Number.parseFloat(getComputedStyle(root).getPropertyValue("--magnifier-radius")) || 90;
     const revealClipPath = clipPathForCircle(paneByMode[revealMode].geo, state.magnifierPoint, radius);
     const revealMarkerClipPath = clipPathForCircle(paneByMode[revealMode].marker, state.magnifierPoint, radius);
+    const nightLightClipPath =
+      revealMode === "night" ? clipPathForCircle(paneByMode.night.light, state.magnifierPoint, radius) : "none";
     const backgroundClipPath = clipPathForCircle(magnifierBackgroundPane, state.magnifierPoint, radius);
-    paneByMode[activeMode].geo.style.zIndex = "340";
-    magnifierBackgroundPane.style.zIndex = "341";
-    paneByMode[revealMode].geo.style.zIndex = "342";
-    paneByMode[activeMode].marker.style.zIndex = "620";
-    paneByMode[revealMode].marker.style.zIndex = "621";
+    setLayerZIndexes();
     magnifierBackgroundPane.style.background = mapBackgroundForMode(revealMode);
     magnifierBackgroundPane.style.opacity = "1";
     magnifierBackgroundPane.style.visibility = "visible";
@@ -442,6 +460,10 @@ const applyPaneVisibility = () => {
     setPaneState(paneByMode[activeMode].marker, { visible: true, clipPath: "none" });
     setPaneState(paneByMode[revealMode].geo, { visible: true, clipPath: revealClipPath });
     setPaneState(paneByMode[revealMode].marker, { visible: true, clipPath: revealMarkerClipPath });
+    setPaneState(paneByMode.night.light, {
+      visible: activeMode === "night" || revealMode === "night",
+      clipPath: nightLightClipPath,
+    });
     return;
   }
 
@@ -452,11 +474,9 @@ const applyPaneVisibility = () => {
     magnifierBackgroundPane.style.opacity = String(nightRatio);
     magnifierBackgroundPane.style.visibility = nightRatio > 0 ? "visible" : "hidden";
     magnifierBackgroundPane.style.clipPath = "none";
-    paneByMode.day.geo.style.zIndex = "340";
-    paneByMode.night.geo.style.zIndex = "342";
-    paneByMode.day.marker.style.zIndex = "620";
-    paneByMode.night.marker.style.zIndex = "621";
+    setLayerZIndexes();
     setPaneState(paneByMode.day.geo, { visible: true, clipPath: "none" });
+    setBlendPaneState(paneByMode.night.light, nightRatio);
     setBlendPaneState(paneByMode.night.geo, nightRatio);
     setBlendPaneState(paneByMode.day.marker, 1 - nightRatio);
     setBlendPaneState(paneByMode.night.marker, nightRatio);
@@ -466,6 +486,7 @@ const applyPaneVisibility = () => {
   if (state.displayMode === "scratch") {
     setPaneState(paneByMode.day.geo, { visible: true, clipPath: "none" });
     setPaneState(paneByMode.day.marker, { visible: true, clipPath: "none" });
+    setPaneState(paneByMode.night.light, { visible: true, clipPath: "none" });
     setPaneState(paneByMode.night.geo, { visible: true, clipPath: "none" });
     setPaneState(paneByMode.night.marker, { visible: true, clipPath: "none" });
     return;
@@ -485,6 +506,7 @@ const applyPaneVisibility = () => {
 
   setPaneState(paneByMode.day.geo, { visible: true, clipPath: clipPathForPane(paneByMode.day.geo, "left") });
   setPaneState(paneByMode.day.marker, { visible: true, clipPath: clipPathForPane(paneByMode.day.marker, "left") });
+  setPaneState(paneByMode.night.light, { visible: true, clipPath: clipPathForPane(paneByMode.night.light, "right") });
   setPaneState(paneByMode.night.geo, { visible: true, clipPath: clipPathForPane(paneByMode.night.geo, "right") });
   setPaneState(paneByMode.night.marker, { visible: true, clipPath: clipPathForPane(paneByMode.night.marker, "right") });
 };
@@ -658,10 +680,7 @@ const applyScratchState = () => {
   root.classList.toggle("is-clock-active", isClock);
   mapElement.style.pointerEvents = isScratch || isMagnifier ? "none" : "auto";
 
-  paneByMode.day.geo.style.zIndex = "340";
-  paneByMode.night.geo.style.zIndex = "341";
-  paneByMode.day.marker.style.zIndex = "620";
-  paneByMode.night.marker.style.zIndex = "621";
+  setLayerZIndexes();
 
   if (!isScratch && !isMagnifier) {
     map.dragging.enable();
