@@ -15,17 +15,6 @@ npm run dev
 npm run build
 ```
 
-## Night Light Tiles
-
-Put the VNL_npp GeoTIFF at the repository root, then generate the static tiles:
-
-```bash
-npm run tiles:night-lights
-```
-
-The generated XYZ tiles are written to `public/tiles/night-lights/`.
-The script smooths the source raster with cubic resampling before colorizing it.
-
 ## Routes
 
 - `/` ランディングページ

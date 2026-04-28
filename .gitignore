@@ -50,5 +50,3 @@ pids
 
 # Geodata
 *.osm.pbf
-VNL_npp_*.tif
-.cache/night-lights/
