@@ -15,8 +15,9 @@ const spots = JSON.parse(document.getElementById("spots-data")!.textContent!) as
 const uiCopy = JSON.parse(document.getElementById("ui-data")!.textContent!);
 const themeByMode = JSON.parse(document.getElementById("theme-data")!.textContent!);
 
-const root = document.querySelector(".map-shell") as HTMLElement;
+const root = document.querySelector("[data-map-shell]") as HTMLElement;
 const mapElement = document.getElementById("map") as HTMLElement;
+const openMapLink = document.querySelector("[data-open-map]") as HTMLAnchorElement | null;
 const languageMenuTrigger = document.querySelector("[data-language-menu-trigger]") as HTMLButtonElement;
 const languageMenu = document.querySelector("[data-language-menu]") as HTMLElement;
 const controlShell = document.querySelector("[data-control-shell]") as HTMLElement;
@@ -94,6 +95,7 @@ const state: {
   scratchStrokes: ScratchPoint[][];
   currentScratchStroke: ScratchPoint[] | null;
   scratchLastPoint: ScratchPoint | null;
+  isExpanded: boolean;
 } = {
   locale: "ja",
   displayMode: "single",
@@ -111,6 +113,7 @@ const state: {
   scratchStrokes: [],
   currentScratchStroke: null,
   scratchLastPoint: null,
+  isExpanded: window.location.hash === "#map",
 };
 
 const map = L.map(mapElement, {
@@ -258,6 +261,7 @@ const geoRendererByMode = {
 
 const markerEntries = new Map<string, MarkerEntry>();
 const geoJsonLayers: Partial<Record<TimeMode, L.GeoJSON>> = {};
+let dataBounds: L.LatLngBounds | null = null;
 
 const geoJsonStyles = {
   day: {
@@ -524,7 +528,7 @@ const updateButtons = () => {
 };
 
 const updateLanguageMenu = () => {
-  languageMenu.hidden = !state.isLanguageMenuOpen;
+  languageMenu.hidden = !state.isExpanded || !state.isLanguageMenuOpen;
   languageMenu.classList.toggle("is-open", state.isLanguageMenuOpen);
   languageMenuTrigger.setAttribute("aria-expanded", String(state.isLanguageMenuOpen));
 };
@@ -605,7 +609,7 @@ const updateCompareUI = () => {
 
 const renderStaticText = () => {
   const ui = uiCopy[state.locale];
-  document.title = `${ui.siteTitle} | ${ui.mapPageTitle}`;
+  document.title = state.isExpanded ? `${ui.siteTitle} | ${ui.mapPageTitle}` : `${ui.siteTitle} | ${ui.siteTagline}`;
   (document.querySelector("[data-back-home-link]") as HTMLElement).setAttribute("aria-label", ui.backHome);
   (document.querySelector('[data-time-mode="day"]') as HTMLElement).setAttribute("aria-label", ui.dayLabel);
   (document.querySelector('[data-time-mode="day"]') as HTMLElement).setAttribute("title", ui.dayLabel);
@@ -663,19 +667,29 @@ const applyScratchState = () => {
   paneByMode.day.marker.style.zIndex = "620";
   paneByMode.night.marker.style.zIndex = "621";
 
-  if (!isScratch && !isMagnifier) {
+  if (!state.isExpanded) {
+    map.dragging.disable();
+    map.scrollWheelZoom.disable();
+    map.touchZoom.disable();
+    map.doubleClickZoom.disable();
+    map.boxZoom.disable();
+    mapElement.style.pointerEvents = "none";
+  } else if (!isScratch && !isMagnifier) {
     map.dragging.enable();
+    map.scrollWheelZoom.enable();
     map.touchZoom.enable();
     map.doubleClickZoom.enable();
     map.boxZoom.disable();
   } else if (isScratch) {
     map.dragging.disable();
+    map.scrollWheelZoom.disable();
     map.touchZoom.disable();
     map.doubleClickZoom.disable();
     map.boxZoom.disable();
     redrawScratchSurface();
   } else {
     map.dragging.disable();
+    map.scrollWheelZoom.disable();
     map.touchZoom.disable();
     map.doubleClickZoom.disable();
     map.boxZoom.disable();
@@ -702,6 +716,9 @@ const ensureSelectionVisibility = () => {
 };
 
 const render = () => {
+  root.classList.toggle("is-map-expanded", state.isExpanded);
+  document.body.classList.toggle("is-map-expanded", state.isExpanded);
+  document.documentElement.classList.toggle("is-map-expanded", state.isExpanded);
   syncCustomPaneBounds();
   ensureSelectionVisibility();
   updateButtons();
@@ -713,6 +730,56 @@ const render = () => {
   applyPaneVisibility();
   updateMarkerVisibility();
   renderCard();
+};
+
+const getFitBoundsPadding = () => {
+  const isMobile = window.innerWidth < 768;
+  const sheetRect = state.isExpanded ? floatingSheet.getBoundingClientRect() : new DOMRect(0, 0, 0, 0);
+
+  return {
+    paddingTopLeft: [
+      state.isExpanded ? (isMobile ? 24 : 92) : 28,
+      state.isExpanded ? (isMobile ? 92 : 56) : 28,
+    ] as L.PointExpression,
+    paddingBottomRight: [
+      state.isExpanded ? 32 : 28,
+      state.isExpanded ? (isMobile ? Math.round(sheetRect.height + 44) : Math.round(sheetRect.height + 36)) : 28,
+    ] as L.PointExpression,
+  };
+};
+
+const fitMapToCurrentViewport = () => {
+  if (!dataBounds?.isValid()) return;
+  map.fitBounds(dataBounds.pad(0.08), getFitBoundsPadding());
+};
+
+const syncExpandedState = (nextExpanded: boolean, options: { updateHistory?: boolean } = {}) => {
+  if (state.isExpanded === nextExpanded && window.location.hash === (nextExpanded ? "#map" : "")) {
+    return;
+  }
+
+  state.isExpanded = nextExpanded;
+  state.isLanguageMenuOpen = false;
+
+  if (options.updateHistory) {
+    if (nextExpanded) {
+      window.history.pushState({ mapExpanded: true }, "", "#map");
+    } else {
+      window.history.pushState({ mapExpanded: false }, "", window.location.pathname);
+    }
+  }
+
+  render();
+  requestAnimationFrame(() => {
+    map.invalidateSize();
+    const sizeChanged = syncCustomPaneBounds();
+    if (sizeChanged && state.displayMode === "scratch") {
+      redrawScratchSurface();
+    }
+    clampMagnifierPoint();
+    fitMapToCurrentViewport();
+    applyPaneVisibility();
+  });
 };
 
 const setSplitRatioFromPointer = (clientX: number) => {
@@ -796,22 +863,6 @@ const endScratch = () => {
   state.scratchLastPoint = null;
 };
 
-const getFitBoundsPadding = () => {
-  const isMobile = window.innerWidth < 768;
-  const sheetRect = floatingSheet.getBoundingClientRect();
-
-  return {
-    paddingTopLeft: [
-      isMobile ? 24 : 92,
-      isMobile ? 92 : 56,
-    ] as L.PointExpression,
-    paddingBottomRight: [
-      32,
-      isMobile ? Math.round(sheetRect.height + 44) : Math.round(sheetRect.height + 36),
-    ] as L.PointExpression,
-  };
-};
-
 const initGeoJson = async () => {
   const response = await fetch("/geodata/map.geojson");
   const data = await response.json();
@@ -830,12 +881,29 @@ const initGeoJson = async () => {
     geoJsonLayers[mode] = layer;
   });
 
-  const dataBounds = geoJsonLayers.day?.getBounds();
+  dataBounds = geoJsonLayers.day?.getBounds() ?? null;
   if (dataBounds?.isValid()) {
-    map.fitBounds(dataBounds.pad(0.08), getFitBoundsPadding());
+    fitMapToCurrentViewport();
     map.setMaxBounds(dataBounds.pad(0.2));
   }
 };
+
+openMapLink?.addEventListener("click", (event) => {
+  event.preventDefault();
+  syncExpandedState(true, { updateHistory: window.location.hash !== "#map" });
+});
+
+(document.querySelector("[data-back-home-link]") as HTMLButtonElement).addEventListener("click", () => {
+  if (window.location.hash === "#map") {
+    window.history.back();
+    return;
+  }
+  syncExpandedState(false, { updateHistory: true });
+});
+
+window.addEventListener("popstate", () => {
+  syncExpandedState(window.location.hash === "#map");
+});
 
 document.querySelectorAll<HTMLElement>("[data-time-mode]").forEach((button) => {
   button.addEventListener("click", () => {
@@ -1050,6 +1118,7 @@ initGeoJson().then(() => {
       redrawScratchSurface();
     }
     clampMagnifierPoint();
+    fitMapToCurrentViewport();
     applyPaneVisibility();
   });
 });
