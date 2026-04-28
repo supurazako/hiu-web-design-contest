@@ -156,6 +156,9 @@ const customPanes = [
 ];
 const scratchContext = scratchSurface.getContext("2d");
 const scratchBrushRadius = 48;
+const scratchMinPointDistance = 4;
+const scratchMaskPixelRatio = 1;
+let scratchMaskFrame: number | null = null;
 
 const syncCustomPaneBounds = () => {
   const { width, height } = mapElement.getBoundingClientRect();
@@ -170,7 +173,7 @@ const syncCustomPaneBounds = () => {
   magnifierBackgroundPane.style.height = `${Math.round(height + backgroundOverscan * 2)}px`;
   magnifierBackgroundPane.style.left = `${-backgroundOverscan}px`;
   magnifierBackgroundPane.style.top = `${-backgroundOverscan}px`;
-  const pixelRatio = window.devicePixelRatio || 1;
+  const pixelRatio = scratchMaskPixelRatio;
   const nextWidth = Math.round(width * pixelRatio);
   const nextHeight = Math.round(height * pixelRatio);
   const sizeChanged = scratchSurface.width !== nextWidth || scratchSurface.height !== nextHeight;
@@ -193,27 +196,16 @@ const paintScratchOverlay = () => {
   const { width, height } = mapElement.getBoundingClientRect();
   scratchContext.globalCompositeOperation = "source-over";
   scratchContext.clearRect(0, 0, width, height);
-
-  const gradient = scratchContext.createLinearGradient(0, 0, width, height);
-  gradient.addColorStop(0, "rgba(255, 248, 241, 0.98)");
-  gradient.addColorStop(1, "rgba(244, 236, 224, 0.96)");
-  scratchContext.fillStyle = gradient;
-  scratchContext.fillRect(0, 0, width, height);
-
-  const glow = scratchContext.createRadialGradient(width * 0.18, height * 0.2, 0, width * 0.18, height * 0.2, width * 0.28);
-  glow.addColorStop(0, "rgba(255, 226, 171, 0.26)");
-  glow.addColorStop(1, "rgba(255, 226, 171, 0)");
-  scratchContext.fillStyle = glow;
-  scratchContext.fillRect(0, 0, width, height);
 };
 
 const eraseScratchStroke = (points: ScratchPoint[]) => {
   if (!scratchContext || points.length === 0) return;
-  scratchContext.globalCompositeOperation = "destination-out";
+  scratchContext.globalCompositeOperation = "source-over";
   scratchContext.lineCap = "round";
   scratchContext.lineJoin = "round";
   scratchContext.lineWidth = scratchBrushRadius * 2;
-  scratchContext.strokeStyle = "rgba(0, 0, 0, 1)";
+  scratchContext.strokeStyle = "rgba(255, 255, 255, 1)";
+  scratchContext.fillStyle = "rgba(255, 255, 255, 1)";
 
   if (points.length === 1) {
     scratchContext.beginPath();
@@ -230,9 +222,88 @@ const eraseScratchStroke = (points: ScratchPoint[]) => {
   scratchContext.stroke();
 };
 
+const eraseScratchSegment = (from: ScratchPoint | null, to: ScratchPoint) => {
+  if (!scratchContext) return;
+  scratchContext.globalCompositeOperation = "source-over";
+  scratchContext.lineCap = "round";
+  scratchContext.lineJoin = "round";
+  scratchContext.lineWidth = scratchBrushRadius * 2;
+  scratchContext.strokeStyle = "rgba(255, 255, 255, 1)";
+  scratchContext.fillStyle = "rgba(255, 255, 255, 1)";
+
+  if (!from) {
+    scratchContext.beginPath();
+    scratchContext.arc(to.x, to.y, scratchBrushRadius, 0, Math.PI * 2);
+    scratchContext.fill();
+    return;
+  }
+
+  scratchContext.beginPath();
+  scratchContext.moveTo(from.x, from.y);
+  scratchContext.lineTo(to.x, to.y);
+  scratchContext.stroke();
+};
+
+const scratchMaskTargets = () => [
+  paneByMode.night.geo,
+  paneByMode.night.marker,
+  magnifierBackgroundPane,
+];
+
+const drawScratchMask = () => {
+  scratchMaskFrame = null;
+  const mapRect = mapElement.getBoundingClientRect();
+  const { width, height } = mapRect;
+  const maskUrl = `url(${scratchSurface.toDataURL("image/png")})`;
+  scratchMaskTargets().forEach((pane) => {
+    const paneRect = pane.getBoundingClientRect();
+    const maskX = mapRect.left - paneRect.left;
+    const maskY = mapRect.top - paneRect.top;
+    pane.style.maskImage = maskUrl;
+    pane.style.maskRepeat = "no-repeat";
+    pane.style.maskSize = `${Math.round(width)}px ${Math.round(height)}px`;
+    pane.style.maskPosition = `${Math.round(maskX)}px ${Math.round(maskY)}px`;
+    pane.style.webkitMaskImage = maskUrl;
+    pane.style.webkitMaskRepeat = "no-repeat";
+    pane.style.webkitMaskSize = `${Math.round(width)}px ${Math.round(height)}px`;
+    pane.style.webkitMaskPosition = `${Math.round(maskX)}px ${Math.round(maskY)}px`;
+  });
+};
+
+const scheduleScratchMask = () => {
+  if (scratchMaskFrame !== null) return;
+  scratchMaskFrame = window.requestAnimationFrame(drawScratchMask);
+};
+
+const applyScratchMask = () => {
+  if (scratchMaskFrame !== null) {
+    window.cancelAnimationFrame(scratchMaskFrame);
+    scratchMaskFrame = null;
+  }
+  drawScratchMask();
+};
+
+const clearScratchMask = () => {
+  if (scratchMaskFrame !== null) {
+    window.cancelAnimationFrame(scratchMaskFrame);
+    scratchMaskFrame = null;
+  }
+  scratchMaskTargets().forEach((pane) => {
+    pane.style.maskImage = "";
+    pane.style.maskRepeat = "";
+    pane.style.maskSize = "";
+    pane.style.maskPosition = "";
+    pane.style.webkitMaskImage = "";
+    pane.style.webkitMaskRepeat = "";
+    pane.style.webkitMaskSize = "";
+    pane.style.webkitMaskPosition = "";
+  });
+};
+
 const redrawScratchSurface = () => {
   paintScratchOverlay();
   state.scratchStrokes.forEach((stroke) => eraseScratchStroke(stroke));
+  applyScratchMask();
 };
 
 const resetScratch = () => {
@@ -244,14 +315,21 @@ const resetScratch = () => {
 };
 
 const eraseScratchAtPoint = (point: ScratchPoint) => {
+  if (state.scratchLastPoint) {
+    const distance = Math.hypot(point.x - state.scratchLastPoint.x, point.y - state.scratchLastPoint.y);
+    if (distance < scratchMinPointDistance) return;
+  }
+
+  const previousPoint = state.scratchLastPoint;
   if (!state.currentScratchStroke) {
     state.currentScratchStroke = [point];
     state.scratchStrokes.push(state.currentScratchStroke);
   } else {
     state.currentScratchStroke.push(point);
   }
-  eraseScratchStroke(state.currentScratchStroke);
+  eraseScratchSegment(previousPoint, point);
   state.scratchLastPoint = point;
+  scheduleScratchMask();
 };
 
 const geoRendererByMode = {
@@ -262,6 +340,8 @@ const geoRendererByMode = {
 const markerEntries = new Map<string, MarkerEntry>();
 const geoJsonLayers: Partial<Record<TimeMode, L.GeoJSON>> = {};
 let dataBounds: L.LatLngBounds | null = null;
+let transitionCleanupTimer: number | null = null;
+const mapTransitionDuration = 720;
 
 const geoJsonStyles = {
   day: {
@@ -468,12 +548,24 @@ const applyPaneVisibility = () => {
   }
 
   if (state.displayMode === "scratch") {
-    setPaneState(paneByMode.day.geo, { visible: true, clipPath: "none" });
-    setPaneState(paneByMode.day.marker, { visible: true, clipPath: "none" });
+    paneByMode.day.geo.style.zIndex = "340";
+    magnifierBackgroundPane.style.zIndex = "341";
+    paneByMode.night.geo.style.zIndex = "342";
+    paneByMode.day.marker.style.zIndex = "620";
+    paneByMode.night.marker.style.zIndex = "621";
+    magnifierBackgroundPane.style.background = mapBackgroundForMode("night");
+    magnifierBackgroundPane.style.opacity = "1";
+    magnifierBackgroundPane.style.visibility = "visible";
+    magnifierBackgroundPane.style.clipPath = "none";
     setPaneState(paneByMode.night.geo, { visible: true, clipPath: "none" });
     setPaneState(paneByMode.night.marker, { visible: true, clipPath: "none" });
+    setPaneState(paneByMode.day.geo, { visible: true, clipPath: "none" });
+    setPaneState(paneByMode.day.marker, { visible: true, clipPath: "none" });
+    applyScratchMask();
     return;
   }
+
+  clearScratchMask();
 
   const mapRect = mapElement.getBoundingClientRect();
   const splitX = mapRect.width * state.splitRatio;
@@ -732,6 +824,27 @@ const render = () => {
   renderCard();
 };
 
+const clearMapTransitionClasses = () => {
+  root.classList.remove("is-map-entering", "is-map-leaving");
+  document.body.classList.remove("is-map-entering", "is-map-leaving");
+  document.documentElement.classList.remove("is-map-entering", "is-map-leaving");
+  if (transitionCleanupTimer !== null) {
+    window.clearTimeout(transitionCleanupTimer);
+    transitionCleanupTimer = null;
+  }
+};
+
+const setMapTransitionDirection = (direction: "entering" | "leaving" | null) => {
+  clearMapTransitionClasses();
+  if (!direction) return;
+
+  const className = direction === "entering" ? "is-map-entering" : "is-map-leaving";
+  root.classList.add(className);
+  document.body.classList.add(className);
+  document.documentElement.classList.add(className);
+  transitionCleanupTimer = window.setTimeout(clearMapTransitionClasses, mapTransitionDuration);
+};
+
 const getFitBoundsPadding = () => {
   const isMobile = window.innerWidth < 768;
   const sheetRect = state.isExpanded ? floatingSheet.getBoundingClientRect() : new DOMRect(0, 0, 0, 0);
@@ -758,6 +871,20 @@ const syncExpandedState = (nextExpanded: boolean, options: { updateHistory?: boo
     return;
   }
 
+  const wasExpanded = state.isExpanded;
+  const transitionDirection = wasExpanded === nextExpanded ? null : nextExpanded ? "entering" : "leaving";
+  setMapTransitionDirection(transitionDirection);
+
+  if (wasExpanded && !nextExpanded && state.displayMode === "scratch") {
+    resetScratch();
+    state.displayMode = "single";
+    state.timeMode = getInitialTimeMode();
+    state.selectedSpotMode = null;
+    state.isScratching = false;
+    state.currentScratchStroke = null;
+    state.scratchLastPoint = null;
+  }
+
   state.isExpanded = nextExpanded;
   state.isLanguageMenuOpen = false;
 
@@ -780,6 +907,15 @@ const syncExpandedState = (nextExpanded: boolean, options: { updateHistory?: boo
     fitMapToCurrentViewport();
     applyPaneVisibility();
   });
+  window.setTimeout(() => {
+    map.invalidateSize();
+    const sizeChanged = syncCustomPaneBounds();
+    if (sizeChanged && state.displayMode === "scratch") {
+      redrawScratchSurface();
+    }
+    clampMagnifierPoint();
+    applyPaneVisibility();
+  }, mapTransitionDuration);
 };
 
 const setSplitRatioFromPointer = (clientX: number) => {

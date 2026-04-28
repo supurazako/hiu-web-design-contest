@@ -36,6 +36,8 @@
   --md-shape-corner-large: 28px;
   --md-shape-corner-extra-large: 36px;
   --theme-glow: rgba(255, 191, 102, 0.18);
+  --map-transition-duration: 640ms;
+  --map-transition-ease: cubic-bezier(0.22, 1, 0.36, 1);
   font-family: "Hiragino Sans", "Noto Sans JP", "Segoe UI", sans-serif;
 }
 
@@ -267,10 +269,14 @@ img {
   background:
     radial-gradient(circle at 20% 20%, rgba(143, 209, 255, 0.14), transparent 20%),
     linear-gradient(160deg, rgba(255, 250, 244, 0.9), rgba(236, 244, 249, 0.76));
+  transform: scale(1);
+  transform-origin: center center;
   transition:
-    inset 520ms cubic-bezier(0.22, 1, 0.36, 1),
-    border-radius 520ms cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 520ms cubic-bezier(0.22, 1, 0.36, 1);
+    inset var(--map-transition-duration) var(--map-transition-ease),
+    border-radius var(--map-transition-duration) var(--map-transition-ease),
+    box-shadow var(--map-transition-duration) var(--map-transition-ease),
+    transform var(--map-transition-duration) var(--map-transition-ease),
+    filter var(--map-transition-duration) var(--map-transition-ease);
 }
 
 .hero__map-background::before {
@@ -296,6 +302,8 @@ img {
   border-radius: 0;
   box-shadow: none;
   background: #fff8f2;
+  transform: scale(1);
+  filter: none;
 }
 
 .hero__map-background.is-map-expanded::after {
@@ -305,6 +313,7 @@ img {
 body.is-map-expanded .hero__content,
 body.is-map-expanded .content-block {
   opacity: 0;
+  transform: translateY(28px) scale(0.965);
   pointer-events: none;
 }
 
@@ -334,6 +343,12 @@ body.is-map-expanded .content-block {
   border-radius: 0;
   box-shadow: none;
   backdrop-filter: none;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transform-origin: left center;
+  transition:
+    opacity 300ms ease,
+    transform var(--map-transition-duration) var(--map-transition-ease);
 }
 
 .hero__content h1,
@@ -535,6 +550,9 @@ body.is-map-expanded .content-block {
 .content-block {
   margin-top: 20px;
   background: var(--md-sys-color-surface-container-low);
+  transition:
+    opacity 260ms ease,
+    transform var(--map-transition-duration) var(--map-transition-ease);
 }
 
 .content-block--cta {
@@ -676,8 +694,8 @@ body.is-map-expanded .content-block {
 
 .theme-scratch .map-canvas {
   background:
-    radial-gradient(circle at 78% 22%, rgba(124, 183, 255, 0.18), transparent 18%),
-    linear-gradient(160deg, rgba(22, 35, 49, 0.98), rgba(16, 26, 39, 0.98));
+    radial-gradient(circle at 20% 20%, rgba(143, 209, 255, 0.14), transparent 20%),
+    linear-gradient(160deg, rgba(255, 250, 244, 0.9), rgba(236, 244, 249, 0.76));
 }
 
 .map-scratch-surface {
@@ -707,6 +725,19 @@ body.is-map-expanded .content-block {
   pointer-events: auto;
 }
 
+.hero__map-background .map-overlay > .map-back,
+.hero__map-background .map-overlay > .map-language,
+.hero__map-background .map-overlay > .map-control-stack,
+.hero__map-background .map-overlay > .sheet-host--floating,
+.hero__map-background .map-overlay > .map-attribution,
+.hero__map-background .map-overlay > .map-clock,
+.hero__map-background .map-overlay > .map-magnifier,
+.hero__map-background .map-overlay > .map-compare {
+  transition:
+    opacity 240ms ease,
+    transform 360ms var(--map-transition-ease);
+}
+
 .hero__map-background:not(.is-map-expanded) .map-overlay > .map-back,
 .hero__map-background:not(.is-map-expanded) .map-overlay > .map-language,
 .hero__map-background:not(.is-map-expanded) .map-overlay > .map-control-stack,
@@ -717,6 +748,52 @@ body.is-map-expanded .content-block {
 .hero__map-background:not(.is-map-expanded) .map-overlay > .map-compare {
   opacity: 0;
   pointer-events: none;
+}
+
+.hero__map-background:not(.is-map-expanded) .map-overlay > .map-back,
+.hero__map-background:not(.is-map-expanded) .map-overlay > .map-language {
+  transform: translateY(-14px) scale(0.96);
+}
+
+.hero__map-background:not(.is-map-expanded) .map-overlay > .map-control-stack {
+  transform: translateX(-18px) scale(0.96);
+}
+
+.hero__map-background:not(.is-map-expanded) .map-overlay > .sheet-host--floating,
+.hero__map-background:not(.is-map-expanded) .map-overlay > .map-attribution {
+  transform: translateY(18px) scale(0.98);
+}
+
+.hero__map-background.is-map-expanded .map-overlay > .map-back,
+.hero__map-background.is-map-expanded .map-overlay > .map-language,
+.hero__map-background.is-map-expanded .map-overlay > .map-control-stack,
+.hero__map-background.is-map-expanded .map-overlay > .sheet-host--floating,
+.hero__map-background.is-map-expanded .map-overlay > .map-attribution,
+.hero__map-background.is-map-expanded .map-overlay > .map-clock,
+.hero__map-background.is-map-expanded .map-overlay > .map-magnifier,
+.hero__map-background.is-map-expanded .map-overlay > .map-compare {
+  opacity: 1;
+  transform: translate(0) scale(1);
+  transition-delay: 180ms;
+}
+
+.hero__map-background.is-map-leaving .map-overlay > .map-back,
+.hero__map-background.is-map-leaving .map-overlay > .map-language,
+.hero__map-background.is-map-leaving .map-overlay > .map-control-stack,
+.hero__map-background.is-map-leaving .map-overlay > .sheet-host--floating,
+.hero__map-background.is-map-leaving .map-overlay > .map-attribution,
+.hero__map-background.is-map-leaving .map-overlay > .map-clock,
+.hero__map-background.is-map-leaving .map-overlay > .map-magnifier,
+.hero__map-background.is-map-leaving .map-overlay > .map-compare {
+  transition-delay: 0ms;
+}
+
+body.is-map-entering .hero__content {
+  transform: translateY(42px) scale(0.94);
+}
+
+body.is-map-leaving .hero__content {
+  transform: translateY(-10px) scale(1.018);
 }
 
 .map-compare {
@@ -1137,8 +1214,16 @@ body.is-map-expanded .content-block {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__map-background {
-    transition: none;
+  :root {
+    --map-transition-duration: 1ms;
+  }
+
+  .hero__map-background,
+  .hero__content,
+  .content-block,
+  .hero__map-background .map-overlay > * {
+    transition-duration: 1ms;
+    transform: none;
   }
 
   .map-scratch-reset {
@@ -1180,6 +1265,7 @@ body.is-map-expanded .content-block {
 }
 
 .is-scratch-active .map-scratch-surface {
+  opacity: 0;
   pointer-events: auto;
   cursor: crosshair;
   touch-action: none;
