@@ -38,8 +38,8 @@
   overflow: hidden;
   border: 1px solid var(--md-sys-color-outline-variant);
   background:
-    radial-gradient(circle at 20% 20%, rgba(143, 209, 255, 0.14), transparent 20%),
-    linear-gradient(160deg, rgba(255, 250, 244, 0.9), rgba(236, 244, 249, 0.76));
+    radial-gradient(circle at 20% 20%, var(--map-day-background-glow), transparent 20%),
+    linear-gradient(160deg, var(--map-day-background-start), var(--map-day-background-end));
 }
 
 .map-canvas--full {
@@ -50,27 +50,8 @@
 
 .theme-night .map-canvas {
   background:
-    radial-gradient(circle at 20% 20%, rgba(133, 188, 255, 0.16), transparent 18%),
-    linear-gradient(160deg, rgba(23, 38, 53, 0.98), rgba(17, 28, 41, 0.96));
-}
-
-.theme-compare .map-canvas {
-  background:
-    radial-gradient(circle at 18% 20%, rgba(255, 211, 140, 0.18), transparent 20%),
-    radial-gradient(circle at 78% 18%, rgba(133, 188, 255, 0.14), transparent 18%),
-    linear-gradient(
-      90deg,
-      rgba(255, 249, 241, 0.96) 0%,
-      rgba(244, 236, 224, 0.94) calc(var(--compare-split, 50%) - 0.2%),
-      rgba(26, 39, 54, 0.98) calc(var(--compare-split, 50%) + 0.2%),
-      rgba(17, 29, 42, 0.98) 100%
-    );
-}
-
-.theme-scratch .map-canvas {
-  background:
-    radial-gradient(circle at 20% 20%, rgba(143, 209, 255, 0.14), transparent 20%),
-    linear-gradient(160deg, rgba(255, 250, 244, 0.9), rgba(236, 244, 249, 0.76));
+    radial-gradient(circle at 20% 20%, var(--map-night-background-glow), transparent 18%),
+    linear-gradient(160deg, var(--map-night-background-start), var(--map-night-background-end));
 }
 
 .map-scratch-surface {

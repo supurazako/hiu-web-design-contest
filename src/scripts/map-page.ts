@@ -15,7 +15,6 @@ import { applyInverseCircleMask, clearMaskStyles, clipPathForCircle, setBlendPan
 import { createScratchController } from "./scratch-controller";
 
 type Locale = "ja" | "en";
-type ThemeMode = keyof ThemeByMode;
 type MarkerEntry = {
   marker: L.Marker;
   spot: Spot;
@@ -433,6 +432,15 @@ const applyPaneVisibility = () => {
     return `inset(0px 0px 0px ${dividerWithinPane}px)`;
   };
 
+  magnifierBackgroundPane.style.zIndex = "341";
+  magnifierBackgroundPane.style.background = mapBackgroundForMode("night");
+  magnifierBackgroundPane.style.opacity = "1";
+  magnifierBackgroundPane.style.visibility = "visible";
+  magnifierBackgroundPane.style.clipPath = clipPathForPane(magnifierBackgroundPane, "right");
+  paneByMode.day.geo.style.zIndex = "340";
+  paneByMode.night.geo.style.zIndex = "342";
+  paneByMode.day.marker.style.zIndex = "620";
+  paneByMode.night.marker.style.zIndex = "621";
   setPaneState(paneByMode.day.geo, { visible: true, clipPath: clipPathForPane(paneByMode.day.geo, "left") });
   setPaneState(paneByMode.day.marker, { visible: true, clipPath: clipPathForPane(paneByMode.day.marker, "left") });
   setPaneState(paneByMode.night.geo, { visible: true, clipPath: clipPathForPane(paneByMode.night.geo, "right") });
@@ -593,14 +601,8 @@ const applyTheme = () => {
     themeByMode.compare.className,
     themeByMode.scratch.className,
   );
-  const themeKey: ThemeMode =
-    state.displayMode === "compare"
-      ? "compare"
-      : state.displayMode === "scratch"
-        ? "scratch"
-        : state.timeMode;
-  root.classList.add(themeByMode[themeKey].className);
-  root.style.setProperty("--theme-glow", themeByMode[themeKey].glow);
+  root.classList.add(themeByMode[state.timeMode].className);
+  root.style.setProperty("--theme-glow", themeByMode[state.timeMode].glow);
 };
 
 const applyScratchState = () => {
@@ -833,7 +835,7 @@ const initGeoJson = async () => {
         const category = featureCategory(feature);
         return Boolean(category) && feature?.geometry?.type !== "Point";
       },
-      style: (feature: GeoJSON.Feature | undefined) => layerStyleForMode(mode, feature),
+      style: (feature: GeoJSON.Feature | undefined) => layerStyleForMode(mode, feature, root),
       interactive: false,
       pane: mode === "day" ? "day-geojson-pane" : "night-geojson-pane",
       renderer: geoRendererByMode[mode],

@@ -3,54 +3,72 @@ import type { TimeMode } from "./map-types";
 
 type FeatureCategory = "building" | "waterway" | "highway" | "highwaySecondary";
 
-const geoJsonStyles = {
+type ColorToken = `--map-${TimeMode}-${string}`;
+type GeoJsonStyleToken = {
+  color: ColorToken;
+  weight: number;
+  opacity?: number;
+  fillColor?: ColorToken;
+  fillOpacity?: number;
+};
+
+const geoJsonStyleTokens = {
   day: {
     building: {
-      color: "#d9cbbd",
+      color: "--map-day-building-stroke",
       weight: 1,
-      fillColor: "#f3e6d6",
+      fillColor: "--map-day-building-fill",
       fillOpacity: 0.85,
     },
     waterway: {
-      color: "#6fb7e9",
+      color: "--map-day-waterway-stroke",
       weight: 3,
       opacity: 0.9,
     },
     highway: {
-      color: "#ffffff",
+      color: "--map-day-highway-stroke",
       weight: 3,
       opacity: 0.95,
     },
     highwaySecondary: {
-      color: "#ecd8b8",
+      color: "--map-day-path-stroke",
       weight: 2.2,
       opacity: 0.9,
     },
   },
   night: {
     building: {
-      color: "#364454",
+      color: "--map-night-building-stroke",
       weight: 1,
-      fillColor: "#263241",
+      fillColor: "--map-night-building-fill",
       fillOpacity: 0.72,
     },
     waterway: {
-      color: "#7ac8ff",
+      color: "--map-night-waterway-stroke",
       weight: 2.6,
       opacity: 0.92,
     },
     highway: {
-      color: "#d6e7ff",
+      color: "--map-night-highway-stroke",
       weight: 2.6,
       opacity: 0.85,
     },
     highwaySecondary: {
-      color: "#6d8198",
+      color: "--map-night-path-stroke",
       weight: 1.8,
       opacity: 0.82,
     },
   },
-} as const;
+} as const satisfies Record<TimeMode, Record<FeatureCategory, GeoJsonStyleToken>>;
+
+const cssVariableValue = (styleRoot: HTMLElement, token: ColorToken) =>
+  getComputedStyle(styleRoot).getPropertyValue(token).trim();
+
+const resolveGeoJsonStyle = (styleRoot: HTMLElement, style: GeoJsonStyleToken) => ({
+  ...style,
+  color: cssVariableValue(styleRoot, style.color),
+  fillColor: style.fillColor ? cssVariableValue(styleRoot, style.fillColor) : undefined,
+});
 
 export const featureCategory = (feature: GeoJSON.Feature | undefined): FeatureCategory | null => {
   const props = feature?.properties ?? {};
@@ -67,7 +85,7 @@ export const featureCategory = (feature: GeoJSON.Feature | undefined): FeatureCa
   return null;
 };
 
-export const layerStyleForMode = (mode: TimeMode, feature: GeoJSON.Feature | undefined) => {
+export const layerStyleForMode = (mode: TimeMode, feature: GeoJSON.Feature | undefined, styleRoot: HTMLElement) => {
   const category = featureCategory(feature);
   if (!category) {
     return {
@@ -77,7 +95,7 @@ export const layerStyleForMode = (mode: TimeMode, feature: GeoJSON.Feature | und
       opacity: 0,
     };
   }
-  return geoJsonStyles[mode][category];
+  return resolveGeoJsonStyle(styleRoot, geoJsonStyleTokens[mode][category]);
 };
 
 export const isSpotVisibleForMode = (spot: Spot, mode: TimeMode) =>
@@ -85,5 +103,5 @@ export const isSpotVisibleForMode = (spot: Spot, mode: TimeMode) =>
 
 export const mapBackgroundForMode = (mode: TimeMode) =>
   mode === "night"
-    ? "radial-gradient(circle at 20% 20%, rgba(133, 188, 255, 0.16), transparent 18%), linear-gradient(160deg, rgba(23, 38, 53, 0.98), rgba(17, 28, 41, 0.96))"
-    : "radial-gradient(circle at 20% 20%, rgba(143, 209, 255, 0.14), transparent 20%), linear-gradient(160deg, rgba(255, 250, 244, 0.9), rgba(236, 244, 249, 0.76))";
+    ? "radial-gradient(circle at 20% 20%, var(--map-night-background-glow), transparent 18%), linear-gradient(160deg, var(--map-night-background-start), var(--map-night-background-end))"
+    : "radial-gradient(circle at 20% 20%, var(--map-day-background-glow), transparent 20%), linear-gradient(160deg, var(--map-day-background-start), var(--map-day-background-end))";

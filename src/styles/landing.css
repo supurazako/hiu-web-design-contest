@@ -40,8 +40,8 @@
   z-index: 0;
   overflow: hidden;
   background:
-    radial-gradient(circle at 20% 20%, rgba(143, 209, 255, 0.14), transparent 20%),
-    linear-gradient(160deg, rgba(255, 250, 244, 0.9), rgba(236, 244, 249, 0.76));
+    radial-gradient(circle at 20% 20%, var(--map-day-background-glow), transparent 20%),
+    linear-gradient(160deg, var(--map-day-background-start), var(--map-day-background-end));
   transform: scale(1);
   transform-origin: center center;
   transition:
@@ -222,21 +222,10 @@ body.is-map-expanded .content-block {
   pointer-events: none;
 }
 
-.hero__map-background:not(.theme-night):not(.theme-compare):not(.theme-scratch) .map-canvas {
-  height: 100%;
-  border: 0;
-  border-radius: 0;
-  background: #fff8f2;
-}
-
 .hero__map-background .map-canvas {
   height: 100%;
   border: 0;
   border-radius: 0;
-}
-
-.hero__map-background.is-map-expanded:not(.theme-night):not(.theme-compare):not(.theme-scratch) .map-canvas {
-  background: #fff8f2;
 }
 
 .hero__map-background.is-map-expanded .hero__map-canvas {
@@ -396,4 +385,3 @@ body.is-map-expanded .content-block {
   font-size: 1rem;
   font-weight: 700;
 }
-

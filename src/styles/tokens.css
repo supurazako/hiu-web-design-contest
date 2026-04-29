@@ -38,6 +38,22 @@
   --theme-glow: rgba(255, 191, 102, 0.18);
   --map-transition-duration: 640ms;
   --map-transition-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --map-day-background-glow: rgba(143, 209, 255, 0.14);
+  --map-day-background-start: #f8fbfc;
+  --map-day-background-end: #edf4f8;
+  --map-day-building-stroke: #d1d8dc;
+  --map-day-building-fill: #eef2f4;
+  --map-day-waterway-stroke: #6fb7e9;
+  --map-day-highway-stroke: #ffffff;
+  --map-day-path-stroke: #dbe4e9;
+  --map-night-background-glow: rgba(133, 188, 255, 0.16);
+  --map-night-background-start: #172635;
+  --map-night-background-end: #111c29;
+  --map-night-building-stroke: #364454;
+  --map-night-building-fill: #263241;
+  --map-night-waterway-stroke: #7ac8ff;
+  --map-night-highway-stroke: #d6e7ff;
+  --map-night-path-stroke: #6d8198;
   font-family: "Hiragino Sans", "Noto Sans JP", "Segoe UI", sans-serif;
 }
 
@@ -166,62 +182,3 @@ img {
   --md-sys-color-state-press: rgba(166, 201, 255, 0.16);
   --theme-glow: rgba(133, 188, 255, 0.12);
 }
-
-.theme-compare {
-  --md-sys-color-primary: #4d647f;
-  --md-sys-color-on-primary: #ffffff;
-  --md-sys-color-primary-container: rgba(221, 232, 244, 0.88);
-  --md-sys-color-on-primary-container: #1b2c3f;
-  --md-sys-color-secondary: #596779;
-  --md-sys-color-on-secondary: #ffffff;
-  --md-sys-color-secondary-container: rgba(233, 238, 244, 0.88);
-  --md-sys-color-on-secondary-container: #243241;
-  --md-sys-color-surface: rgba(246, 248, 251, 1);
-  --md-sys-color-surface-dim: rgba(231, 236, 242, 1);
-  --md-sys-color-surface-bright: rgba(250, 251, 253, 1);
-  --md-sys-color-surface-container-low: rgba(250, 251, 253, 0.84);
-  --md-sys-color-surface-container: rgba(240, 244, 248, 0.84);
-  --md-sys-color-surface-container-high: rgba(234, 239, 245, 0.9);
-  --md-sys-color-surface-container-highest: rgba(228, 234, 242, 0.96);
-  --md-sys-color-on-surface: #1d2a37;
-  --md-sys-color-on-surface-variant: #516171;
-  --md-sys-color-outline: #8090a2;
-  --md-sys-color-outline-variant: rgba(134, 148, 165, 0.42);
-  --md-sys-color-inverse-surface: #223142;
-  --md-sys-color-inverse-on-surface: #f7fbff;
-  --md-sys-color-inverse-primary: #c4d8ee;
-  --md-sys-color-tertiary-container: rgba(206, 229, 240, 0.84);
-  --md-sys-color-state-hover: rgba(77, 100, 127, 0.08);
-  --md-sys-color-state-press: rgba(77, 100, 127, 0.14);
-  --theme-glow: rgba(162, 185, 212, 0.2);
-}
-
-.theme-scratch {
-  --md-sys-color-primary: #6d4f16;
-  --md-sys-color-on-primary: #ffffff;
-  --md-sys-color-primary-container: rgba(255, 227, 176, 0.92);
-  --md-sys-color-on-primary-container: #2c1a00;
-  --md-sys-color-secondary: #6a5d4e;
-  --md-sys-color-on-secondary: #ffffff;
-  --md-sys-color-secondary-container: rgba(243, 230, 212, 0.92);
-  --md-sys-color-on-secondary-container: #271f15;
-  --md-sys-color-surface: rgba(255, 248, 241, 1);
-  --md-sys-color-surface-dim: rgba(239, 231, 220, 1);
-  --md-sys-color-surface-bright: rgba(255, 250, 245, 1);
-  --md-sys-color-surface-container-low: rgba(255, 250, 245, 0.86);
-  --md-sys-color-surface-container: rgba(247, 239, 229, 0.88);
-  --md-sys-color-surface-container-high: rgba(241, 233, 223, 0.92);
-  --md-sys-color-surface-container-highest: rgba(235, 226, 216, 0.96);
-  --md-sys-color-on-surface: #231a12;
-  --md-sys-color-on-surface-variant: #5c4d40;
-  --md-sys-color-outline: #8c7a69;
-  --md-sys-color-outline-variant: rgba(153, 133, 112, 0.34);
-  --md-sys-color-inverse-surface: #31455b;
-  --md-sys-color-inverse-on-surface: #f7fbff;
-  --md-sys-color-inverse-primary: #d4e5f7;
-  --md-sys-color-tertiary-container: rgba(218, 233, 246, 0.88);
-  --md-sys-color-state-hover: rgba(109, 79, 22, 0.08);
-  --md-sys-color-state-press: rgba(109, 79, 22, 0.14);
-  --theme-glow: rgba(255, 196, 109, 0.2);
-}
-
