@@ -205,7 +205,10 @@ const markerEntries = new Map<string, MarkerEntry>();
 const geoJsonLayers: Partial<Record<TimeMode, L.GeoJSON>> = {};
 let dataBounds: L.LatLngBounds | null = null;
 let transitionCleanupTimer: number | null = null;
+let spotCardHideTimer: number | null = null;
+let spotCardShowFrame: number | null = null;
 const mapTransitionDuration = 720;
+const spotCardMotionDuration = 320;
 const townCenter = L.latLng(42.9650, 141.16615);
 const townZoomDesktop = 15.5;
 const townZoomMobile = 15.25;
@@ -487,24 +490,58 @@ const updateLanguageMenu = () => {
   languageMenuTrigger.setAttribute("aria-expanded", String(state.isLanguageMenuOpen));
 };
 
+const showSpotCard = () => {
+  if (spotCardHideTimer !== null) {
+    window.clearTimeout(spotCardHideTimer);
+    spotCardHideTimer = null;
+  }
+
+  if (spotCardShowFrame !== null) {
+    window.cancelAnimationFrame(spotCardShowFrame);
+    spotCardShowFrame = null;
+  }
+
+  const wasHidden = spotCard.hidden;
+  spotCard.hidden = false;
+
+  if (!wasHidden && spotCard.classList.contains("is-visible-sheet")) return;
+
+  spotCardShowFrame = window.requestAnimationFrame(() => {
+    spotCard.classList.add("is-visible-sheet");
+    spotCardShowFrame = null;
+  });
+};
+
+const hideSpotCard = () => {
+  if (spotCardShowFrame !== null) {
+    window.cancelAnimationFrame(spotCardShowFrame);
+    spotCardShowFrame = null;
+  }
+
+  spotCard.classList.remove("is-visible-sheet");
+  if (spotCard.hidden || spotCardHideTimer !== null) return;
+
+  spotCardHideTimer = window.setTimeout(() => {
+    spotCard.hidden = true;
+    spotCardHideTimer = null;
+  }, spotCardMotionDuration);
+};
+
 const renderCard = () => {
   const ui = uiCopy[state.locale];
   const spot = getSelectedSpot();
 
   if (!spot) {
+    hideSpotCard();
     spotCard.classList.add("is-empty-sheet");
     spotCard.classList.remove("is-selected-sheet");
-    spotVisual.hidden = true;
-    spotMeta.hidden = true;
-    spotTitle.hidden = true;
-    spotDescription.hidden = true;
-    spotDetailLabel.hidden = true;
-    spotEmpty.hidden = false;
+    spotEmpty.hidden = true;
     spotEmptyTitle.textContent = ui.cardEmptyTitle;
     spotEmptyHint.textContent = ui.cardEmptyHint;
     return;
   }
 
+  showSpotCard();
   const activeTimeMode =
     state.displayMode === "single" ? state.timeMode : state.selectedSpotMode ?? state.timeMode;
   const activeTimeLabel =

@@ -62,9 +62,14 @@
   }
 
   .sheet-host--floating {
+    position: absolute;
+    top: auto;
+    right: auto;
+    left: 50%;
     align-items: flex-end;
     bottom: 24px;
     width: min(calc(100% - 48px), 560px);
+    translate: -50% 0;
   }
 
   .sheet-host--floating .spot-card {
@@ -120,8 +125,13 @@
   }
 
   .sheet-host--floating {
+    position: absolute;
+    top: auto;
+    right: auto;
+    left: 50%;
     bottom: 16px;
     width: min(calc(100% - 32px), 520px);
+    translate: -50% 0;
   }
 
   .spot-card {

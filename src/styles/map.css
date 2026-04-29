@@ -190,11 +190,29 @@ body.is-map-leaving .hero__content {
   border: 2px solid var(--md-sys-color-outline);
   border-radius: 50%;
   background:
-    linear-gradient(180deg, rgba(255, 248, 241, 0.9), rgba(255, 248, 241, 0.36)),
-    conic-gradient(from 180deg, rgba(18, 28, 39, 0.88), rgba(18, 28, 39, 0.88) 50%, rgba(255, 222, 169, 0.92) 50%, rgba(255, 222, 169, 0.92));
+    radial-gradient(circle, rgba(255, 248, 241, 0.94), rgba(225, 231, 237, 0.7));
   color: var(--md-sys-color-on-surface);
   cursor: grab;
+  overflow: hidden;
   touch-action: none;
+}
+
+.map-clock__dial::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background:
+    conic-gradient(
+      from 0deg,
+      rgba(18, 28, 39, 0.88) 0deg 60deg,
+      rgba(110, 137, 163, 0.76) 60deg 120deg,
+      rgba(255, 222, 169, 0.95) 120deg 240deg,
+      rgba(110, 137, 163, 0.76) 240deg 300deg,
+      rgba(18, 28, 39, 0.88) 300deg 360deg
+    );
+  mask-image: radial-gradient(circle, transparent 0 55%, #000 56%);
+  pointer-events: none;
 }
 
 .map-clock__dial:active {
@@ -208,7 +226,8 @@ body.is-map-leaving .hero__content {
   width: 3px;
   height: 28px;
   border-radius: 999px;
-  background: var(--md-sys-color-primary);
+  background: #000000;
+  z-index: 1;
   transform: translateX(-50%) rotate(180deg);
   transform-origin: center bottom;
 }
@@ -220,7 +239,8 @@ body.is-map-leaving .hero__content {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--md-sys-color-primary);
+  background: #000000;
+  z-index: 2;
   transform: translate(-50%, -50%);
 }
 
@@ -561,7 +581,8 @@ body.is-map-leaving .hero__content {
   .hero__map-background,
   .hero__content,
   .content-block,
-  .hero__map-background .map-overlay > * {
+  .hero__map-background .map-overlay > *,
+  .sheet-host--floating .spot-card {
     transition-duration: 1ms;
     transform: none;
   }
@@ -587,6 +608,57 @@ body.is-map-leaving .hero__content {
   touch-action: none;
 }
 
+.is-clock-active {
+  --clock-on-surface: color-mix(
+    in srgb,
+    #231a12 calc((1 - var(--clock-night-ratio)) * 100%),
+    #edf2f7
+  );
+  --clock-on-surface-variant: color-mix(
+    in srgb,
+    #54473a calc((1 - var(--clock-night-ratio)) * 100%),
+    #b6c4d3
+  );
+  --clock-primary: color-mix(
+    in srgb,
+    #7e5700 calc((1 - var(--clock-night-ratio)) * 100%),
+    #a6c9ff
+  );
+  --clock-outline: color-mix(
+    in srgb,
+    #857567 calc((1 - var(--clock-night-ratio)) * 100%),
+    #8895a3
+  );
+  --clock-outline-variant: color-mix(
+    in srgb,
+    #d9c3b0 calc((1 - var(--clock-night-ratio)) * 100%),
+    #3f4b59
+  );
+  --clock-secondary-container: color-mix(
+    in srgb,
+    #eedcc7 calc((1 - var(--clock-night-ratio)) * 100%),
+    rgba(55, 63, 77, 0.96)
+  );
+  --clock-on-secondary-container: color-mix(
+    in srgb,
+    #211b12 calc((1 - var(--clock-night-ratio)) * 100%),
+    #dfe4ec
+  );
+  --md-sys-color-on-surface: var(--clock-on-surface);
+  --md-sys-color-on-surface-variant: var(--clock-on-surface-variant);
+  --md-sys-color-primary: var(--clock-primary);
+  --md-sys-color-outline: var(--clock-outline);
+  --md-sys-color-outline-variant: var(--clock-outline-variant);
+  --md-sys-color-secondary-container: var(--clock-secondary-container);
+  --md-sys-color-on-secondary-container: var(--clock-on-secondary-container);
+  --map-ui-primary: var(--clock-primary);
+  --map-ui-on-surface: var(--clock-on-surface);
+  --map-ui-on-surface-variant: var(--clock-on-surface-variant);
+  --map-ui-outline: var(--clock-outline-variant);
+  --map-ui-secondary-container: var(--clock-secondary-container);
+  --map-ui-on-secondary-container: var(--clock-on-secondary-container);
+}
+
 .is-clock-active .map-control-stack,
 .is-clock-active .sheet-host--floating .spot-card,
 .is-clock-active .map-attribution,
@@ -603,7 +675,7 @@ body.is-map-leaving .hero__content {
 .is-clock-active .map-clock,
 .is-clock-active .map-control-stack,
 .is-clock-active .map-toolbar__button {
-  color: color-mix(in srgb, var(--md-sys-color-on-surface) calc((1 - var(--clock-night-ratio)) * 100%), #edf2f7);
+  color: var(--clock-on-surface);
 }
 
 .is-scratch-active .map-scratch-surface {
