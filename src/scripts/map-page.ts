@@ -164,6 +164,8 @@ clippedCustomPanes.forEach((pane) => {
   pane.classList.add("time-map-clipped-pane");
 });
 const scratchContext = scratchSurface.getContext("2d");
+const inverseScratchSurface = document.createElement("canvas");
+const inverseScratchContext = inverseScratchSurface.getContext("2d");
 const scratchBrushRadius = 48;
 const scratchMinPointDistance = 4;
 const scratchMaskPixelRatio = 1;
@@ -192,11 +194,17 @@ const syncCustomPaneBounds = () => {
   if (!sizeChanged) return false;
   scratchSurface.width = nextWidth;
   scratchSurface.height = nextHeight;
+  inverseScratchSurface.width = nextWidth;
+  inverseScratchSurface.height = nextHeight;
   scratchSurface.style.width = `${Math.round(width)}px`;
   scratchSurface.style.height = `${Math.round(height)}px`;
   if (scratchContext) {
     scratchContext.setTransform(1, 0, 0, 1, 0, 0);
     scratchContext.scale(pixelRatio, pixelRatio);
+  }
+  if (inverseScratchContext) {
+    inverseScratchContext.setTransform(1, 0, 0, 1, 0, 0);
+    inverseScratchContext.scale(pixelRatio, pixelRatio);
   }
   return true;
 };
@@ -262,11 +270,25 @@ const scratchMaskTargets = () => [
   magnifierBackgroundPane,
 ];
 
+const inverseScratchMaskTargets = () => [
+  paneByMode.day.marker,
+];
+
 const drawScratchMask = () => {
   scratchMaskFrame = null;
   const mapRect = mapElement.getBoundingClientRect();
   const { width, height } = mapRect;
   const maskUrl = `url(${scratchSurface.toDataURL("image/png")})`;
+  let inverseMaskUrl = "";
+  if (inverseScratchContext) {
+    inverseScratchContext.globalCompositeOperation = "source-over";
+    inverseScratchContext.clearRect(0, 0, width, height);
+    inverseScratchContext.fillStyle = "rgba(255, 255, 255, 1)";
+    inverseScratchContext.fillRect(0, 0, width, height);
+    inverseScratchContext.globalCompositeOperation = "destination-out";
+    inverseScratchContext.drawImage(scratchSurface, 0, 0, width, height);
+    inverseMaskUrl = `url(${inverseScratchSurface.toDataURL("image/png")})`;
+  }
   scratchMaskTargets().forEach((pane) => {
     const paneRect = pane.getBoundingClientRect();
     const maskX = mapRect.left - paneRect.left;
@@ -276,6 +298,19 @@ const drawScratchMask = () => {
     pane.style.maskSize = `${Math.round(width)}px ${Math.round(height)}px`;
     pane.style.maskPosition = `${Math.round(maskX)}px ${Math.round(maskY)}px`;
     pane.style.webkitMaskImage = maskUrl;
+    pane.style.webkitMaskRepeat = "no-repeat";
+    pane.style.webkitMaskSize = `${Math.round(width)}px ${Math.round(height)}px`;
+    pane.style.webkitMaskPosition = `${Math.round(maskX)}px ${Math.round(maskY)}px`;
+  });
+  inverseScratchMaskTargets().forEach((pane) => {
+    const paneRect = pane.getBoundingClientRect();
+    const maskX = mapRect.left - paneRect.left;
+    const maskY = mapRect.top - paneRect.top;
+    pane.style.maskImage = inverseMaskUrl;
+    pane.style.maskRepeat = "no-repeat";
+    pane.style.maskSize = `${Math.round(width)}px ${Math.round(height)}px`;
+    pane.style.maskPosition = `${Math.round(maskX)}px ${Math.round(maskY)}px`;
+    pane.style.webkitMaskImage = inverseMaskUrl;
     pane.style.webkitMaskRepeat = "no-repeat";
     pane.style.webkitMaskSize = `${Math.round(width)}px ${Math.round(height)}px`;
     pane.style.webkitMaskPosition = `${Math.round(maskX)}px ${Math.round(maskY)}px`;
@@ -301,6 +336,16 @@ const clearScratchMask = () => {
     scratchMaskFrame = null;
   }
   scratchMaskTargets().forEach((pane) => {
+    pane.style.maskImage = "";
+    pane.style.maskRepeat = "";
+    pane.style.maskSize = "";
+    pane.style.maskPosition = "";
+    pane.style.webkitMaskImage = "";
+    pane.style.webkitMaskRepeat = "";
+    pane.style.webkitMaskSize = "";
+    pane.style.webkitMaskPosition = "";
+  });
+  inverseScratchMaskTargets().forEach((pane) => {
     pane.style.maskImage = "";
     pane.style.maskRepeat = "";
     pane.style.maskSize = "";
@@ -439,6 +484,83 @@ const isSpotVisibleForMode = (spot: Spot, mode: TimeMode) => spot.timeMode === "
 
 const getSelectedSpot = () => spots.find((spot) => spot.id === state.selectedSpotId) ?? null;
 
+const isScratchMaskRevealedAtPoint = (point: ScratchPoint) => {
+  if (!scratchContext || scratchSurface.hidden) return false;
+  if (point.x < 0 || point.y < 0 || point.x >= scratchSurface.width || point.y >= scratchSurface.height) return false;
+  const pixel = scratchContext.getImageData(Math.round(point.x), Math.round(point.y), 1, 1).data;
+  return pixel[3] > 0;
+};
+
+const isMarkerModeVisibleAtPoint = (mode: TimeMode, point: ScratchPoint) => {
+  if (state.displayMode === "single") return mode === state.timeMode;
+
+  if (state.displayMode === "compare") {
+    const { width } = mapElement.getBoundingClientRect();
+    const splitX = width * state.splitRatio;
+    return mode === "day" ? point.x <= splitX : point.x >= splitX;
+  }
+
+  if (state.displayMode === "magnifier") {
+    const activeMode = state.timeMode;
+    const radius = Number.parseFloat(getComputedStyle(root).getPropertyValue("--magnifier-radius")) || 90;
+    const isInsideLens = Math.hypot(point.x - state.magnifierPoint.x, point.y - state.magnifierPoint.y) <= radius;
+    return mode === activeMode ? !isInsideLens : isInsideLens;
+  }
+
+  if (state.displayMode === "scratch") {
+    const isRevealed = isScratchMaskRevealedAtPoint(point);
+    return mode === "day" ? !isRevealed : isRevealed;
+  }
+
+  if (state.displayMode === "clock") {
+    const nightRatio = nightRatioForHour(state.clockHour);
+    return mode === "day" ? nightRatio < 1 : nightRatio > 0;
+  }
+
+  return true;
+};
+
+const getVisibleMarkerAtPoint = (point: ScratchPoint) => {
+  const hitRadius = 24;
+  let closest: MarkerEntry | null = null;
+  let closestDistance = Number.POSITIVE_INFINITY;
+  let closestPriority = -1;
+
+  markerEntries.forEach((entry) => {
+    const { marker, mode } = entry;
+    if (!map.hasLayer(marker) || !isMarkerModeVisibleAtPoint(mode, point)) return;
+
+    const markerPoint = map.latLngToContainerPoint(marker.getLatLng());
+    const distance = Math.hypot(point.x - markerPoint.x, point.y - markerPoint.y);
+    if (distance > hitRadius) return;
+
+    const priority =
+      (state.displayMode === "magnifier" && mode === oppositeTimeMode(state.timeMode)) ||
+      (state.displayMode === "scratch" && mode === "night" && isScratchMaskRevealedAtPoint(point))
+        ? 1
+        : 0;
+
+    if (priority > closestPriority || (priority === closestPriority && distance < closestDistance)) {
+      closest = entry;
+      closestDistance = distance;
+      closestPriority = priority;
+    }
+  });
+
+  return closest;
+};
+
+const selectVisibleMarkerFromPointer = (clientX: number, clientY: number) => {
+  const point = getScratchPointFromPointer(clientX, clientY);
+  if (!point) return false;
+  const entry = getVisibleMarkerAtPoint(point);
+  if (!entry) return false;
+  state.selectedSpotId = entry.spot.id;
+  state.selectedSpotMode = entry.mode;
+  render();
+  return true;
+};
+
 const createPinHtml = (spot: Spot, mode: TimeMode) => `
   <span
     class="time-pin time-pin--${mode}"
@@ -493,6 +615,14 @@ const setPaneState = (pane: HTMLElement, options: { visible: boolean; clipPath: 
 const clearPaneBackgrounds = () => {
   customPanes.forEach((pane) => {
     pane.style.background = "";
+    pane.style.maskImage = "";
+    pane.style.maskRepeat = "";
+    pane.style.maskSize = "";
+    pane.style.maskPosition = "";
+    pane.style.webkitMaskImage = "";
+    pane.style.webkitMaskRepeat = "";
+    pane.style.webkitMaskSize = "";
+    pane.style.webkitMaskPosition = "";
   });
   magnifierBackgroundPane.style.opacity = "0";
   magnifierBackgroundPane.style.visibility = "hidden";
@@ -523,6 +653,22 @@ const clipPathForCircle = (pane: HTMLElement, point: ScratchPoint, radius: numbe
   const x = clamp(mapRect.left - paneRect.left + point.x, 0, paneRect.width);
   const y = clamp(mapRect.top - paneRect.top + point.y, 0, paneRect.height);
   return `circle(${radius}px at ${x}px ${y}px)`;
+};
+
+const applyInverseCircleMask = (pane: HTMLElement, point: ScratchPoint, radius: number) => {
+  const mapRect = mapElement.getBoundingClientRect();
+  const paneRect = pane.getBoundingClientRect();
+  const x = clamp(mapRect.left - paneRect.left + point.x, 0, paneRect.width);
+  const y = clamp(mapRect.top - paneRect.top + point.y, 0, paneRect.height);
+  const maskImage = `radial-gradient(circle ${radius}px at ${x}px ${y}px, transparent 0 ${Math.max(radius - 1, 0)}px, #fff ${radius}px)`;
+  pane.style.maskImage = maskImage;
+  pane.style.maskRepeat = "no-repeat";
+  pane.style.maskSize = "100% 100%";
+  pane.style.maskPosition = "0 0";
+  pane.style.webkitMaskImage = maskImage;
+  pane.style.webkitMaskRepeat = "no-repeat";
+  pane.style.webkitMaskSize = "100% 100%";
+  pane.style.webkitMaskPosition = "0 0";
 };
 
 const applyPaneVisibility = () => {
@@ -559,6 +705,7 @@ const applyPaneVisibility = () => {
     setPaneState(paneByMode[activeMode].marker, { visible: true, clipPath: "none" });
     setPaneState(paneByMode[revealMode].geo, { visible: true, clipPath: revealClipPath });
     setPaneState(paneByMode[revealMode].marker, { visible: true, clipPath: revealMarkerClipPath });
+    applyInverseCircleMask(paneByMode[activeMode].marker, state.magnifierPoint, radius);
     return;
   }
 
@@ -1115,6 +1262,7 @@ magnifierOverlay.addEventListener("pointerdown", (event) => {
   event.preventDefault();
   magnifierOverlay.setPointerCapture(event.pointerId);
   setMagnifierPointFromPointer(event.clientX, event.clientY);
+  selectVisibleMarkerFromPointer(event.clientX, event.clientY);
 });
 
 magnifierOverlay.addEventListener("pointermove", (event) => {
@@ -1243,6 +1391,7 @@ scratchSurface.addEventListener("pointerdown", (event) => {
   event.preventDefault();
   scratchSurface.setPointerCapture(event.pointerId);
   beginScratch(event.clientX, event.clientY);
+  selectVisibleMarkerFromPointer(event.clientX, event.clientY);
 });
 
 scratchSurface.addEventListener("pointermove", (event) => {
