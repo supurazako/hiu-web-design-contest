@@ -1,0 +1,227 @@
+:root {
+  color-scheme: light;
+  --md-sys-color-primary: #7e5700;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #ffdea9;
+  --md-sys-color-on-primary-container: #281800;
+  --md-sys-color-secondary: #655847;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: #eedcc7;
+  --md-sys-color-on-secondary-container: #211b12;
+  --md-sys-color-surface: #fff8f2;
+  --md-sys-color-surface-dim: #eadfd3;
+  --md-sys-color-surface-bright: #fff8f2;
+  --md-sys-color-surface-container-low: rgba(255, 251, 245, 0.9);
+  --md-sys-color-surface-container: rgba(248, 240, 231, 0.92);
+  --md-sys-color-surface-container-high: rgba(242, 233, 223, 0.96);
+  --md-sys-color-surface-container-highest: rgba(236, 227, 217, 1);
+  --md-sys-color-on-surface: #231a12;
+  --md-sys-color-on-surface-variant: #54473a;
+  --md-sys-color-outline: #857567;
+  --md-sys-color-outline-variant: #d9c3b0;
+  --md-sys-color-shadow: rgba(45, 28, 12, 0.18);
+  --md-sys-color-scrim: rgba(32, 22, 15, 0.32);
+  --md-sys-color-inverse-surface: #382f26;
+  --md-sys-color-inverse-on-surface: #fff8f2;
+  --md-sys-color-inverse-primary: #f2bf5b;
+  --md-sys-color-tertiary-container: rgba(202, 233, 243, 0.84);
+  --md-sys-color-state-hover: rgba(126, 87, 0, 0.08);
+  --md-sys-color-state-press: rgba(126, 87, 0, 0.14);
+  --md-elevation-1: 0 1px 2px rgba(45, 28, 12, 0.1), 0 1px 3px rgba(45, 28, 12, 0.16);
+  --md-elevation-2: 0 2px 6px rgba(45, 28, 12, 0.12), 0 1px 2px rgba(45, 28, 12, 0.08);
+  --md-elevation-3: 0 8px 24px rgba(45, 28, 12, 0.12), 0 2px 8px rgba(45, 28, 12, 0.1);
+  --md-shape-corner-extra-small: 4px;
+  --md-shape-corner-small: 8px;
+  --md-shape-corner-medium: 16px;
+  --md-shape-corner-large: 28px;
+  --md-shape-corner-extra-large: 36px;
+  --theme-glow: rgba(255, 191, 102, 0.18);
+  --map-transition-duration: 640ms;
+  --map-transition-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  font-family: "Hiragino Sans", "Noto Sans JP", "Segoe UI", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top left, rgba(255, 211, 140, 0.2), transparent 26%),
+    linear-gradient(180deg, #fff8f2 0%, #f7efe6 100%);
+  color: var(--md-sys-color-on-surface);
+}
+
+body {
+  line-height: 1.5;
+}
+
+html.is-map-expanded,
+body.is-map-expanded {
+  overflow: hidden;
+  background: #fff8f2;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+.page-shell {
+  min-height: 100vh;
+  padding: 0 16px 16px;
+}
+
+.landing-shell {
+  padding-inline: 0;
+}
+
+.landing-shell > .content-block {
+  margin-inline: 16px;
+}
+
+.landing-shell,
+.map-shell {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+}
+
+.landing-shell::before,
+.map-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 12% 14%, var(--theme-glow), transparent 24%),
+    radial-gradient(circle at 84% 16%, rgba(255, 255, 255, 0.48), transparent 18%);
+  pointer-events: none;
+  transition: background 240ms ease;
+}
+
+.theme-day {
+  --md-sys-color-primary: #7e5700;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #ffdea9;
+  --md-sys-color-on-primary-container: #281800;
+  --md-sys-color-secondary-container: #eedcc7;
+  --md-sys-color-surface: #fff8f2;
+  --md-sys-color-surface-container: rgba(248, 240, 231, 0.92);
+  --md-sys-color-surface-container-high: rgba(242, 233, 223, 0.96);
+  --md-sys-color-surface-container-highest: rgba(236, 227, 217, 1);
+  --md-sys-color-on-surface: #231a12;
+  --md-sys-color-on-surface-variant: #54473a;
+  --md-sys-color-outline: #857567;
+  --md-sys-color-outline-variant: #d9c3b0;
+  --md-sys-color-inverse-surface: #382f26;
+  --md-sys-color-inverse-on-surface: #fff8f2;
+  --md-sys-color-inverse-primary: #f2bf5b;
+  --md-sys-color-tertiary-container: rgba(202, 233, 243, 0.84);
+  --md-sys-color-state-hover: rgba(126, 87, 0, 0.08);
+  --md-sys-color-state-press: rgba(126, 87, 0, 0.14);
+  --theme-glow: rgba(255, 191, 102, 0.18);
+}
+
+.theme-night {
+  color-scheme: dark;
+  --md-sys-color-primary: #a6c9ff;
+  --md-sys-color-on-primary: #08305f;
+  --md-sys-color-primary-container: #244777;
+  --md-sys-color-on-primary-container: #d7e3ff;
+  --md-sys-color-secondary: #c7d0dd;
+  --md-sys-color-on-secondary: #2f3945;
+  --md-sys-color-secondary-container: rgba(55, 63, 77, 0.96);
+  --md-sys-color-on-secondary-container: #dfe4ec;
+  --md-sys-color-surface: #121c27;
+  --md-sys-color-surface-dim: #0d1721;
+  --md-sys-color-surface-bright: #1f2a36;
+  --md-sys-color-surface-container-low: rgba(20, 30, 42, 0.84);
+  --md-sys-color-surface-container: rgba(24, 35, 48, 0.9);
+  --md-sys-color-surface-container-high: rgba(28, 41, 56, 0.94);
+  --md-sys-color-surface-container-highest: rgba(35, 49, 66, 0.98);
+  --md-sys-color-on-surface: #edf2f7;
+  --md-sys-color-on-surface-variant: #b6c4d3;
+  --md-sys-color-outline: #8895a3;
+  --md-sys-color-outline-variant: #3f4b59;
+  --md-sys-color-shadow: rgba(0, 0, 0, 0.34);
+  --md-sys-color-scrim: rgba(0, 0, 0, 0.42);
+  --md-sys-color-inverse-surface: #edf2f7;
+  --md-sys-color-inverse-on-surface: #162230;
+  --md-sys-color-inverse-primary: #375f90;
+  --md-sys-color-tertiary-container: rgba(54, 73, 89, 0.9);
+  --md-sys-color-state-hover: rgba(166, 201, 255, 0.1);
+  --md-sys-color-state-press: rgba(166, 201, 255, 0.16);
+  --theme-glow: rgba(133, 188, 255, 0.12);
+}
+
+.theme-compare {
+  --md-sys-color-primary: #4d647f;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: rgba(221, 232, 244, 0.88);
+  --md-sys-color-on-primary-container: #1b2c3f;
+  --md-sys-color-secondary: #596779;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: rgba(233, 238, 244, 0.88);
+  --md-sys-color-on-secondary-container: #243241;
+  --md-sys-color-surface: rgba(246, 248, 251, 1);
+  --md-sys-color-surface-dim: rgba(231, 236, 242, 1);
+  --md-sys-color-surface-bright: rgba(250, 251, 253, 1);
+  --md-sys-color-surface-container-low: rgba(250, 251, 253, 0.84);
+  --md-sys-color-surface-container: rgba(240, 244, 248, 0.84);
+  --md-sys-color-surface-container-high: rgba(234, 239, 245, 0.9);
+  --md-sys-color-surface-container-highest: rgba(228, 234, 242, 0.96);
+  --md-sys-color-on-surface: #1d2a37;
+  --md-sys-color-on-surface-variant: #516171;
+  --md-sys-color-outline: #8090a2;
+  --md-sys-color-outline-variant: rgba(134, 148, 165, 0.42);
+  --md-sys-color-inverse-surface: #223142;
+  --md-sys-color-inverse-on-surface: #f7fbff;
+  --md-sys-color-inverse-primary: #c4d8ee;
+  --md-sys-color-tertiary-container: rgba(206, 229, 240, 0.84);
+  --md-sys-color-state-hover: rgba(77, 100, 127, 0.08);
+  --md-sys-color-state-press: rgba(77, 100, 127, 0.14);
+  --theme-glow: rgba(162, 185, 212, 0.2);
+}
+
+.theme-scratch {
+  --md-sys-color-primary: #6d4f16;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: rgba(255, 227, 176, 0.92);
+  --md-sys-color-on-primary-container: #2c1a00;
+  --md-sys-color-secondary: #6a5d4e;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: rgba(243, 230, 212, 0.92);
+  --md-sys-color-on-secondary-container: #271f15;
+  --md-sys-color-surface: rgba(255, 248, 241, 1);
+  --md-sys-color-surface-dim: rgba(239, 231, 220, 1);
+  --md-sys-color-surface-bright: rgba(255, 250, 245, 1);
+  --md-sys-color-surface-container-low: rgba(255, 250, 245, 0.86);
+  --md-sys-color-surface-container: rgba(247, 239, 229, 0.88);
+  --md-sys-color-surface-container-high: rgba(241, 233, 223, 0.92);
+  --md-sys-color-surface-container-highest: rgba(235, 226, 216, 0.96);
+  --md-sys-color-on-surface: #231a12;
+  --md-sys-color-on-surface-variant: #5c4d40;
+  --md-sys-color-outline: #8c7a69;
+  --md-sys-color-outline-variant: rgba(153, 133, 112, 0.34);
+  --md-sys-color-inverse-surface: #31455b;
+  --md-sys-color-inverse-on-surface: #f7fbff;
+  --md-sys-color-inverse-primary: #d4e5f7;
+  --md-sys-color-tertiary-container: rgba(218, 233, 246, 0.88);
+  --md-sys-color-state-hover: rgba(109, 79, 22, 0.08);
+  --md-sys-color-state-press: rgba(109, 79, 22, 0.14);
+  --theme-glow: rgba(255, 196, 109, 0.2);
+}
+

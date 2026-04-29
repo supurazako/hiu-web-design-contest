@@ -1,82 +1,106 @@
 import L from "leaflet";
 import type { Spot } from "../data/spots";
+import type { ThemeByMode, UiCopy } from "../data/site";
+import {
+  clamp,
+  formatClockHour,
+  getInitialTimeMode,
+  nightRatioForHour,
+  oppositeTimeMode,
+  type ScratchPoint,
+  type TimeMode,
+} from "./map-utils";
 
-type TimeMode = "day" | "night";
 type DisplayMode = "single" | "compare" | "magnifier" | "clock" | "scratch";
 type Locale = "ja" | "en";
+type ThemeMode = keyof ThemeByMode;
+type FeatureCategory = "building" | "waterway" | "highway" | "highwaySecondary";
 type MarkerEntry = {
   marker: L.Marker;
   spot: Spot;
   mode: TimeMode;
 };
-type ScratchPoint = { x: number; y: number };
 
-const spots = JSON.parse(document.getElementById("spots-data")!.textContent!) as Spot[];
-const uiCopy = JSON.parse(document.getElementById("ui-data")!.textContent!);
-const themeByMode = JSON.parse(document.getElementById("theme-data")!.textContent!);
+const getJsonData = <T>(id: string): T => {
+  const element = document.getElementById(id);
+  if (!element?.textContent) {
+    throw new Error(`Missing JSON data element: #${id}`);
+  }
+  return JSON.parse(element.textContent) as T;
+};
 
-const root = document.querySelector("[data-map-shell]") as HTMLElement;
-const mapElement = document.getElementById("map") as HTMLElement;
+const requiredElement = <T extends Element>(selector: string, rootNode: ParentNode = document): T => {
+  const element = rootNode.querySelector<T>(selector);
+  if (!element) {
+    throw new Error(`Missing required element: ${selector}`);
+  }
+  return element;
+};
+
+const requiredElementById = <T extends HTMLElement>(id: string): T => {
+  const element = document.getElementById(id);
+  if (!element) {
+    throw new Error(`Missing required element: #${id}`);
+  }
+  return element as T;
+};
+
+const spots = getJsonData<Spot[]>("spots-data");
+const uiCopy = getJsonData<UiCopy>("ui-data");
+const themeByMode = getJsonData<ThemeByMode>("theme-data");
+
+const root = requiredElement<HTMLElement>("[data-map-shell]");
+const mapElement = requiredElementById<HTMLElement>("map");
 const openMapLink = document.querySelector("[data-open-map]") as HTMLAnchorElement | null;
-const languageMenuTrigger = document.querySelector("[data-language-menu-trigger]") as HTMLButtonElement;
-const languageMenu = document.querySelector("[data-language-menu]") as HTMLElement;
-const controlShell = document.querySelector("[data-control-shell]") as HTMLElement;
-const timeToggleGroup = document.querySelector("[data-time-toggle-group]") as HTMLElement;
-const compareOverlay = document.querySelector("[data-compare-overlay]") as HTMLElement;
-const splitDivider = document.querySelector("[data-split-divider]") as HTMLElement;
-const splitHandle = document.querySelector("[data-split-handle]") as HTMLButtonElement;
-const magnifierOverlay = document.querySelector("[data-magnifier-overlay]") as HTMLElement;
-const clockPanel = document.querySelector("[data-clock-panel]") as HTMLElement;
-const clockDial = document.querySelector("[data-clock-dial]") as HTMLButtonElement;
-const clockHand = document.querySelector("[data-clock-hand]") as HTMLElement;
-const clockTime = document.querySelector("[data-clock-time]") as HTMLElement;
-const scratchSurface = document.querySelector("[data-scratch-surface]") as HTMLCanvasElement;
-const scratchGroup = document.querySelector("[data-scratch-group]") as HTMLElement;
-const scratchResetButton = document.querySelector("[data-scratch-reset]") as HTMLButtonElement;
-const floatingSheet = document.querySelector(".sheet-host--floating") as HTMLElement;
+const languageMenuTrigger = requiredElement<HTMLButtonElement>("[data-language-menu-trigger]");
+const languageMenu = requiredElement<HTMLElement>("[data-language-menu]");
+const controlShell = requiredElement<HTMLElement>("[data-control-shell]");
+const timeToggleGroup = requiredElement<HTMLElement>("[data-time-toggle-group]");
+const compareOverlay = requiredElement<HTMLElement>("[data-compare-overlay]");
+const splitDivider = requiredElement<HTMLElement>("[data-split-divider]");
+const splitHandle = requiredElement<HTMLButtonElement>("[data-split-handle]");
+const magnifierOverlay = requiredElement<HTMLElement>("[data-magnifier-overlay]");
+const clockPanel = requiredElement<HTMLElement>("[data-clock-panel]");
+const clockDial = requiredElement<HTMLButtonElement>("[data-clock-dial]");
+const clockHand = requiredElement<HTMLElement>("[data-clock-hand]");
+const clockTime = requiredElement<HTMLElement>("[data-clock-time]");
+const scratchSurface = requiredElement<HTMLCanvasElement>("[data-scratch-surface]");
+const scratchGroup = requiredElement<HTMLElement>("[data-scratch-group]");
+const scratchResetButton = requiredElement<HTMLButtonElement>("[data-scratch-reset]");
+const floatingSheet = requiredElement<HTMLElement>(".sheet-host--floating");
 
-const spotCard = document.querySelector("[data-spot-card]") as HTMLElement;
-const spotVisual = document.querySelector("[data-spot-visual]") as HTMLElement;
-const spotMeta = document.querySelector("[data-spot-meta]") as HTMLElement;
-const spotCategory = document.querySelector("[data-spot-category]") as HTMLElement;
-const spotRoute = document.querySelector("[data-spot-route]") as HTMLElement;
-const spotTitle = document.querySelector("[data-spot-title]") as HTMLElement;
-const spotDescription = document.querySelector("[data-spot-description]") as HTMLElement;
-const spotDetailLabel = document.querySelector("[data-spot-detail-label]") as HTMLElement;
-const spotEmpty = document.querySelector("[data-spot-empty]") as HTMLElement;
-const spotEmptyTitle = document.querySelector("[data-spot-empty-title]") as HTMLElement;
-const spotEmptyHint = document.querySelector("[data-spot-empty-hint]") as HTMLElement;
+const spotCard = requiredElement<HTMLElement>("[data-spot-card]");
+const spotVisual = requiredElement<HTMLElement>("[data-spot-visual]");
+const spotMeta = requiredElement<HTMLElement>("[data-spot-meta]");
+const spotCategory = requiredElement<HTMLElement>("[data-spot-category]");
+const spotRoute = requiredElement<HTMLElement>("[data-spot-route]");
+const spotTitle = requiredElement<HTMLElement>("[data-spot-title]");
+const spotDescription = requiredElement<HTMLElement>("[data-spot-description]");
+const spotDetailLabel = requiredElement<HTMLElement>("[data-spot-detail-label]");
+const spotEmpty = requiredElement<HTMLElement>("[data-spot-empty]");
+const spotEmptyTitle = requiredElement<HTMLElement>("[data-spot-empty-title]");
+const spotEmptyHint = requiredElement<HTMLElement>("[data-spot-empty-hint]");
+const backHomeButton = requiredElement<HTMLButtonElement>("[data-back-home-link]");
+const mapAttributionText = requiredElement<HTMLElement>(".map-attribution span");
+const displayModeGroup = requiredElement<HTMLElement>("[data-display-mode-group]");
+const timeModeButtons = Array.from(document.querySelectorAll<HTMLElement>("[data-time-mode]"));
+const displayModeButtons = Array.from(document.querySelectorAll<HTMLElement>("[data-display-mode]"));
+const languageOptionButtons = Array.from(document.querySelectorAll<HTMLElement>("[data-language-option]"));
+
+const timeModeButtonByMode = {
+  day: requiredElement<HTMLElement>('[data-time-mode="day"]'),
+  night: requiredElement<HTMLElement>('[data-time-mode="night"]'),
+} as const;
+
+const displayModeButtonByMode = {
+  single: requiredElement<HTMLElement>('[data-display-mode="single"]'),
+  compare: requiredElement<HTMLElement>('[data-display-mode="compare"]'),
+  magnifier: requiredElement<HTMLElement>('[data-display-mode="magnifier"]'),
+  clock: requiredElement<HTMLElement>('[data-display-mode="clock"]'),
+  scratch: requiredElement<HTMLElement>('[data-display-mode="scratch"]'),
+} as const;
 
 const placeholderClasses = ["placeholder-river", "placeholder-steam", "placeholder-forest", "placeholder-light"];
-
-const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
-const oppositeTimeMode = (mode: TimeMode): TimeMode => (mode === "day" ? "night" : "day");
-const smoothstep = (edge0: number, edge1: number, value: number) => {
-  const x = clamp((value - edge0) / (edge1 - edge0), 0, 1);
-  return x * x * (3 - 2 * x);
-};
-
-const nightRatioForHour = (hour: number) => {
-  const normalizedHour = ((hour % 24) + 24) % 24;
-  if (normalizedHour >= 20 || normalizedHour < 4) return 1;
-  if (normalizedHour >= 8 && normalizedHour < 16) return 0;
-  if (normalizedHour >= 4 && normalizedHour < 8) return 1 - smoothstep(4, 8, normalizedHour);
-  return smoothstep(16, 20, normalizedHour);
-};
-
-const formatClockHour = (hour: number) => {
-  const normalizedHour = ((hour % 24) + 24) % 24;
-  const wholeHour = Math.floor(normalizedHour);
-  const minutes = Math.round((normalizedHour - wholeHour) * 60);
-  const adjustedHour = (wholeHour + Math.floor(minutes / 60)) % 24;
-  const adjustedMinutes = minutes % 60;
-  return `${String(adjustedHour).padStart(2, "0")}:${String(adjustedMinutes).padStart(2, "0")}`;
-};
-
-const getInitialTimeMode = (): TimeMode => {
-  const hour = new Date().getHours();
-  return hour >= 6 && hour < 18 ? "day" : "night";
-};
 
 const state: {
   locale: Locale;
@@ -452,8 +476,8 @@ const geoJsonStyles = {
   },
 } as const;
 
-const featureCategory = (feature: any) => {
-  const props = feature.properties || {};
+const featureCategory = (feature: GeoJSON.Feature | undefined): FeatureCategory | null => {
+  const props = feature?.properties ?? {};
   if (props.waterway) return "waterway";
   if (props.building) return "building";
   if (props.highway) {
@@ -467,7 +491,7 @@ const featureCategory = (feature: any) => {
   return null;
 };
 
-const layerStyleForMode = (mode: TimeMode, feature: any) => {
+const layerStyleForMode = (mode: TimeMode, feature: GeoJSON.Feature | undefined) => {
   const category = featureCategory(feature);
   if (!category) {
     return {
@@ -520,7 +544,7 @@ const isMarkerModeVisibleAtPoint = (mode: TimeMode, point: ScratchPoint) => {
   return true;
 };
 
-const getVisibleMarkerAtPoint = (point: ScratchPoint) => {
+const getVisibleMarkerAtPoint = (point: ScratchPoint): MarkerEntry | null => {
   const hitRadius = 24;
   let closest: MarkerEntry | null = null;
   let closestDistance = Number.POSITIVE_INFINITY;
@@ -788,13 +812,13 @@ const updateMarkerVisibility = () => {
 };
 
 const updateButtons = () => {
-  document.querySelectorAll<HTMLElement>("[data-time-mode]").forEach((button) => {
+  timeModeButtons.forEach((button) => {
     button.classList.toggle("is-active", button.dataset.timeMode === state.timeMode);
   });
-  document.querySelectorAll<HTMLElement>("[data-display-mode]").forEach((button) => {
+  displayModeButtons.forEach((button) => {
     button.classList.toggle("is-active", button.dataset.displayMode === state.displayMode);
   });
-  document.querySelectorAll<HTMLElement>("[data-language-option]").forEach((button) => {
+  languageOptionButtons.forEach((button) => {
     button.classList.toggle("is-active", button.dataset.locale === state.locale);
   });
 };
@@ -882,23 +906,24 @@ const updateCompareUI = () => {
 const renderStaticText = () => {
   const ui = uiCopy[state.locale];
   document.title = state.isExpanded ? `${ui.siteTitle} | ${ui.mapPageTitle}` : `${ui.siteTitle} | ${ui.siteTagline}`;
-  (document.querySelector("[data-back-home-link]") as HTMLElement).setAttribute("aria-label", ui.backHome);
-  (document.querySelector('[data-time-mode="day"]') as HTMLElement).setAttribute("aria-label", ui.dayLabel);
-  (document.querySelector('[data-time-mode="day"]') as HTMLElement).setAttribute("title", ui.dayLabel);
-  (document.querySelector('[data-time-mode="night"]') as HTMLElement).setAttribute("aria-label", ui.nightLabel);
-  (document.querySelector('[data-time-mode="night"]') as HTMLElement).setAttribute("title", ui.nightLabel);
-  (document.querySelector(".map-attribution span") as HTMLElement).textContent = ui.mapDataAttribution;
-  (document.querySelector("[data-display-mode-group]") as HTMLElement).setAttribute("aria-label", ui.displayModeLabel);
-  (document.querySelector('[data-display-mode="single"]') as HTMLElement).setAttribute("aria-label", ui.singleModeLabel);
-  (document.querySelector('[data-display-mode="single"]') as HTMLElement).setAttribute("title", ui.singleModeLabel);
-  (document.querySelector('[data-display-mode="compare"]') as HTMLElement).setAttribute("aria-label", ui.compareModeLabel);
-  (document.querySelector('[data-display-mode="compare"]') as HTMLElement).setAttribute("title", ui.compareModeLabel);
-  (document.querySelector('[data-display-mode="magnifier"]') as HTMLElement).setAttribute("aria-label", ui.magnifierModeLabel);
-  (document.querySelector('[data-display-mode="magnifier"]') as HTMLElement).setAttribute("title", ui.magnifierModeLabel);
-  (document.querySelector('[data-display-mode="clock"]') as HTMLElement).setAttribute("aria-label", ui.clockModeLabel);
-  (document.querySelector('[data-display-mode="clock"]') as HTMLElement).setAttribute("title", ui.clockModeLabel);
-  (document.querySelector('[data-display-mode="scratch"]') as HTMLElement).setAttribute("aria-label", ui.scratchModeLabel);
-  (document.querySelector('[data-display-mode="scratch"]') as HTMLElement).setAttribute("title", ui.scratchModeLabel);
+  backHomeButton.setAttribute("aria-label", ui.backHome);
+  timeModeButtonByMode.day.setAttribute("aria-label", ui.dayLabel);
+  timeModeButtonByMode.day.setAttribute("title", ui.dayLabel);
+  timeModeButtonByMode.night.setAttribute("aria-label", ui.nightLabel);
+  timeModeButtonByMode.night.setAttribute("title", ui.nightLabel);
+  mapAttributionText.textContent = ui.mapDataAttribution;
+  displayModeGroup.setAttribute("aria-label", ui.displayModeLabel);
+  const displayModeLabels: Array<[HTMLElement, string]> = [
+    [displayModeButtonByMode.single, ui.singleModeLabel],
+    [displayModeButtonByMode.compare, ui.compareModeLabel],
+    [displayModeButtonByMode.magnifier, ui.magnifierModeLabel],
+    [displayModeButtonByMode.clock, ui.clockModeLabel],
+    [displayModeButtonByMode.scratch, ui.scratchModeLabel],
+  ];
+  displayModeLabels.forEach(([button, label]) => {
+    button.setAttribute("aria-label", label);
+    button.setAttribute("title", label);
+  });
   splitHandle.setAttribute("aria-label", ui.compareHandleLabel);
   clockDial.setAttribute("aria-label", ui.clockDialLabel);
   languageMenuTrigger.setAttribute("aria-label", ui.languageLabel);
@@ -914,7 +939,7 @@ const applyTheme = () => {
     themeByMode.compare.className,
     themeByMode.scratch.className,
   );
-  const themeKey =
+  const themeKey: ThemeMode =
     state.displayMode === "compare"
       ? "compare"
       : state.displayMode === "scratch"
@@ -1033,11 +1058,11 @@ const getFitBoundsPadding = () => {
     paddingTopLeft: [
       state.isExpanded ? (isMobile ? 24 : 92) : 28,
       state.isExpanded ? (isMobile ? 92 : 56) : 28,
-    ] as L.PointExpression,
+    ] as [number, number],
     paddingBottomRight: [
       state.isExpanded ? 32 : 28,
       state.isExpanded ? (isMobile ? Math.round(sheetRect.height + 44) : Math.round(sheetRect.height + 36)) : 28,
-    ] as L.PointExpression,
+    ] as [number, number],
   };
 };
 
@@ -1186,19 +1211,19 @@ const endScratch = () => {
 
 const initGeoJson = async () => {
   const response = await fetch("/geodata/map.geojson");
-  const data = await response.json();
+  const data = (await response.json()) as GeoJSON.GeoJsonObject;
 
   (["day", "night"] as TimeMode[]).forEach((mode) => {
     const layer = L.geoJSON(data, {
-      filter: (feature) => {
+      filter: (feature: GeoJSON.Feature | undefined) => {
         const category = featureCategory(feature);
-        return Boolean(category) && feature.geometry?.type !== "Point";
+        return Boolean(category) && feature?.geometry?.type !== "Point";
       },
-      style: (feature) => layerStyleForMode(mode, feature),
+      style: (feature: GeoJSON.Feature | undefined) => layerStyleForMode(mode, feature),
       interactive: false,
       pane: mode === "day" ? "day-geojson-pane" : "night-geojson-pane",
       renderer: geoRendererByMode[mode],
-    }).addTo(map);
+    } as L.GeoJSONOptions & { renderer: L.Renderer }).addTo(map);
     geoJsonLayers[mode] = layer;
   });
 
@@ -1214,7 +1239,7 @@ openMapLink?.addEventListener("click", (event) => {
   syncExpandedState(true, { updateHistory: window.location.hash !== "#map" });
 });
 
-(document.querySelector("[data-back-home-link]") as HTMLButtonElement).addEventListener("click", () => {
+backHomeButton.addEventListener("click", () => {
   if (window.location.hash === "#map") {
     window.history.back();
     return;
@@ -1226,14 +1251,14 @@ window.addEventListener("popstate", () => {
   syncExpandedState(window.location.hash === "#map");
 });
 
-document.querySelectorAll<HTMLElement>("[data-time-mode]").forEach((button) => {
+timeModeButtons.forEach((button) => {
   button.addEventListener("click", () => {
     state.timeMode = button.dataset.timeMode as TimeMode;
     render();
   });
 });
 
-document.querySelectorAll<HTMLElement>("[data-display-mode]").forEach((button) => {
+displayModeButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const nextMode = button.dataset.displayMode as DisplayMode;
     if (nextMode === "magnifier" && state.displayMode !== "magnifier") {
@@ -1321,7 +1346,7 @@ clockDial.addEventListener("keydown", (event) => {
   }
 });
 
-document.querySelectorAll<HTMLElement>("[data-language-option]").forEach((button) => {
+languageOptionButtons.forEach((button) => {
   button.addEventListener("click", () => {
     state.locale = button.dataset.locale as Locale;
     state.isLanguageMenuOpen = false;

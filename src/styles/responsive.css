@@ -1,0 +1,145 @@
+@media (min-width: 768px) {
+  .page-shell {
+    padding: 0 24px 24px;
+  }
+
+  .landing-shell {
+    padding-inline: 0;
+  }
+
+  .landing-shell > .content-block {
+    margin-inline: 24px;
+  }
+
+  .scene-split {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .map-layout {
+    grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.92fr);
+    align-items: start;
+  }
+
+  .sheet-host {
+    position: sticky;
+    top: 24px;
+  }
+
+  .map-shell--immersive {
+    padding: 0;
+  }
+
+  .map-overlay {
+    padding: 24px;
+  }
+
+  .map-back,
+  .map-language {
+    top: 24px;
+  }
+
+  .map-back {
+    left: 24px;
+  }
+
+  .map-language {
+    right: 24px;
+  }
+
+  .map-attribution {
+    right: 24px;
+    bottom: 24px;
+  }
+
+  .map-clock {
+    right: 24px;
+    bottom: 82px;
+  }
+
+  .map-control-stack {
+    left: 24px;
+    bottom: 24px;
+  }
+
+  .sheet-host--floating {
+    align-items: flex-end;
+    bottom: 24px;
+    width: min(calc(100% - 48px), 560px);
+  }
+
+  .sheet-host--floating .spot-card {
+    width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .map-shell {
+    --magnifier-size: 132px;
+    --magnifier-radius: 66;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-magnifier {
+    transition: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero {
+    min-height: min(720px, calc(100vh - 16px));
+    padding: 36px 0 48px;
+  }
+
+  .hero::before {
+    background:
+      linear-gradient(180deg, rgba(255, 248, 242, 0.94) 0%, rgba(255, 248, 242, 0.76) 58%, rgba(255, 248, 242, 0.32) 100%),
+      linear-gradient(90deg, rgba(255, 248, 242, 0.78), rgba(255, 248, 242, 0.24));
+  }
+
+  .hero__content {
+    width: min(calc(100% - 24px), 560px);
+    margin-inline: auto;
+    padding: 0;
+  }
+
+  .hero__content h1 {
+    font-size: clamp(2.55rem, 14vw, 4.25rem);
+  }
+
+  .hero__content h1 span {
+    white-space: normal;
+  }
+
+  .map-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sheet-host {
+    margin-top: -8px;
+  }
+
+  .sheet-host--floating {
+    bottom: 16px;
+    width: min(calc(100% - 32px), 520px);
+  }
+
+  .spot-card {
+    border-top-left-radius: var(--md-shape-corner-extra-large);
+    border-top-right-radius: var(--md-shape-corner-extra-large);
+    box-shadow: 0 -4px 16px rgba(20, 24, 32, 0.12), var(--md-elevation-2);
+  }
+
+  .sheet-host--floating .spot-card {
+    width: 100%;
+  }
+
+  .map-attribution {
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .map-control-stack {
+    bottom: 92px;
+  }
+}
