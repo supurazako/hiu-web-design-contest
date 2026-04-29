@@ -26,6 +26,18 @@ export const setMaskImage = (
   pane.style.webkitMaskPosition = options.position;
 };
 
+export const setMaskReference = (pane: HTMLElement, maskId: string) => {
+  const maskValue = `url(#${maskId})`;
+  pane.style.maskImage = maskValue;
+  pane.style.maskRepeat = "no-repeat";
+  pane.style.maskSize = "100% 100%";
+  pane.style.maskPosition = "0 0";
+  pane.style.webkitMaskImage = maskValue;
+  pane.style.webkitMaskRepeat = "no-repeat";
+  pane.style.webkitMaskSize = "100% 100%";
+  pane.style.webkitMaskPosition = "0 0";
+};
+
 export const setPaneState = (pane: HTMLElement, options: { visible: boolean; clipPath: string }) => {
   pane.style.opacity = options.visible ? "1" : "0";
   pane.style.visibility = options.visible ? "visible" : "hidden";

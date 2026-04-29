@@ -1,11 +1,11 @@
 import type { MapPoint, PointerBounds } from "./map-types";
-import { clearMaskStyles, setMaskImage } from "./pane-utils";
+import { clearMaskStyles, setMaskReference } from "./pane-utils";
 
 type ScratchMaskLayout = {
   width: number;
   height: number;
-  targets: { pane: HTMLElement; maskX: number; maskY: number }[];
-  inverseTargets: { pane: HTMLElement; maskX: number; maskY: number }[];
+  targets: { pane: HTMLElement; maskId: string; maskX: number; maskY: number; width: number; height: number }[];
+  inverseTargets: { pane: HTMLElement; maskId: string; maskX: number; maskY: number; width: number; height: number }[];
 };
 
 type ScratchControllerOptions = {
@@ -31,15 +31,20 @@ type ScratchTransform = {
 type ScratchStroke = {
   localBrushRadius: number;
   points: MapPoint[];
+  path: SVGPathElement;
 };
 
 type ZoomSnapshot = {
   center: L.LatLng;
   zoom: number;
-  width: number;
-  height: number;
   transform: ScratchTransform;
 };
+
+const SVG_NS = "http://www.w3.org/2000/svg";
+let scratchMaskIdCounter = 0;
+
+const createSvgElement = <K extends keyof SVGElementTagNameMap>(tagName: K) =>
+  document.createElementNS(SVG_NS, tagName);
 
 const identityTransform = (): ScratchTransform => ({
   a: 1,
@@ -77,11 +82,6 @@ const translateTransform = (x: number, y: number): ScratchTransform => ({
   f: y,
 });
 
-const applyTransformToPoint = (point: MapPoint, transform: ScratchTransform): MapPoint => ({
-  x: transform.a * point.x + transform.c * point.y + transform.e,
-  y: transform.b * point.x + transform.d * point.y + transform.f,
-});
-
 const invertTransform = (transform: ScratchTransform): ScratchTransform => {
   const determinant = transform.a * transform.d - transform.b * transform.c;
   if (Math.abs(determinant) < 0.000001) return identityTransform();
@@ -96,7 +96,24 @@ const invertTransform = (transform: ScratchTransform): ScratchTransform => {
   };
 };
 
+const applyTransformToPoint = (point: MapPoint, transform: ScratchTransform): MapPoint => ({
+  x: transform.a * point.x + transform.c * point.y + transform.e,
+  y: transform.b * point.x + transform.d * point.y + transform.f,
+});
+
 const getTransformScale = (transform: ScratchTransform) => Math.hypot(transform.a, transform.b);
+
+const serializeTransform = (transform: ScratchTransform) =>
+  `matrix(${transform.a} ${transform.b} ${transform.c} ${transform.d} ${transform.e} ${transform.f})`;
+
+const pathDataForPoints = (points: MapPoint[]) => {
+  if (points.length === 0) return "";
+  if (points.length === 1) {
+    const point = points[0];
+    return `M ${point.x} ${point.y} L ${point.x} ${point.y}`;
+  }
+  return points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`).join(" ");
+};
 
 export const createScratchController = ({
   map,
@@ -109,8 +126,6 @@ export const createScratchController = ({
   pixelRatio = 1,
 }: ScratchControllerOptions) => {
   const context = surface.getContext("2d");
-  const inverseSurface = document.createElement("canvas");
-  const inverseContext = inverseSurface.getContext("2d");
   const strokes: ScratchStroke[] = [];
   let currentStroke: ScratchStroke | null = null;
   let lastScreenPoint: MapPoint | null = null;
@@ -119,13 +134,45 @@ export const createScratchController = ({
   let maskLayout: ScratchMaskLayout | null = null;
   let maskFrame: number | null = null;
   let currentTransform = identityTransform();
+  let animatedTransform: ScratchTransform | null = null;
   let zoomSnapshot: ZoomSnapshot | null = null;
+
+  const scratchMaskHost = mapElement.parentElement ?? mapElement;
+  const maskSvg = createSvgElement("svg");
+  const defs = createSvgElement("defs");
+  const revealGeometry = createSvgElement("g");
+  const inverseGeometry = createSvgElement("g");
+  const revealContent = createSvgElement("g");
+  const inverseContent = createSvgElement("g");
+
+  revealContent.setAttribute("fill", "none");
+  revealContent.setAttribute("stroke", "#ffffff");
+  revealContent.setAttribute("stroke-linecap", "round");
+  revealContent.setAttribute("stroke-linejoin", "round");
+  inverseContent.setAttribute("fill", "none");
+  inverseContent.setAttribute("stroke", "#000000");
+  inverseContent.setAttribute("stroke-linecap", "round");
+  inverseContent.setAttribute("stroke-linejoin", "round");
+  revealContent.appendChild(revealGeometry);
+  inverseContent.appendChild(inverseGeometry);
+  defs.appendChild(revealContent);
+  defs.appendChild(inverseContent);
+  maskSvg.appendChild(defs);
+  maskSvg.setAttribute("aria-hidden", "true");
+  maskSvg.style.position = "absolute";
+  maskSvg.style.inset = "0";
+  maskSvg.style.width = "0";
+  maskSvg.style.height = "0";
+  maskSvg.style.pointerEvents = "none";
+  scratchMaskHost.appendChild(maskSvg);
 
   const configureDrawingContext = (target: CanvasRenderingContext2D | null) => {
     if (!target) return;
     target.setTransform(1, 0, 0, 1, 0, 0);
     target.scale(pixelRatio, pixelRatio);
   };
+
+  configureDrawingContext(context);
 
   const getLogicalSurfaceSize = () => {
     const { width, height } = mapElement.getBoundingClientRect();
@@ -144,7 +191,7 @@ export const createScratchController = ({
 
   const getZoomAnchor = (targetCenter: L.LatLng, targetZoom: number): MapPoint => {
     const snapshot = zoomSnapshot;
-    const { width, height } = snapshot ?? getLogicalSurfaceSize();
+    const { width, height } = getLogicalSurfaceSize();
     const viewportCenter = { x: width / 2, y: height / 2 };
     if (!snapshot) return viewportCenter;
 
@@ -183,11 +230,27 @@ export const createScratchController = ({
     );
   };
 
-  const drawStroke = (stroke: ScratchStroke) => {
-    if (!context || stroke.points.length === 0) return;
+  const syncGeometryTransform = (transform: ScratchTransform = animatedTransform ?? currentTransform) => {
+    const transformValue = serializeTransform(transform);
+    revealGeometry.setAttribute("transform", transformValue);
+    inverseGeometry.setAttribute("transform", transformValue);
+  };
 
+  const updateStrokePath = (stroke: ScratchStroke) => {
+    stroke.path.setAttribute("d", pathDataForPoints(stroke.points));
+    stroke.path.setAttribute("stroke-width", String(stroke.localBrushRadius * 2));
+  };
+
+  const clonePathForInverse = (path: SVGPathElement) => {
+    const inversePath = path.cloneNode(true) as SVGPathElement;
+    return inversePath;
+  };
+
+  const syncCanvasStroke = (stroke: ScratchStroke) => {
+    if (!context || stroke.points.length === 0) return;
     const points = stroke.points.map((point) => applyTransformToPoint(point, currentTransform));
     const currentBrushRadius = stroke.localBrushRadius * getTransformScale(currentTransform);
+
     context.globalCompositeOperation = "source-over";
     context.lineCap = "round";
     context.lineJoin = "round";
@@ -210,9 +273,53 @@ export const createScratchController = ({
     context.stroke();
   };
 
-  const renderStrokes = () => {
+  const renderCanvas = () => {
     clearSurface();
-    strokes.forEach(drawStroke);
+    strokes.forEach(syncCanvasStroke);
+  };
+
+  const ensureMaskDefinition = (
+    maskId: string,
+    width: number,
+    height: number,
+    maskX: number,
+    maskY: number,
+    contentId: string,
+    inverse = false,
+  ) => {
+    let mask = defs.querySelector(`#${maskId}`) as SVGMaskElement | null;
+    if (!mask) {
+      mask = createSvgElement("mask");
+      mask.id = maskId;
+      mask.setAttribute("maskUnits", "userSpaceOnUse");
+      mask.setAttribute("maskContentUnits", "userSpaceOnUse");
+      defs.appendChild(mask);
+    }
+
+    mask.replaceChildren();
+    mask.setAttribute("x", "0");
+    mask.setAttribute("y", "0");
+    mask.setAttribute("width", String(width));
+    mask.setAttribute("height", String(height));
+
+    const baseRect = createSvgElement("rect");
+    baseRect.setAttribute("x", "0");
+    baseRect.setAttribute("y", "0");
+    baseRect.setAttribute("width", String(width));
+    baseRect.setAttribute("height", String(height));
+    baseRect.setAttribute("fill", inverse ? "#ffffff" : "#000000");
+    mask.appendChild(baseRect);
+
+    const use = createSvgElement("use");
+    use.setAttribute("href", `#${contentId}`);
+    use.setAttributeNS("http://www.w3.org/1999/xlink", "href", `#${contentId}`);
+    use.setAttribute("transform", `translate(${maskX} ${maskY})`);
+    if (inverse) {
+      use.setAttribute("stroke", "#000000");
+    } else {
+      use.setAttribute("stroke", "#ffffff");
+    }
+    mask.appendChild(use);
   };
 
   const invalidateLayout = () => {
@@ -229,13 +336,9 @@ export const createScratchController = ({
 
     surface.width = nextWidth;
     surface.height = nextHeight;
-    inverseSurface.width = nextWidth;
-    inverseSurface.height = nextHeight;
     surface.style.width = `${width}px`;
     surface.style.height = `${height}px`;
     configureDrawingContext(context);
-    configureDrawingContext(inverseContext);
-
     return true;
   };
 
@@ -253,64 +356,58 @@ export const createScratchController = ({
     };
   };
 
-  const toLocalPoint = (screenPoint: MapPoint) => {
-    return applyTransformToPoint(screenPoint, invertTransform(currentTransform));
-  };
+  const toLocalPoint = (screenPoint: MapPoint) => applyTransformToPoint(screenPoint, invertTransform(currentTransform));
 
   const getMaskLayout = () => {
     if (maskLayout) return maskLayout;
     const mapRect = mapElement.getBoundingClientRect();
-    const { width, height } = mapRect;
     const targets = getMaskTargets().map((pane) => {
       const paneRect = pane.getBoundingClientRect();
       return {
         pane,
+        maskId: `scratch-mask-${scratchMaskIdCounter++}`,
         maskX: mapRect.left - paneRect.left,
         maskY: mapRect.top - paneRect.top,
+        width: Math.round(paneRect.width),
+        height: Math.round(paneRect.height),
       };
     });
     const inverseTargets = getInverseMaskTargets().map((pane) => {
       const paneRect = pane.getBoundingClientRect();
       return {
         pane,
+        maskId: `scratch-mask-${scratchMaskIdCounter++}`,
         maskX: mapRect.left - paneRect.left,
         maskY: mapRect.top - paneRect.top,
+        width: Math.round(paneRect.width),
+        height: Math.round(paneRect.height),
       };
     });
-    maskLayout = { width, height, targets, inverseTargets };
+    maskLayout = {
+      width: Math.round(mapRect.width),
+      height: Math.round(mapRect.height),
+      targets,
+      inverseTargets,
+    };
     return maskLayout;
   };
 
   const drawMask = () => {
     maskFrame = null;
-    const { width, height, targets, inverseTargets } = getMaskLayout();
-    const maskUrl = `url(${surface.toDataURL("image/png")})`;
-    let inverseMaskUrl = "";
-    if (inverseContext) {
-      inverseContext.globalCompositeOperation = "source-over";
-      inverseContext.clearRect(0, 0, width, height);
-      inverseContext.fillStyle = "rgba(255, 255, 255, 1)";
-      inverseContext.fillRect(0, 0, width, height);
-      inverseContext.globalCompositeOperation = "destination-out";
-      inverseContext.drawImage(surface, 0, 0, width, height);
-      inverseMaskUrl = `url(${inverseSurface.toDataURL("image/png")})`;
-    }
+    const { targets, inverseTargets } = getMaskLayout();
+    const revealContentId = "scratch-reveal-content";
+    const inverseContentId = "scratch-inverse-content";
+    revealContent.id = revealContentId;
+    inverseContent.id = inverseContentId;
 
-    targets.forEach(({ pane, maskX, maskY }) => {
-      setMaskImage(pane, {
-        image: maskUrl,
-        repeat: "no-repeat",
-        size: `${Math.round(width)}px ${Math.round(height)}px`,
-        position: `${Math.round(maskX)}px ${Math.round(maskY)}px`,
-      });
+    targets.forEach(({ pane, maskId, maskX, maskY, width, height }) => {
+      ensureMaskDefinition(maskId, width, height, maskX, maskY, revealContentId, false);
+      setMaskReference(pane, maskId);
     });
-    inverseTargets.forEach(({ pane, maskX, maskY }) => {
-      setMaskImage(pane, {
-        image: inverseMaskUrl,
-        repeat: "no-repeat",
-        size: `${Math.round(width)}px ${Math.round(height)}px`,
-        position: `${Math.round(maskX)}px ${Math.round(maskY)}px`,
-      });
+
+    inverseTargets.forEach(({ pane, maskId, maskX, maskY, width, height }) => {
+      ensureMaskDefinition(maskId, width, height, maskX, maskY, inverseContentId, true);
+      setMaskReference(pane, maskId);
     });
   };
 
@@ -337,7 +434,8 @@ export const createScratchController = ({
   };
 
   const redraw = () => {
-    renderStrokes();
+    syncGeometryTransform(currentTransform);
+    renderCanvas();
     applyMask();
   };
 
@@ -348,7 +446,10 @@ export const createScratchController = ({
     isScratching = false;
     pointerBounds = null;
     currentTransform = identityTransform();
+    animatedTransform = null;
     zoomSnapshot = null;
+    revealGeometry.replaceChildren();
+    inverseGeometry.replaceChildren();
     clearSurface();
     applyMask();
   };
@@ -361,17 +462,33 @@ export const createScratchController = ({
 
     const localPoint = toLocalPoint(screenPoint);
     if (!currentStroke) {
+      const path = createSvgElement("path");
+      path.setAttribute("fill", "none");
+      const inversePath = clonePathForInverse(path);
       currentStroke = {
         localBrushRadius: brushRadius / getTransformScale(currentTransform),
         points: [localPoint],
+        path,
       };
+      path.setAttribute("stroke-width", String(currentStroke.localBrushRadius * 2));
+      inversePath.setAttribute("stroke-width", String(currentStroke.localBrushRadius * 2));
+      revealGeometry.appendChild(path);
+      inverseGeometry.appendChild(inversePath);
       strokes.push(currentStroke);
     } else {
       currentStroke.points.push(localPoint);
     }
 
+    const strokeIndex = strokes.indexOf(currentStroke);
+    updateStrokePath(currentStroke);
+    const inversePath = inverseGeometry.children.item(strokeIndex) as SVGPathElement | null;
+    if (inversePath) {
+      inversePath.setAttribute("d", currentStroke.path.getAttribute("d") ?? "");
+      inversePath.setAttribute("stroke-width", currentStroke.path.getAttribute("stroke-width") ?? "0");
+    }
+
     lastScreenPoint = screenPoint;
-    renderStrokes();
+    renderCanvas();
     scheduleMask();
   };
 
@@ -417,27 +534,27 @@ export const createScratchController = ({
   };
 
   const captureZoomSnapshot = () => {
-    const { width, height } = getLogicalSurfaceSize();
+    animatedTransform = null;
     zoomSnapshot = {
       center: map.getCenter(),
       zoom: map.getZoom(),
-      width,
-      height,
       transform: { ...currentTransform },
     };
   };
 
   const transformForZoom = (targetCenter: L.LatLng, targetZoom: number) => {
     if (!zoomSnapshot) return;
-    currentTransform = computeZoomTransform(targetCenter, targetZoom);
-    redraw();
+    animatedTransform = computeZoomTransform(targetCenter, targetZoom);
+    syncGeometryTransform(animatedTransform);
   };
 
   const commitZoomTransform = (targetCenter: L.LatLng, targetZoom: number) => {
     if (!zoomSnapshot) return;
     currentTransform = computeZoomTransform(targetCenter, targetZoom);
+    animatedTransform = null;
     zoomSnapshot = null;
-    redraw();
+    syncGeometryTransform(currentTransform);
+    renderCanvas();
   };
 
   const isRevealedAtPoint = (point: MapPoint) => {
