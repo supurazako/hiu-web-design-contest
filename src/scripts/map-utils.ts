@@ -1,5 +1,6 @@
-export type TimeMode = "day" | "night";
-export type ScratchPoint = { x: number; y: number };
+import type { TimeMode } from "./map-types";
+
+export type { TimeMode } from "./map-types";
 
 export const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 

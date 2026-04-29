@@ -1,55 +1,25 @@
 import L from "leaflet";
 import type { Spot } from "../data/spots";
 import type { ThemeByMode, UiCopy } from "../data/site";
+import { getJsonData, requiredElement, requiredElementById } from "./dom-utils";
+import { featureCategory, isSpotVisibleForMode, layerStyleForMode, mapBackgroundForMode } from "./map-style";
+import type { DisplayMode, MapPoint, TimeMode } from "./map-types";
 import {
   clamp,
   formatClockHour,
   getInitialTimeMode,
   nightRatioForHour,
   oppositeTimeMode,
-  type ScratchPoint,
-  type TimeMode,
 } from "./map-utils";
+import { applyInverseCircleMask, clearMaskStyles, clipPathForCircle, setBlendPaneState, setPaneState } from "./pane-utils";
+import { createScratchController } from "./scratch-controller";
 
-type DisplayMode = "single" | "compare" | "magnifier" | "clock" | "scratch";
 type Locale = "ja" | "en";
 type ThemeMode = keyof ThemeByMode;
-type FeatureCategory = "building" | "waterway" | "highway" | "highwaySecondary";
 type MarkerEntry = {
   marker: L.Marker;
   spot: Spot;
   mode: TimeMode;
-};
-type ScratchInputBounds = Pick<DOMRectReadOnly, "left" | "right" | "top" | "bottom">;
-type ScratchMaskLayout = {
-  width: number;
-  height: number;
-  targets: { pane: HTMLElement; maskX: number; maskY: number }[];
-  inverseTargets: { pane: HTMLElement; maskX: number; maskY: number }[];
-};
-
-const getJsonData = <T>(id: string): T => {
-  const element = document.getElementById(id);
-  if (!element?.textContent) {
-    throw new Error(`Missing JSON data element: #${id}`);
-  }
-  return JSON.parse(element.textContent) as T;
-};
-
-const requiredElement = <T extends Element>(selector: string, rootNode: ParentNode = document): T => {
-  const element = rootNode.querySelector<T>(selector);
-  if (!element) {
-    throw new Error(`Missing required element: ${selector}`);
-  }
-  return element;
-};
-
-const requiredElementById = <T extends HTMLElement>(id: string): T => {
-  const element = document.getElementById(id);
-  if (!element) {
-    throw new Error(`Missing required element: #${id}`);
-  }
-  return element as T;
 };
 
 const spots = getJsonData<Spot[]>("spots-data");
@@ -119,13 +89,9 @@ const state: {
   isLanguageMenuOpen: boolean;
   isDraggingSplit: boolean;
   hasMagnifierPoint: boolean;
-  magnifierPoint: ScratchPoint;
+  magnifierPoint: MapPoint;
   clockHour: number;
   isDraggingClock: boolean;
-  isScratching: boolean;
-  scratchStrokes: ScratchPoint[][];
-  currentScratchStroke: ScratchPoint[] | null;
-  scratchLastPoint: ScratchPoint | null;
   isExpanded: boolean;
 } = {
   locale: "ja",
@@ -140,10 +106,6 @@ const state: {
   magnifierPoint: { x: 0, y: 0 },
   clockHour: 12,
   isDraggingClock: false,
-  isScratching: false,
-  scratchStrokes: [],
-  currentScratchStroke: null,
-  scratchLastPoint: null,
   isExpanded: window.location.hash === "#map",
 };
 
@@ -194,22 +156,26 @@ const clippedCustomPanes = [
 clippedCustomPanes.forEach((pane) => {
   pane.classList.add("time-map-clipped-pane");
 });
-const scratchContext = scratchSurface.getContext("2d");
-const inverseScratchSurface = document.createElement("canvas");
-const inverseScratchContext = inverseScratchSurface.getContext("2d");
-const scratchBrushRadius = 48;
-const scratchMinPointDistance = 4;
-const scratchMaskPixelRatio = 1;
-let scratchMaskFrame: number | null = null;
-let scratchPointerBounds: ScratchInputBounds | null = null;
-let scratchMaskLayout: ScratchMaskLayout | null = null;
 
-const invalidateScratchMaskLayout = () => {
-  scratchMaskLayout = null;
-};
+const scratchMaskTargets = () => [
+  paneByMode.night.geo,
+  paneByMode.night.marker,
+  magnifierBackgroundPane,
+];
+
+const inverseScratchMaskTargets = () => [
+  paneByMode.day.marker,
+];
+
+const scratchController = createScratchController({
+  surface: scratchSurface,
+  mapElement,
+  getMaskTargets: scratchMaskTargets,
+  getInverseMaskTargets: inverseScratchMaskTargets,
+});
 
 const syncCustomPaneBounds = () => {
-  invalidateScratchMaskLayout();
+  scratchController.invalidateLayout();
   const { width, height } = mapElement.getBoundingClientRect();
   const paneOverscan = Math.round(Math.max(width, height) * 2);
   clippedCustomPanes.forEach((pane) => {
@@ -225,224 +191,10 @@ const syncCustomPaneBounds = () => {
   magnifierBackgroundPane.style.height = `${Math.round(height + backgroundOverscan * 2)}px`;
   magnifierBackgroundPane.style.left = `${-backgroundOverscan}px`;
   magnifierBackgroundPane.style.top = `${-backgroundOverscan}px`;
-  const pixelRatio = scratchMaskPixelRatio;
-  const nextWidth = Math.round(width * pixelRatio);
-  const nextHeight = Math.round(height * pixelRatio);
-  const sizeChanged = scratchSurface.width !== nextWidth || scratchSurface.height !== nextHeight;
-  if (!sizeChanged) return false;
-  scratchSurface.width = nextWidth;
-  scratchSurface.height = nextHeight;
-  inverseScratchSurface.width = nextWidth;
-  inverseScratchSurface.height = nextHeight;
-  scratchSurface.style.width = `${Math.round(width)}px`;
-  scratchSurface.style.height = `${Math.round(height)}px`;
-  if (scratchContext) {
-    scratchContext.setTransform(1, 0, 0, 1, 0, 0);
-    scratchContext.scale(pixelRatio, pixelRatio);
-  }
-  if (inverseScratchContext) {
-    inverseScratchContext.setTransform(1, 0, 0, 1, 0, 0);
-    inverseScratchContext.scale(pixelRatio, pixelRatio);
-  }
-  return true;
+  return scratchController.syncSurfaceSize();
 };
 
 syncCustomPaneBounds();
-
-const paintScratchOverlay = () => {
-  if (!scratchContext) return;
-  const { width, height } = mapElement.getBoundingClientRect();
-  scratchContext.globalCompositeOperation = "source-over";
-  scratchContext.clearRect(0, 0, width, height);
-};
-
-const eraseScratchStroke = (points: ScratchPoint[]) => {
-  if (!scratchContext || points.length === 0) return;
-  scratchContext.globalCompositeOperation = "source-over";
-  scratchContext.lineCap = "round";
-  scratchContext.lineJoin = "round";
-  scratchContext.lineWidth = scratchBrushRadius * 2;
-  scratchContext.strokeStyle = "rgba(255, 255, 255, 1)";
-  scratchContext.fillStyle = "rgba(255, 255, 255, 1)";
-
-  if (points.length === 1) {
-    scratchContext.beginPath();
-    scratchContext.arc(points[0].x, points[0].y, scratchBrushRadius, 0, Math.PI * 2);
-    scratchContext.fill();
-    return;
-  }
-
-  scratchContext.beginPath();
-  scratchContext.moveTo(points[0].x, points[0].y);
-  points.slice(1).forEach((point) => {
-    scratchContext.lineTo(point.x, point.y);
-  });
-  scratchContext.stroke();
-};
-
-const eraseScratchSegment = (from: ScratchPoint | null, to: ScratchPoint) => {
-  if (!scratchContext) return;
-  scratchContext.globalCompositeOperation = "source-over";
-  scratchContext.lineCap = "round";
-  scratchContext.lineJoin = "round";
-  scratchContext.lineWidth = scratchBrushRadius * 2;
-  scratchContext.strokeStyle = "rgba(255, 255, 255, 1)";
-  scratchContext.fillStyle = "rgba(255, 255, 255, 1)";
-
-  if (!from) {
-    scratchContext.beginPath();
-    scratchContext.arc(to.x, to.y, scratchBrushRadius, 0, Math.PI * 2);
-    scratchContext.fill();
-    return;
-  }
-
-  scratchContext.beginPath();
-  scratchContext.moveTo(from.x, from.y);
-  scratchContext.lineTo(to.x, to.y);
-  scratchContext.stroke();
-};
-
-const scratchMaskTargets = () => [
-  paneByMode.night.geo,
-  paneByMode.night.marker,
-  magnifierBackgroundPane,
-];
-
-const inverseScratchMaskTargets = () => [
-  paneByMode.day.marker,
-];
-
-const getScratchMaskLayout = () => {
-  if (scratchMaskLayout) return scratchMaskLayout;
-  const mapRect = mapElement.getBoundingClientRect();
-  const { width, height } = mapRect;
-  const targets = scratchMaskTargets().map((pane) => {
-    const paneRect = pane.getBoundingClientRect();
-    return {
-      pane,
-      maskX: mapRect.left - paneRect.left,
-      maskY: mapRect.top - paneRect.top,
-    };
-  });
-  const inverseTargets = inverseScratchMaskTargets().map((pane) => {
-    const paneRect = pane.getBoundingClientRect();
-    return {
-      pane,
-      maskX: mapRect.left - paneRect.left,
-      maskY: mapRect.top - paneRect.top,
-    };
-  });
-  scratchMaskLayout = { width, height, targets, inverseTargets };
-  return scratchMaskLayout;
-};
-
-const drawScratchMask = () => {
-  scratchMaskFrame = null;
-  const { width, height, targets, inverseTargets } = getScratchMaskLayout();
-  const maskUrl = `url(${scratchSurface.toDataURL("image/png")})`;
-  let inverseMaskUrl = "";
-  if (inverseScratchContext) {
-    inverseScratchContext.globalCompositeOperation = "source-over";
-    inverseScratchContext.clearRect(0, 0, width, height);
-    inverseScratchContext.fillStyle = "rgba(255, 255, 255, 1)";
-    inverseScratchContext.fillRect(0, 0, width, height);
-    inverseScratchContext.globalCompositeOperation = "destination-out";
-    inverseScratchContext.drawImage(scratchSurface, 0, 0, width, height);
-    inverseMaskUrl = `url(${inverseScratchSurface.toDataURL("image/png")})`;
-  }
-  targets.forEach(({ pane, maskX, maskY }) => {
-    pane.style.maskImage = maskUrl;
-    pane.style.maskRepeat = "no-repeat";
-    pane.style.maskSize = `${Math.round(width)}px ${Math.round(height)}px`;
-    pane.style.maskPosition = `${Math.round(maskX)}px ${Math.round(maskY)}px`;
-    pane.style.webkitMaskImage = maskUrl;
-    pane.style.webkitMaskRepeat = "no-repeat";
-    pane.style.webkitMaskSize = `${Math.round(width)}px ${Math.round(height)}px`;
-    pane.style.webkitMaskPosition = `${Math.round(maskX)}px ${Math.round(maskY)}px`;
-  });
-  inverseTargets.forEach(({ pane, maskX, maskY }) => {
-    pane.style.maskImage = inverseMaskUrl;
-    pane.style.maskRepeat = "no-repeat";
-    pane.style.maskSize = `${Math.round(width)}px ${Math.round(height)}px`;
-    pane.style.maskPosition = `${Math.round(maskX)}px ${Math.round(maskY)}px`;
-    pane.style.webkitMaskImage = inverseMaskUrl;
-    pane.style.webkitMaskRepeat = "no-repeat";
-    pane.style.webkitMaskSize = `${Math.round(width)}px ${Math.round(height)}px`;
-    pane.style.webkitMaskPosition = `${Math.round(maskX)}px ${Math.round(maskY)}px`;
-  });
-};
-
-const scheduleScratchMask = () => {
-  if (scratchMaskFrame !== null) return;
-  scratchMaskFrame = window.requestAnimationFrame(drawScratchMask);
-};
-
-const applyScratchMask = () => {
-  if (scratchMaskFrame !== null) {
-    window.cancelAnimationFrame(scratchMaskFrame);
-    scratchMaskFrame = null;
-  }
-  drawScratchMask();
-};
-
-const clearScratchMask = () => {
-  if (scratchMaskFrame !== null) {
-    window.cancelAnimationFrame(scratchMaskFrame);
-    scratchMaskFrame = null;
-  }
-  scratchMaskTargets().forEach((pane) => {
-    pane.style.maskImage = "";
-    pane.style.maskRepeat = "";
-    pane.style.maskSize = "";
-    pane.style.maskPosition = "";
-    pane.style.webkitMaskImage = "";
-    pane.style.webkitMaskRepeat = "";
-    pane.style.webkitMaskSize = "";
-    pane.style.webkitMaskPosition = "";
-  });
-  inverseScratchMaskTargets().forEach((pane) => {
-    pane.style.maskImage = "";
-    pane.style.maskRepeat = "";
-    pane.style.maskSize = "";
-    pane.style.maskPosition = "";
-    pane.style.webkitMaskImage = "";
-    pane.style.webkitMaskRepeat = "";
-    pane.style.webkitMaskSize = "";
-    pane.style.webkitMaskPosition = "";
-  });
-};
-
-const redrawScratchSurface = () => {
-  paintScratchOverlay();
-  state.scratchStrokes.forEach((stroke) => eraseScratchStroke(stroke));
-  applyScratchMask();
-};
-
-const resetScratch = () => {
-  state.scratchStrokes = [];
-  state.currentScratchStroke = null;
-  state.scratchLastPoint = null;
-  state.isScratching = false;
-  redrawScratchSurface();
-};
-
-const eraseScratchAtPoint = (point: ScratchPoint) => {
-  if (state.scratchLastPoint) {
-    const distance = Math.hypot(point.x - state.scratchLastPoint.x, point.y - state.scratchLastPoint.y);
-    if (distance < scratchMinPointDistance) return;
-  }
-
-  const previousPoint = state.scratchLastPoint;
-  if (!state.currentScratchStroke) {
-    state.currentScratchStroke = [point];
-    state.scratchStrokes.push(state.currentScratchStroke);
-  } else {
-    state.currentScratchStroke.push(point);
-  }
-  eraseScratchSegment(previousPoint, point);
-  state.scratchLastPoint = point;
-  scheduleScratchMask();
-};
 
 const geoRendererByMode = {
   day: L.svg({ pane: "day-geojson-pane" }),
@@ -458,95 +210,9 @@ const townCenter = L.latLng(42.9650, 141.16615);
 const townZoomDesktop = 15.5;
 const townZoomMobile = 15.25;
 
-const geoJsonStyles = {
-  day: {
-    building: {
-      color: "#d9cbbd",
-      weight: 1,
-      fillColor: "#f3e6d6",
-      fillOpacity: 0.85,
-    },
-    waterway: {
-      color: "#6fb7e9",
-      weight: 3,
-      opacity: 0.9,
-    },
-    highway: {
-      color: "#ffffff",
-      weight: 3,
-      opacity: 0.95,
-    },
-    highwaySecondary: {
-      color: "#ecd8b8",
-      weight: 2.2,
-      opacity: 0.9,
-    },
-  },
-  night: {
-    building: {
-      color: "#364454",
-      weight: 1,
-      fillColor: "#263241",
-      fillOpacity: 0.72,
-    },
-    waterway: {
-      color: "#7ac8ff",
-      weight: 2.6,
-      opacity: 0.92,
-    },
-    highway: {
-      color: "#d6e7ff",
-      weight: 2.6,
-      opacity: 0.85,
-    },
-    highwaySecondary: {
-      color: "#6d8198",
-      weight: 1.8,
-      opacity: 0.82,
-    },
-  },
-} as const;
-
-const featureCategory = (feature: GeoJSON.Feature | undefined): FeatureCategory | null => {
-  const props = feature?.properties ?? {};
-  if (props.waterway) return "waterway";
-  if (props.building) return "building";
-  if (props.highway) {
-    if (["primary", "secondary", "tertiary", "residential", "service"].includes(props.highway)) {
-      return "highway";
-    }
-    if (["footway", "path", "track", "steps"].includes(props.highway)) {
-      return "highwaySecondary";
-    }
-  }
-  return null;
-};
-
-const layerStyleForMode = (mode: TimeMode, feature: GeoJSON.Feature | undefined) => {
-  const category = featureCategory(feature);
-  if (!category) {
-    return {
-      color: "transparent",
-      weight: 0,
-      fillOpacity: 0,
-      opacity: 0,
-    };
-  }
-  return geoJsonStyles[mode][category];
-};
-
-const isSpotVisibleForMode = (spot: Spot, mode: TimeMode) => spot.timeMode === "both" || spot.timeMode === mode;
-
 const getSelectedSpot = () => spots.find((spot) => spot.id === state.selectedSpotId) ?? null;
 
-const isScratchMaskRevealedAtPoint = (point: ScratchPoint) => {
-  if (!scratchContext || scratchSurface.hidden) return false;
-  if (point.x < 0 || point.y < 0 || point.x >= scratchSurface.width || point.y >= scratchSurface.height) return false;
-  const pixel = scratchContext.getImageData(Math.round(point.x), Math.round(point.y), 1, 1).data;
-  return pixel[3] > 0;
-};
-
-const isMarkerModeVisibleAtPoint = (mode: TimeMode, point: ScratchPoint) => {
+const isMarkerModeVisibleAtPoint = (mode: TimeMode, point: MapPoint) => {
   if (state.displayMode === "single") return mode === state.timeMode;
 
   if (state.displayMode === "compare") {
@@ -563,7 +229,7 @@ const isMarkerModeVisibleAtPoint = (mode: TimeMode, point: ScratchPoint) => {
   }
 
   if (state.displayMode === "scratch") {
-    const isRevealed = isScratchMaskRevealedAtPoint(point);
+    const isRevealed = scratchController.isRevealedAtPoint(point);
     return mode === "day" ? !isRevealed : isRevealed;
   }
 
@@ -575,7 +241,7 @@ const isMarkerModeVisibleAtPoint = (mode: TimeMode, point: ScratchPoint) => {
   return true;
 };
 
-const getVisibleMarkerAtPoint = (point: ScratchPoint): MarkerEntry | null => {
+const getVisibleMarkerAtPoint = (point: MapPoint): MarkerEntry | null => {
   const hitRadius = 24;
   let closest: MarkerEntry | null = null;
   let closestDistance = Number.POSITIVE_INFINITY;
@@ -591,7 +257,7 @@ const getVisibleMarkerAtPoint = (point: ScratchPoint): MarkerEntry | null => {
 
     const priority =
       (state.displayMode === "magnifier" && mode === oppositeTimeMode(state.timeMode)) ||
-      (state.displayMode === "scratch" && mode === "night" && isScratchMaskRevealedAtPoint(point))
+      (state.displayMode === "scratch" && mode === "night" && scratchController.isRevealedAtPoint(point))
         ? 1
         : 0;
 
@@ -606,7 +272,7 @@ const getVisibleMarkerAtPoint = (point: ScratchPoint): MarkerEntry | null => {
 };
 
 const selectVisibleMarkerFromPointer = (clientX: number, clientY: number) => {
-  const point = getScratchPointFromPointer(clientX, clientY);
+  const point = scratchController.getPointFromPointer(clientX, clientY);
   if (!point) return false;
   const entry = getVisibleMarkerAtPoint(point);
   if (!entry) return false;
@@ -661,69 +327,21 @@ const initMarkers = () => {
   });
 };
 
-const setPaneState = (pane: HTMLElement, options: { visible: boolean; clipPath: string }) => {
-  pane.style.opacity = options.visible ? "1" : "0";
-  pane.style.visibility = options.visible ? "visible" : "hidden";
-  pane.style.clipPath = options.visible ? options.clipPath : "none";
-};
-
 const clearPaneBackgrounds = () => {
   customPanes.forEach((pane) => {
     pane.style.background = "";
-    pane.style.maskImage = "";
-    pane.style.maskRepeat = "";
-    pane.style.maskSize = "";
-    pane.style.maskPosition = "";
-    pane.style.webkitMaskImage = "";
-    pane.style.webkitMaskRepeat = "";
-    pane.style.webkitMaskSize = "";
-    pane.style.webkitMaskPosition = "";
+    clearMaskStyles(pane);
   });
   magnifierBackgroundPane.style.opacity = "0";
   magnifierBackgroundPane.style.visibility = "hidden";
   magnifierBackgroundPane.style.clipPath = "none";
 };
 
-const setBlendPaneState = (pane: HTMLElement, opacity: number, clipPath = "none") => {
-  pane.style.opacity = String(opacity);
-  pane.style.visibility = opacity > 0 ? "visible" : "hidden";
-  pane.style.clipPath = clipPath;
-};
-
-const mapBackgroundForMode = (mode: TimeMode) =>
-  mode === "night"
-    ? "radial-gradient(circle at 20% 20%, rgba(133, 188, 255, 0.16), transparent 18%), linear-gradient(160deg, rgba(23, 38, 53, 0.98), rgba(17, 28, 41, 0.96))"
-    : "radial-gradient(circle at 20% 20%, rgba(143, 209, 255, 0.14), transparent 20%), linear-gradient(160deg, rgba(255, 250, 244, 0.9), rgba(236, 244, 249, 0.76))";
-
 const ensureMagnifierPoint = () => {
   if (state.hasMagnifierPoint) return;
   const { width, height } = mapElement.getBoundingClientRect();
   state.magnifierPoint = { x: width / 2, y: height / 2 };
   state.hasMagnifierPoint = true;
-};
-
-const clipPathForCircle = (pane: HTMLElement, point: ScratchPoint, radius: number) => {
-  const mapRect = mapElement.getBoundingClientRect();
-  const paneRect = pane.getBoundingClientRect();
-  const x = clamp(mapRect.left - paneRect.left + point.x, 0, paneRect.width);
-  const y = clamp(mapRect.top - paneRect.top + point.y, 0, paneRect.height);
-  return `circle(${radius}px at ${x}px ${y}px)`;
-};
-
-const applyInverseCircleMask = (pane: HTMLElement, point: ScratchPoint, radius: number) => {
-  const mapRect = mapElement.getBoundingClientRect();
-  const paneRect = pane.getBoundingClientRect();
-  const x = clamp(mapRect.left - paneRect.left + point.x, 0, paneRect.width);
-  const y = clamp(mapRect.top - paneRect.top + point.y, 0, paneRect.height);
-  const maskImage = `radial-gradient(circle ${radius}px at ${x}px ${y}px, transparent 0 ${Math.max(radius - 1, 0)}px, #fff ${radius}px)`;
-  pane.style.maskImage = maskImage;
-  pane.style.maskRepeat = "no-repeat";
-  pane.style.maskSize = "100% 100%";
-  pane.style.maskPosition = "0 0";
-  pane.style.webkitMaskImage = maskImage;
-  pane.style.webkitMaskRepeat = "no-repeat";
-  pane.style.webkitMaskSize = "100% 100%";
-  pane.style.webkitMaskPosition = "0 0";
 };
 
 const applyPaneVisibility = () => {
@@ -744,9 +362,9 @@ const applyPaneVisibility = () => {
     const activeMode = state.timeMode;
     const revealMode = oppositeTimeMode(activeMode);
     const radius = Number.parseFloat(getComputedStyle(root).getPropertyValue("--magnifier-radius")) || 90;
-    const revealClipPath = clipPathForCircle(paneByMode[revealMode].geo, state.magnifierPoint, radius);
-    const revealMarkerClipPath = clipPathForCircle(paneByMode[revealMode].marker, state.magnifierPoint, radius);
-    const backgroundClipPath = clipPathForCircle(magnifierBackgroundPane, state.magnifierPoint, radius);
+    const revealClipPath = clipPathForCircle(mapElement, paneByMode[revealMode].geo, state.magnifierPoint, radius);
+    const revealMarkerClipPath = clipPathForCircle(mapElement, paneByMode[revealMode].marker, state.magnifierPoint, radius);
+    const backgroundClipPath = clipPathForCircle(mapElement, magnifierBackgroundPane, state.magnifierPoint, radius);
     paneByMode[activeMode].geo.style.zIndex = "340";
     magnifierBackgroundPane.style.zIndex = "341";
     paneByMode[revealMode].geo.style.zIndex = "342";
@@ -760,7 +378,7 @@ const applyPaneVisibility = () => {
     setPaneState(paneByMode[activeMode].marker, { visible: true, clipPath: "none" });
     setPaneState(paneByMode[revealMode].geo, { visible: true, clipPath: revealClipPath });
     setPaneState(paneByMode[revealMode].marker, { visible: true, clipPath: revealMarkerClipPath });
-    applyInverseCircleMask(paneByMode[activeMode].marker, state.magnifierPoint, radius);
+    applyInverseCircleMask(mapElement, paneByMode[activeMode].marker, state.magnifierPoint, radius);
     return;
   }
 
@@ -796,11 +414,11 @@ const applyPaneVisibility = () => {
     setPaneState(paneByMode.night.marker, { visible: true, clipPath: "none" });
     setPaneState(paneByMode.day.geo, { visible: true, clipPath: "none" });
     setPaneState(paneByMode.day.marker, { visible: true, clipPath: "none" });
-    applyScratchMask();
+    scratchController.applyMask();
     return;
   }
 
-  clearScratchMask();
+  scratchController.clearMask();
 
   const mapRect = mapElement.getBoundingClientRect();
   const splitX = mapRect.width * state.splitRatio;
@@ -1014,7 +632,7 @@ const applyScratchState = () => {
     map.touchZoom.disable();
     map.doubleClickZoom.disable();
     map.boxZoom.disable();
-    redrawScratchSurface();
+    scratchController.redraw();
   } else {
     map.dragging.disable();
     map.scrollWheelZoom.disable();
@@ -1117,13 +735,10 @@ const syncExpandedState = (nextExpanded: boolean, options: { updateHistory?: boo
   setMapTransitionDirection(transitionDirection);
 
   if (wasExpanded && !nextExpanded && state.displayMode === "scratch") {
-    resetScratch();
+    scratchController.reset();
     state.displayMode = "single";
     state.timeMode = getInitialTimeMode();
     state.selectedSpotMode = null;
-    state.isScratching = false;
-    state.currentScratchStroke = null;
-    state.scratchLastPoint = null;
   }
 
   state.isExpanded = nextExpanded;
@@ -1142,7 +757,7 @@ const syncExpandedState = (nextExpanded: boolean, options: { updateHistory?: boo
     map.invalidateSize();
     const sizeChanged = syncCustomPaneBounds();
     if (sizeChanged && state.displayMode === "scratch") {
-      redrawScratchSurface();
+      scratchController.redraw();
     }
     clampMagnifierPoint();
     setMapToTownCenter();
@@ -1152,7 +767,7 @@ const syncExpandedState = (nextExpanded: boolean, options: { updateHistory?: boo
     map.invalidateSize();
     const sizeChanged = syncCustomPaneBounds();
     if (sizeChanged && state.displayMode === "scratch") {
-      redrawScratchSurface();
+      scratchController.redraw();
     }
     clampMagnifierPoint();
     applyPaneVisibility();
@@ -1167,20 +782,6 @@ const setSplitRatioFromPointer = (clientX: number) => {
   updateCompareUI();
 };
 
-const getScratchPointFromPointer = (
-  clientX: number,
-  clientY: number,
-  bounds: ScratchInputBounds = scratchPointerBounds ?? mapElement.getBoundingClientRect(),
-): ScratchPoint | null => {
-  if (clientX < bounds.left || clientX > bounds.right || clientY < bounds.top || clientY > bounds.bottom) {
-    return null;
-  }
-  return {
-    x: clientX - bounds.left,
-    y: clientY - bounds.top,
-  };
-};
-
 const clampMagnifierPoint = () => {
   if (!state.hasMagnifierPoint) return;
   const { width, height } = mapElement.getBoundingClientRect();
@@ -1191,7 +792,7 @@ const clampMagnifierPoint = () => {
 };
 
 const setMagnifierPointFromPointer = (clientX: number, clientY: number) => {
-  const point = getScratchPointFromPointer(clientX, clientY);
+  const point = scratchController.getPointFromPointer(clientX, clientY);
   if (!point) return;
   state.magnifierPoint = point;
   state.hasMagnifierPoint = true;
@@ -1215,46 +816,6 @@ const adjustClockHour = (delta: number) => {
   state.clockHour = (state.clockHour + delta + 24) % 24;
   applyPaneVisibility();
   updateCompareUI();
-};
-
-const beginScratch = (clientX: number, clientY: number) => {
-  scratchPointerBounds = mapElement.getBoundingClientRect();
-  const point = getScratchPointFromPointer(clientX, clientY, scratchPointerBounds);
-  if (!point) {
-    scratchPointerBounds = null;
-    return false;
-  }
-  state.isScratching = true;
-  state.currentScratchStroke = null;
-  state.scratchLastPoint = null;
-  eraseScratchAtPoint(point);
-  applyScratchMask();
-  return true;
-};
-
-const moveScratch = (clientX: number, clientY: number) => {
-  if (!state.isScratching) return;
-  const point = getScratchPointFromPointer(clientX, clientY);
-  if (!point) {
-    state.currentScratchStroke = null;
-    state.scratchLastPoint = null;
-    return;
-  }
-  eraseScratchAtPoint(point);
-};
-
-const endScratch = () => {
-  state.isScratching = false;
-  state.currentScratchStroke = null;
-  state.scratchLastPoint = null;
-  scratchPointerBounds = null;
-};
-
-const moveScratchFromPointerEvent = (event: PointerEvent) => {
-  const samples = typeof event.getCoalescedEvents === "function" ? event.getCoalescedEvents() : [event];
-  samples.forEach((sample) => {
-    moveScratch(sample.clientX, sample.clientY);
-  });
 };
 
 const initGeoJson = async () => {
@@ -1318,12 +879,12 @@ displayModeButtons.forEach((button) => {
       state.timeMode = "day";
     }
     if (nextMode === "scratch" && state.displayMode !== "scratch") {
-      resetScratch();
+      scratchController.reset();
       state.timeMode = "day";
       state.selectedSpotMode = state.selectedSpotMode ?? "day";
     }
     if (state.displayMode === "scratch" && nextMode !== "scratch") {
-      resetScratch();
+      scratchController.reset();
     }
     state.displayMode = nextMode;
     render();
@@ -1455,14 +1016,14 @@ splitHandle.addEventListener("keydown", (event) => {
 });
 
 scratchResetButton.addEventListener("click", () => {
-  resetScratch();
+  scratchController.reset();
   render();
 });
 
 scratchSurface.addEventListener("pointerdown", (event) => {
   if (state.displayMode !== "scratch") return;
   event.preventDefault();
-  const didBegin = beginScratch(event.clientX, event.clientY);
+  const didBegin = scratchController.begin(event.clientX, event.clientY);
   try {
     scratchSurface.setPointerCapture(event.pointerId);
   } catch {
@@ -1476,23 +1037,23 @@ scratchSurface.addEventListener("pointerdown", (event) => {
 scratchSurface.addEventListener("pointermove", (event) => {
   if (state.displayMode !== "scratch") return;
   event.preventDefault();
-  moveScratchFromPointerEvent(event);
+  scratchController.moveFromPointerEvent(event);
 });
 
 scratchSurface.addEventListener("pointerup", (event) => {
-  if (!state.isScratching) return;
+  if (!scratchController.isActive()) return;
   if (scratchSurface.hasPointerCapture(event.pointerId)) {
     scratchSurface.releasePointerCapture(event.pointerId);
   }
-  endScratch();
+  scratchController.end();
 });
 
 scratchSurface.addEventListener("pointercancel", (event) => {
-  if (!state.isScratching) return;
+  if (!scratchController.isActive()) return;
   if (scratchSurface.hasPointerCapture(event.pointerId)) {
     scratchSurface.releasePointerCapture(event.pointerId);
   }
-  endScratch();
+  scratchController.end();
 });
 
 document.addEventListener("click", (event) => {
@@ -1518,7 +1079,7 @@ initGeoJson().then(() => {
     map.invalidateSize();
     const sizeChanged = syncCustomPaneBounds();
     if (sizeChanged && state.displayMode === "scratch") {
-      redrawScratchSurface();
+      scratchController.redraw();
     }
     clampMagnifierPoint();
     setMapToTownCenter();
@@ -1529,7 +1090,7 @@ initGeoJson().then(() => {
 window.addEventListener("resize", () => {
   const sizeChanged = syncCustomPaneBounds();
   if (sizeChanged && state.displayMode === "scratch") {
-    redrawScratchSurface();
+    scratchController.redraw();
   }
   clampMagnifierPoint();
   applyPaneVisibility();
@@ -1538,7 +1099,7 @@ window.addEventListener("resize", () => {
 map.on("move zoom resize", () => {
   const sizeChanged = syncCustomPaneBounds();
   if (sizeChanged && state.displayMode === "scratch") {
-    redrawScratchSurface();
+    scratchController.redraw();
   }
   clampMagnifierPoint();
   applyPaneVisibility();
