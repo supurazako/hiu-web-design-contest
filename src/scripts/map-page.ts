@@ -285,6 +285,13 @@ const selectVisibleMarkerFromPointer = (clientX: number, clientY: number) => {
   return true;
 };
 
+const clearSelectedSpot = () => {
+  if (!state.selectedSpotId && !state.selectedSpotMode) return;
+  state.selectedSpotId = null;
+  state.selectedSpotMode = null;
+  render();
+};
+
 const createPinHtml = (spot: Spot, mode: TimeMode) => `
   <span
     class="time-pin time-pin--${mode}"
@@ -936,12 +943,21 @@ displayModeButtons.forEach((button) => {
   });
 });
 
+mapElement.addEventListener("pointerdown", (event) => {
+  if (!state.isExpanded || state.displayMode === "magnifier" || state.displayMode === "scratch") return;
+  const target = event.target;
+  if (target instanceof Element && target.closest(".time-pin, .time-pin-wrapper")) return;
+  clearSelectedSpot();
+});
+
 magnifierOverlay.addEventListener("pointerdown", (event) => {
   if (state.displayMode !== "magnifier") return;
   event.preventDefault();
   magnifierOverlay.setPointerCapture(event.pointerId);
   setMagnifierPointFromPointer(event.clientX, event.clientY);
-  selectVisibleMarkerFromPointer(event.clientX, event.clientY);
+  if (!selectVisibleMarkerFromPointer(event.clientX, event.clientY)) {
+    clearSelectedSpot();
+  }
 });
 
 magnifierOverlay.addEventListener("pointermove", (event) => {
@@ -1075,7 +1091,9 @@ scratchSurface.addEventListener("pointerdown", (event) => {
     // Ignore synthetic or interrupted pointer streams; the first scratch mark is already applied.
   }
   if (didBegin) {
-    selectVisibleMarkerFromPointer(event.clientX, event.clientY);
+    if (!selectVisibleMarkerFromPointer(event.clientX, event.clientY)) {
+      clearSelectedSpot();
+    }
   }
 });
 

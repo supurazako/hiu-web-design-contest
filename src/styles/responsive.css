@@ -67,8 +67,8 @@
     right: auto;
     left: 50%;
     align-items: flex-end;
-    bottom: 24px;
-    width: min(calc(100% - 48px), 560px);
+    bottom: 0;
+    width: min(100%, 560px);
     translate: -50% 0;
   }
 
@@ -129,15 +129,14 @@
     top: auto;
     right: auto;
     left: 50%;
-    bottom: 16px;
-    width: min(calc(100% - 32px), 520px);
+    bottom: 0;
+    width: 100%;
     translate: -50% 0;
   }
 
-  .spot-card {
-    border-top-left-radius: var(--md-shape-corner-extra-large);
-    border-top-right-radius: var(--md-shape-corner-extra-large);
-    box-shadow: 0 -4px 16px rgba(20, 24, 32, 0.12), var(--md-elevation-2);
+  .sheet-host--floating .spot-card {
+    border-radius: 28px 28px 0 0;
+    box-shadow: 0 -10px 24px rgba(20, 24, 32, 0.18);
   }
 
   .sheet-host--floating .spot-card {

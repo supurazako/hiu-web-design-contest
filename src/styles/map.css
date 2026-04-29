@@ -4,14 +4,14 @@
   --magnifier-x: 50vw;
   --magnifier-y: 50vh;
   --clock-night-ratio: 0;
-  --map-ui-surface: rgba(236, 227, 217, 0.92);
-  --map-ui-surface-strong: rgba(236, 227, 217, 0.96);
-  --map-ui-primary: #7e5700;
-  --map-ui-on-surface: #231a12;
-  --map-ui-on-surface-variant: #54473a;
-  --map-ui-outline: #d9c3b0;
-  --map-ui-secondary-container: #eedcc7;
-  --map-ui-on-secondary-container: #211b12;
+  --map-ui-surface: var(--md-sys-color-surface-container-highest);
+  --map-ui-surface-strong: var(--md-sys-color-surface-container-highest);
+  --map-ui-primary: var(--md-sys-color-primary);
+  --map-ui-on-surface: var(--md-sys-color-on-surface);
+  --map-ui-on-surface-variant: var(--md-sys-color-on-surface-variant);
+  --map-ui-outline: var(--md-sys-color-outline-variant);
+  --map-ui-secondary-container: var(--md-sys-color-secondary-container);
+  --map-ui-on-secondary-container: var(--md-sys-color-on-secondary-container);
   transition: background 240ms ease, color 240ms ease;
 }
 
@@ -624,6 +624,16 @@ body.is-map-leaving .hero__content {
     #7e5700 calc((1 - var(--clock-night-ratio)) * 100%),
     #a6c9ff
   );
+  --clock-surface-low: color-mix(
+    in srgb,
+    rgba(255, 251, 245, 0.9) calc((1 - var(--clock-night-ratio)) * 100%),
+    rgba(20, 30, 42, 0.84)
+  );
+  --clock-surface-highest: color-mix(
+    in srgb,
+    rgba(236, 227, 217, 1) calc((1 - var(--clock-night-ratio)) * 100%),
+    rgba(35, 49, 66, 0.98)
+  );
   --clock-outline: color-mix(
     in srgb,
     #857567 calc((1 - var(--clock-night-ratio)) * 100%),
@@ -647,10 +657,14 @@ body.is-map-leaving .hero__content {
   --md-sys-color-on-surface: var(--clock-on-surface);
   --md-sys-color-on-surface-variant: var(--clock-on-surface-variant);
   --md-sys-color-primary: var(--clock-primary);
+  --md-sys-color-surface-container-low: var(--clock-surface-low);
+  --md-sys-color-surface-container-highest: var(--clock-surface-highest);
   --md-sys-color-outline: var(--clock-outline);
   --md-sys-color-outline-variant: var(--clock-outline-variant);
   --md-sys-color-secondary-container: var(--clock-secondary-container);
   --md-sys-color-on-secondary-container: var(--clock-on-secondary-container);
+  --map-ui-surface: var(--clock-surface-highest);
+  --map-ui-surface-strong: var(--clock-surface-highest);
   --map-ui-primary: var(--clock-primary);
   --map-ui-on-surface: var(--clock-on-surface);
   --map-ui-on-surface-variant: var(--clock-on-surface-variant);
@@ -674,8 +688,24 @@ body.is-map-leaving .hero__content {
 
 .is-clock-active .map-clock,
 .is-clock-active .map-control-stack,
-.is-clock-active .map-toolbar__button {
+.is-clock-active .map-toolbar__button,
+.is-clock-active .sheet-host--floating .spot-card {
   color: var(--clock-on-surface);
+}
+
+.is-clock-active .sheet-host--floating .spot-card p,
+.is-clock-active .sheet-host--floating .spot-card__pill {
+  color: var(--clock-on-surface-variant);
+}
+
+.is-clock-active .sheet-host--floating .spot-card__pill {
+  background: var(--clock-surface-low);
+  border-color: var(--clock-outline-variant);
+}
+
+.is-clock-active .sheet-host--floating .spot-card__detail-label,
+.is-clock-active .sheet-host--floating .spot-card__empty-title {
+  color: var(--clock-primary);
 }
 
 .is-scratch-active .map-scratch-surface {
