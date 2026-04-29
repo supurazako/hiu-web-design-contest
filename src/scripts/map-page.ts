@@ -20,6 +20,13 @@ type MarkerEntry = {
   spot: Spot;
   mode: TimeMode;
 };
+type ScratchInputBounds = Pick<DOMRectReadOnly, "left" | "right" | "top" | "bottom">;
+type ScratchMaskLayout = {
+  width: number;
+  height: number;
+  targets: { pane: HTMLElement; maskX: number; maskY: number }[];
+  inverseTargets: { pane: HTMLElement; maskX: number; maskY: number }[];
+};
 
 const getJsonData = <T>(id: string): T => {
   const element = document.getElementById(id);
@@ -194,8 +201,15 @@ const scratchBrushRadius = 48;
 const scratchMinPointDistance = 4;
 const scratchMaskPixelRatio = 1;
 let scratchMaskFrame: number | null = null;
+let scratchPointerBounds: ScratchInputBounds | null = null;
+let scratchMaskLayout: ScratchMaskLayout | null = null;
+
+const invalidateScratchMaskLayout = () => {
+  scratchMaskLayout = null;
+};
 
 const syncCustomPaneBounds = () => {
+  invalidateScratchMaskLayout();
   const { width, height } = mapElement.getBoundingClientRect();
   const paneOverscan = Math.round(Math.max(width, height) * 2);
   clippedCustomPanes.forEach((pane) => {
@@ -298,10 +312,33 @@ const inverseScratchMaskTargets = () => [
   paneByMode.day.marker,
 ];
 
-const drawScratchMask = () => {
-  scratchMaskFrame = null;
+const getScratchMaskLayout = () => {
+  if (scratchMaskLayout) return scratchMaskLayout;
   const mapRect = mapElement.getBoundingClientRect();
   const { width, height } = mapRect;
+  const targets = scratchMaskTargets().map((pane) => {
+    const paneRect = pane.getBoundingClientRect();
+    return {
+      pane,
+      maskX: mapRect.left - paneRect.left,
+      maskY: mapRect.top - paneRect.top,
+    };
+  });
+  const inverseTargets = inverseScratchMaskTargets().map((pane) => {
+    const paneRect = pane.getBoundingClientRect();
+    return {
+      pane,
+      maskX: mapRect.left - paneRect.left,
+      maskY: mapRect.top - paneRect.top,
+    };
+  });
+  scratchMaskLayout = { width, height, targets, inverseTargets };
+  return scratchMaskLayout;
+};
+
+const drawScratchMask = () => {
+  scratchMaskFrame = null;
+  const { width, height, targets, inverseTargets } = getScratchMaskLayout();
   const maskUrl = `url(${scratchSurface.toDataURL("image/png")})`;
   let inverseMaskUrl = "";
   if (inverseScratchContext) {
@@ -313,10 +350,7 @@ const drawScratchMask = () => {
     inverseScratchContext.drawImage(scratchSurface, 0, 0, width, height);
     inverseMaskUrl = `url(${inverseScratchSurface.toDataURL("image/png")})`;
   }
-  scratchMaskTargets().forEach((pane) => {
-    const paneRect = pane.getBoundingClientRect();
-    const maskX = mapRect.left - paneRect.left;
-    const maskY = mapRect.top - paneRect.top;
+  targets.forEach(({ pane, maskX, maskY }) => {
     pane.style.maskImage = maskUrl;
     pane.style.maskRepeat = "no-repeat";
     pane.style.maskSize = `${Math.round(width)}px ${Math.round(height)}px`;
@@ -326,10 +360,7 @@ const drawScratchMask = () => {
     pane.style.webkitMaskSize = `${Math.round(width)}px ${Math.round(height)}px`;
     pane.style.webkitMaskPosition = `${Math.round(maskX)}px ${Math.round(maskY)}px`;
   });
-  inverseScratchMaskTargets().forEach((pane) => {
-    const paneRect = pane.getBoundingClientRect();
-    const maskX = mapRect.left - paneRect.left;
-    const maskY = mapRect.top - paneRect.top;
+  inverseTargets.forEach(({ pane, maskX, maskY }) => {
     pane.style.maskImage = inverseMaskUrl;
     pane.style.maskRepeat = "no-repeat";
     pane.style.maskSize = `${Math.round(width)}px ${Math.round(height)}px`;
@@ -1136,8 +1167,11 @@ const setSplitRatioFromPointer = (clientX: number) => {
   updateCompareUI();
 };
 
-const getScratchPointFromPointer = (clientX: number, clientY: number): ScratchPoint | null => {
-  const bounds = mapElement.getBoundingClientRect();
+const getScratchPointFromPointer = (
+  clientX: number,
+  clientY: number,
+  bounds: ScratchInputBounds = scratchPointerBounds ?? mapElement.getBoundingClientRect(),
+): ScratchPoint | null => {
   if (clientX < bounds.left || clientX > bounds.right || clientY < bounds.top || clientY > bounds.bottom) {
     return null;
   }
@@ -1184,12 +1218,18 @@ const adjustClockHour = (delta: number) => {
 };
 
 const beginScratch = (clientX: number, clientY: number) => {
-  const point = getScratchPointFromPointer(clientX, clientY);
-  if (!point) return;
+  scratchPointerBounds = mapElement.getBoundingClientRect();
+  const point = getScratchPointFromPointer(clientX, clientY, scratchPointerBounds);
+  if (!point) {
+    scratchPointerBounds = null;
+    return false;
+  }
   state.isScratching = true;
   state.currentScratchStroke = null;
   state.scratchLastPoint = null;
   eraseScratchAtPoint(point);
+  applyScratchMask();
+  return true;
 };
 
 const moveScratch = (clientX: number, clientY: number) => {
@@ -1207,6 +1247,14 @@ const endScratch = () => {
   state.isScratching = false;
   state.currentScratchStroke = null;
   state.scratchLastPoint = null;
+  scratchPointerBounds = null;
+};
+
+const moveScratchFromPointerEvent = (event: PointerEvent) => {
+  const samples = typeof event.getCoalescedEvents === "function" ? event.getCoalescedEvents() : [event];
+  samples.forEach((sample) => {
+    moveScratch(sample.clientX, sample.clientY);
+  });
 };
 
 const initGeoJson = async () => {
@@ -1414,14 +1462,21 @@ scratchResetButton.addEventListener("click", () => {
 scratchSurface.addEventListener("pointerdown", (event) => {
   if (state.displayMode !== "scratch") return;
   event.preventDefault();
-  scratchSurface.setPointerCapture(event.pointerId);
-  beginScratch(event.clientX, event.clientY);
-  selectVisibleMarkerFromPointer(event.clientX, event.clientY);
+  const didBegin = beginScratch(event.clientX, event.clientY);
+  try {
+    scratchSurface.setPointerCapture(event.pointerId);
+  } catch {
+    // Ignore synthetic or interrupted pointer streams; the first scratch mark is already applied.
+  }
+  if (didBegin) {
+    selectVisibleMarkerFromPointer(event.clientX, event.clientY);
+  }
 });
 
 scratchSurface.addEventListener("pointermove", (event) => {
   if (state.displayMode !== "scratch") return;
-  moveScratch(event.clientX, event.clientY);
+  event.preventDefault();
+  moveScratchFromPointerEvent(event);
 });
 
 scratchSurface.addEventListener("pointerup", (event) => {
