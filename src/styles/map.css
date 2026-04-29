@@ -83,7 +83,7 @@
 
 .hero__map-background .map-overlay > .map-back,
 .hero__map-background .map-overlay > .map-language,
-.hero__map-background .map-overlay > .map-control-stack,
+.hero__map-background .map-overlay > .map-control-cluster,
 .hero__map-background .map-overlay > .sheet-host--floating,
 .hero__map-background .map-overlay > .map-attribution,
 .hero__map-background .map-overlay > .map-clock,
@@ -96,7 +96,7 @@
 
 .hero__map-background:not(.is-map-expanded) .map-overlay > .map-back,
 .hero__map-background:not(.is-map-expanded) .map-overlay > .map-language,
-.hero__map-background:not(.is-map-expanded) .map-overlay > .map-control-stack,
+.hero__map-background:not(.is-map-expanded) .map-overlay > .map-control-cluster,
 .hero__map-background:not(.is-map-expanded) .map-overlay > .sheet-host--floating,
 .hero__map-background:not(.is-map-expanded) .map-overlay > .map-attribution,
 .hero__map-background:not(.is-map-expanded) .map-overlay > .map-clock,
@@ -111,7 +111,7 @@
   transform: translateY(-14px) scale(0.96);
 }
 
-.hero__map-background:not(.is-map-expanded) .map-overlay > .map-control-stack {
+.hero__map-background:not(.is-map-expanded) .map-overlay > .map-control-cluster {
   transform: translateX(-18px) scale(0.96);
 }
 
@@ -122,7 +122,7 @@
 
 .hero__map-background.is-map-expanded .map-overlay > .map-back,
 .hero__map-background.is-map-expanded .map-overlay > .map-language,
-.hero__map-background.is-map-expanded .map-overlay > .map-control-stack,
+.hero__map-background.is-map-expanded .map-overlay > .map-control-cluster,
 .hero__map-background.is-map-expanded .map-overlay > .sheet-host--floating,
 .hero__map-background.is-map-expanded .map-overlay > .map-attribution,
 .hero__map-background.is-map-expanded .map-overlay > .map-clock,
@@ -135,7 +135,7 @@
 
 .hero__map-background.is-map-leaving .map-overlay > .map-back,
 .hero__map-background.is-map-leaving .map-overlay > .map-language,
-.hero__map-background.is-map-leaving .map-overlay > .map-control-stack,
+.hero__map-background.is-map-leaving .map-overlay > .map-control-cluster,
 .hero__map-background.is-map-leaving .map-overlay > .sheet-host--floating,
 .hero__map-background.is-map-leaving .map-overlay > .map-attribution,
 .hero__map-background.is-map-leaving .map-overlay > .map-clock,
@@ -352,6 +352,12 @@ body.is-map-leaving .hero__content {
   text-decoration: none;
 }
 
+.map-toolbar__button:disabled {
+  opacity: 0.42;
+  cursor: default;
+  box-shadow: none;
+}
+
 .map-toolbar__button svg {
   display: block;
   width: 24px;
@@ -416,13 +422,34 @@ body.is-map-leaving .hero__content {
   font-size: 0.75rem;
 }
 
-.map-control-stack {
+.map-control-cluster {
   position: absolute;
   left: 16px;
   bottom: 16px;
   z-index: 410;
   display: grid;
-  gap: 0;
+  justify-items: stretch;
+  gap: 12px;
+}
+
+.map-zoom-stack {
+  display: grid;
+  gap: 4px;
+  width: 64px;
+  padding: 5px;
+  border: 1px solid var(--map-ui-outline);
+  border-radius: 32px;
+  background: color-mix(in srgb, var(--map-ui-surface-strong) 92%, transparent);
+  box-shadow: var(--md-elevation-2);
+}
+
+.map-zoom-stack__section {
+  min-width: 0;
+}
+
+.map-control-stack {
+  display: grid;
+  gap: 4px;
   width: 64px;
   padding: 5px;
   border: 1px solid var(--map-ui-outline);
@@ -433,6 +460,19 @@ body.is-map-leaving .hero__content {
 
 .map-control-stack__section {
   min-width: 0;
+}
+
+.map-toolbar__button--stacked {
+  width: 100%;
+  border-radius: 18px;
+}
+
+.map-zoom-stack__section:first-child .map-toolbar__button--stacked {
+  border-radius: 26px 26px 18px 18px;
+}
+
+.map-zoom-stack__section:last-child .map-toolbar__button--stacked {
+  border-radius: 18px 18px 26px 26px;
 }
 
 .map-time-toggle {

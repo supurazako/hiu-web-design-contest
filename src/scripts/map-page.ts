@@ -44,6 +44,9 @@ const scratchSurface = requiredElement<HTMLCanvasElement>("[data-scratch-surface
 const singleGroup = requiredElement<HTMLElement>("[data-single-group]");
 const scratchGroup = requiredElement<HTMLElement>("[data-scratch-group]");
 const scratchResetButton = requiredElement<HTMLButtonElement>("[data-scratch-reset]");
+const zoomControls = requiredElement<HTMLElement>("[data-zoom-controls]");
+const zoomInButton = requiredElement<HTMLButtonElement>("[data-zoom-in]");
+const zoomOutButton = requiredElement<HTMLButtonElement>("[data-zoom-out]");
 const floatingSheet = requiredElement<HTMLElement>(".sheet-host--floating");
 
 const spotCard = requiredElement<HTMLElement>("[data-spot-card]");
@@ -489,6 +492,10 @@ const updateButtons = () => {
   languageOptionButtons.forEach((button) => {
     button.classList.toggle("is-active", button.dataset.locale === state.locale);
   });
+
+  const currentZoom = map.getZoom();
+  zoomInButton.disabled = currentZoom >= map.getMaxZoom();
+  zoomOutButton.disabled = currentZoom <= map.getMinZoom();
 };
 
 const updateLanguageMenu = () => {
@@ -613,6 +620,11 @@ const renderStaticText = () => {
   const ui = uiCopy[state.locale];
   document.title = state.isExpanded ? `${ui.siteTitle} | ${ui.mapPageTitle}` : `${ui.siteTitle} | ${ui.siteTagline}`;
   backHomeButton.setAttribute("aria-label", ui.backHome);
+  zoomControls.setAttribute("aria-label", ui.zoomControlsLabel);
+  zoomInButton.setAttribute("aria-label", ui.zoomInLabel);
+  zoomInButton.setAttribute("title", ui.zoomInLabel);
+  zoomOutButton.setAttribute("aria-label", ui.zoomOutLabel);
+  zoomOutButton.setAttribute("title", ui.zoomOutLabel);
   timeModeButtonByMode.day.setAttribute("aria-label", ui.dayLabel);
   timeModeButtonByMode.day.setAttribute("title", ui.dayLabel);
   timeModeButtonByMode.night.setAttribute("aria-label", ui.nightLabel);
@@ -943,6 +955,14 @@ displayModeButtons.forEach((button) => {
   });
 });
 
+zoomInButton.addEventListener("click", () => {
+  map.zoomIn();
+});
+
+zoomOutButton.addEventListener("click", () => {
+  map.zoomOut();
+});
+
 mapElement.addEventListener("pointerdown", (event) => {
   if (!state.isExpanded || state.displayMode === "magnifier" || state.displayMode === "scratch") return;
   const target = event.target;
@@ -1032,6 +1052,10 @@ languageMenuTrigger.addEventListener("click", (event) => {
 
 languageMenu.addEventListener("click", (event) => {
   event.stopPropagation();
+});
+
+map.on("zoomend", () => {
+  updateButtons();
 });
 
 splitHandle.addEventListener("pointerdown", (event) => {

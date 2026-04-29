@@ -90,7 +90,20 @@ const ui = uiCopy[locale];
             </div>
           </div>
 
-          <div class="map-control-stack" data-control-shell>
+          <div class="map-control-cluster">
+            <div class="map-zoom-stack" role="group" aria-label={ui.zoomControlsLabel} data-zoom-controls>
+              <div class="map-zoom-stack__section">
+                <button class="map-toolbar__button map-toolbar__button--stacked" type="button" data-zoom-in aria-label={ui.zoomInLabel} title={ui.zoomInLabel}>
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" aria-hidden="true"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
+                </button>
+              </div>
+              <div class="map-zoom-stack__section">
+                <button class="map-toolbar__button map-toolbar__button--stacked" type="button" data-zoom-out aria-label={ui.zoomOutLabel} title={ui.zoomOutLabel}>
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" aria-hidden="true"><path d="M200-440v-80h560v80H200Z"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="map-control-stack" data-control-shell>
             <div class="map-control-stack__section map-control-stack__section--mode">
               <div class="map-mode-switch" role="group" aria-label={ui.displayModeLabel} data-display-mode-group>
                 <div class="map-mode-switch__single-group is-expanded" data-single-group>
@@ -120,6 +133,7 @@ const ui = uiCopy[locale];
                 </div>
               </div>
             </div>
+          </div>
           </div>
 
           <div class="sheet-host sheet-host--floating">
