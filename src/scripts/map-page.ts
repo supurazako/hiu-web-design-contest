@@ -1,9 +1,9 @@
 import L from "leaflet";
+import type { Spot } from "../data/spots";
 
 type TimeMode = "day" | "night";
 type DisplayMode = "single" | "compare" | "magnifier" | "clock" | "scratch";
 type Locale = "ja" | "en";
-type Spot = (typeof spots)[number];
 type MarkerEntry = {
   marker: L.Marker;
   spot: Spot;
@@ -424,14 +424,32 @@ const isSpotVisibleForMode = (spot: Spot, mode: TimeMode) => spot.timeMode === "
 
 const getSelectedSpot = () => spots.find((spot) => spot.id === state.selectedSpotId) ?? null;
 
+const createPinHtml = (spot: Spot, mode: TimeMode) => `
+  <span
+    class="time-pin time-pin--${mode}"
+    style="--pin-color: ${spot.marker.color}; --pin-accent: ${spot.accent}"
+    aria-hidden="true"
+  >
+    <svg
+      class="time-pin__icon"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="${spot.marker.iconViewBox}"
+      focusable="false"
+      aria-hidden="true"
+    >
+      <path d="${spot.marker.iconPath}"></path>
+    </svg>
+  </span>
+`;
+
 const createMarker = (spot: Spot, mode: TimeMode) => {
   const marker = L.marker(spot.coordinates, {
     pane: mode === "day" ? "day-marker-pane" : "night-marker-pane",
     icon: L.divIcon({
       className: "time-pin-wrapper",
-      html: `<span class="time-pin time-pin--${mode}" style="--pin-color: ${spot.accent}"><span></span></span>`,
-      iconSize: [28, 28],
-      iconAnchor: [14, 14],
+      html: createPinHtml(spot, mode),
+      iconSize: [36, 36],
+      iconAnchor: [18, 18],
     }),
   });
 

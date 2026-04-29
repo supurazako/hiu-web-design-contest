@@ -1,0 +1,228 @@
+[
+  {
+    "id": "bakery-morning-window",
+    "categoryId": "food",
+    "timeMode": "day",
+    "coordinates": [42.9719, 141.1667],
+    "name": {
+      "ja": "朝のベーカリー窓辺",
+      "en": "Morning Bakery Window"
+    },
+    "description": {
+      "ja": "散策前に立ち寄る小さなベーカリー。焼きたての香りと窓辺の光で、定山渓の朝を始める。",
+      "en": "A small bakery stop before a walk, where warm bread and window light begin the morning in Jozankei."
+    },
+    "image": {
+      "src": "/spots/bakery-morning-window.jpg",
+      "alt": {
+        "ja": "朝の光が入るベーカリーの窓辺",
+        "en": "A bakery window filled with morning light"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "紙袋の温度",
+        "en": "Warm Paper Bag"
+      },
+      "body": {
+        "ja": "パンを受け取ると、紙袋の底が少しだけ温かかった。川へ向かう足取りも軽くなる。",
+        "en": "The bottom of the paper bag was still warm. It made the walk toward the river feel lighter."
+      },
+      "unlockHint": {
+        "ja": "朝の散策前に、焼きたての香りを探す",
+        "en": "Look for the smell of fresh bread before the morning walk"
+      }
+    }
+  },
+  {
+    "id": "soup-afterglow-counter",
+    "categoryId": "food",
+    "timeMode": "night",
+    "coordinates": [42.9662, 141.1648],
+    "name": {
+      "ja": "余韻のスープカウンター",
+      "en": "Afterglow Soup Counter"
+    },
+    "description": {
+      "ja": "湯上がりに寄りたい静かなカウンター。湯けむりの余韻を、温かいスープでゆっくりほどく。",
+      "en": "A quiet counter for after the bath, where a warm bowl of soup softens the afterglow of steam."
+    },
+    "image": {
+      "src": "/spots/soup-afterglow-counter.jpg",
+      "alt": {
+        "ja": "夜に温かいスープを出す静かなカウンター",
+        "en": "A quiet night counter serving warm soup"
+      }
+    },
+    "accent": "#dc2626",
+    "published": true
+  },
+  {
+    "id": "riverside-inn-checkin",
+    "categoryId": "stay",
+    "timeMode": "day",
+    "coordinates": [42.9694, 141.1681],
+    "name": {
+      "ja": "川沿いの宿チェックイン",
+      "en": "Riverside Inn Check-in"
+    },
+    "description": {
+      "ja": "川音が聞こえる宿の玄関。荷物を置いたら、昼のうちに温泉街へ歩き出せる。",
+      "en": "An inn entrance close to the river sound, ready for dropping bags and stepping back into the town by day."
+    },
+    "image": {
+      "src": "/spots/riverside-inn-checkin.jpg",
+      "alt": {
+        "ja": "川沿いに建つ宿の明るい玄関",
+        "en": "A bright inn entrance beside the river"
+      }
+    },
+    "accent": "#6366f1",
+    "published": true
+  },
+  {
+    "id": "quiet-room-lantern",
+    "categoryId": "stay",
+    "timeMode": "night",
+    "coordinates": [42.9678, 141.1692],
+    "name": {
+      "ja": "行灯の静かな客室",
+      "en": "Quiet Room with Lantern Light"
+    },
+    "description": {
+      "ja": "夜の温泉街を歩いたあとに戻る客室。低い灯りが、会話も足音も自然に小さくする。",
+      "en": "A room to return to after a night walk, where low lantern light naturally quiets voices and footsteps."
+    },
+    "image": {
+      "src": "/spots/quiet-room-lantern.jpg",
+      "alt": {
+        "ja": "行灯の光が落ちる静かな客室",
+        "en": "A quiet guest room lit by a lantern"
+      }
+    },
+    "accent": "#4f46e5",
+    "published": true
+  },
+  {
+    "id": "source-park-steam",
+    "categoryId": "onsen",
+    "timeMode": "day",
+    "coordinates": [42.965, 141.1632],
+    "name": {
+      "ja": "湯けむりの源泉公園",
+      "en": "Steam Source Park"
+    },
+    "description": {
+      "ja": "昼の光の中で湯けむりが立ち上る公園。温泉街らしさを短い散策で感じられる。",
+      "en": "A park where steam rises in daylight, giving a quick walking glimpse of the hot spring town."
+    },
+    "image": {
+      "src": "/spots/source-park-steam.jpg",
+      "alt": {
+        "ja": "昼の光に包まれた源泉公園の湯けむり",
+        "en": "Steam rising through daylight in the source park"
+      }
+    },
+    "accent": "#f97316",
+    "published": true
+  },
+  {
+    "id": "footbath-night-bridge",
+    "categoryId": "onsen",
+    "timeMode": "night",
+    "coordinates": [42.9653, 141.1653],
+    "name": {
+      "ja": "夜橋そばの足湯",
+      "en": "Night Footbath by the Bridge"
+    },
+    "description": {
+      "ja": "橋の近くで湯けむりに包まれる足湯。夜は川音と灯りが混ざり、短い休憩が記憶に残る。",
+      "en": "A footbath wrapped in steam near the bridge, where river sound and light make a short pause memorable."
+    },
+    "image": {
+      "src": "/spots/footbath-night-bridge.jpg",
+      "alt": {
+        "ja": "夜の橋の近くにある湯けむりの足湯",
+        "en": "A steamy footbath near a bridge at night"
+      }
+    },
+    "accent": "#ea580c",
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "湯けむりの向こう",
+        "en": "Beyond the Steam"
+      },
+      "body": {
+        "ja": "足だけ湯に沈めると、夜の川音が少し遠くなった。灯りは湯けむりの中で輪郭をなくしていた。",
+        "en": "Once my feet sank into the bath, the night river sounded farther away. The lights lost their edges in the steam."
+      },
+      "unlockHint": {
+        "ja": "夜の橋のそばで、湯けむりを探す",
+        "en": "Look for steam near the bridge at night"
+      }
+    }
+  },
+  {
+    "id": "futami-river-walk",
+    "categoryId": "sightseeing",
+    "timeMode": "day",
+    "coordinates": [42.9645, 141.1595],
+    "name": {
+      "ja": "二見川沿い散策",
+      "en": "Futami Riverside Walk"
+    },
+    "description": {
+      "ja": "川沿いをゆっくり歩く昼の散策路。水音と木陰が、温泉前の時間をほどよく整える。",
+      "en": "A slow daytime riverside path where water sound and shade set the pace before the bath."
+    },
+    "image": {
+      "src": "/spots/futami-river-walk.jpg",
+      "alt": {
+        "ja": "昼の川沿いを歩く散策路",
+        "en": "A daytime walking path along the river"
+      }
+    },
+    "accent": "#22c55e",
+    "published": true
+  },
+  {
+    "id": "moonlit-bridge-view",
+    "categoryId": "sightseeing",
+    "timeMode": "night",
+    "coordinates": [42.9708, 141.178],
+    "name": {
+      "ja": "月明かりの橋景色",
+      "en": "Moonlit Bridge View"
+    },
+    "description": {
+      "ja": "夜の橋から川面を眺めるフォトスポット。灯りの反射が、昼とは違う温泉街の表情を見せる。",
+      "en": "A night photo spot from the bridge, where reflected lights reveal another face of the hot spring town."
+    },
+    "image": {
+      "src": "/spots/moonlit-bridge-view.jpg",
+      "alt": {
+        "ja": "月明かりと灯りが映る夜の橋景色",
+        "en": "A night bridge view with moonlight and reflected lights"
+      }
+    },
+    "accent": "#16a34a",
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "川面に残る光",
+        "en": "Light Left on the River"
+      },
+      "body": {
+        "ja": "橋の上で少し立ち止まると、流れているのは水だけではない気がした。夜の光も、ゆっくり下っていた。",
+        "en": "Standing still on the bridge, it felt like more than water was flowing. The night lights were drifting downstream too."
+      },
+      "unlockHint": {
+        "ja": "夜に橋の上で川面の光を見る",
+        "en": "Watch the reflected lights from the bridge at night"
+      }
+    }
+  }
+]
