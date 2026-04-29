@@ -632,6 +632,7 @@ body.is-map-expanded .content-block {
   --clock-night-ratio: 0;
   --map-ui-surface: rgba(236, 227, 217, 0.92);
   --map-ui-surface-strong: rgba(236, 227, 217, 0.96);
+  --map-ui-primary: #7e5700;
   --map-ui-on-surface: #231a12;
   --map-ui-on-surface-variant: #54473a;
   --map-ui-outline: #d9c3b0;
@@ -1326,6 +1327,7 @@ body.is-map-leaving .hero__content {
   gap: 18px;
   align-self: start;
   background: var(--map-ui-surface);
+  color: var(--map-ui-on-surface);
 }
 
 .sheet-host--floating {
@@ -1417,13 +1419,22 @@ body.is-map-leaving .hero__content {
   border-radius: 999px;
   background: var(--md-sys-color-surface-container-low);
   border: 1px solid var(--md-sys-color-outline-variant);
-  color: var(--md-sys-color-on-surface-variant);
+  color: var(--map-ui-on-surface-variant);
   font-size: 0.8125rem;
 }
 
 .spot-card__detail-label,
 .spot-card__empty-title {
-  color: var(--md-sys-color-primary);
+  color: var(--map-ui-primary);
+}
+
+.spot-card h2 {
+  color: inherit;
+}
+
+.spot-card p,
+.spot-card__body.is-empty p {
+  color: var(--map-ui-on-surface-variant);
 }
 
 .spot-card__detail-label {
