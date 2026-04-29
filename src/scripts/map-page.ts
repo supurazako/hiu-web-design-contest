@@ -171,6 +171,7 @@ const inverseScratchMaskTargets = () => [
 ];
 
 const scratchController = createScratchController({
+  map,
   surface: scratchSurface,
   mapElement,
   getMaskTargets: scratchMaskTargets,
@@ -1054,7 +1055,20 @@ languageMenu.addEventListener("click", (event) => {
   event.stopPropagation();
 });
 
+map.on("zoomstart", () => {
+  if (state.displayMode !== "scratch") return;
+  scratchController.captureZoomSnapshot();
+});
+
+map.on("zoomanim", (event) => {
+  if (state.displayMode !== "scratch") return;
+  scratchController.transformForZoom(event.center, event.zoom);
+});
+
 map.on("zoomend", () => {
+  if (state.displayMode === "scratch") {
+    scratchController.commitZoomTransform(map.getCenter(), map.getZoom());
+  }
   updateButtons();
 });
 
@@ -1183,7 +1197,7 @@ window.addEventListener("resize", () => {
   applyPaneVisibility();
 });
 
-map.on("move zoom resize", () => {
+map.on("move resize", () => {
   const sizeChanged = syncCustomPaneBounds();
   if (sizeChanged && state.displayMode === "scratch") {
     scratchController.redraw();
