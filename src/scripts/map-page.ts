@@ -354,6 +354,9 @@ const geoJsonLayers: Partial<Record<TimeMode, L.GeoJSON>> = {};
 let dataBounds: L.LatLngBounds | null = null;
 let transitionCleanupTimer: number | null = null;
 const mapTransitionDuration = 720;
+const townCenter = L.latLng(42.9650, 141.16615);
+const townZoomDesktop = 15.5;
+const townZoomMobile = 15.25;
 
 const geoJsonStyles = {
   day: {
@@ -891,9 +894,14 @@ const getFitBoundsPadding = () => {
   };
 };
 
-const fitMapToCurrentViewport = () => {
-  if (!dataBounds?.isValid()) return;
-  map.fitBounds(dataBounds.pad(0.08), getFitBoundsPadding());
+const setMapToTownCenter = () => {
+  const isMobile = window.innerWidth < 768;
+  const zoom = isMobile ? townZoomMobile : townZoomDesktop;
+  const padding = getFitBoundsPadding();
+  const offsetX = (padding.paddingBottomRight[0] - padding.paddingTopLeft[0]) / 2;
+  const offsetY = (padding.paddingBottomRight[1] - padding.paddingTopLeft[1]) / 2;
+  const targetPoint = map.project(townCenter, zoom).subtract([offsetX, offsetY]);
+  map.setView(map.unproject(targetPoint, zoom), zoom);
 };
 
 const syncExpandedState = (nextExpanded: boolean, options: { updateHistory?: boolean } = {}) => {
@@ -934,7 +942,7 @@ const syncExpandedState = (nextExpanded: boolean, options: { updateHistory?: boo
       redrawScratchSurface();
     }
     clampMagnifierPoint();
-    fitMapToCurrentViewport();
+    setMapToTownCenter();
     applyPaneVisibility();
   });
   window.setTimeout(() => {
@@ -1049,7 +1057,7 @@ const initGeoJson = async () => {
 
   dataBounds = geoJsonLayers.day?.getBounds() ?? null;
   if (dataBounds?.isValid()) {
-    fitMapToCurrentViewport();
+    setMapToTownCenter();
     map.setMaxBounds(dataBounds.pad(0.2));
   }
 };
@@ -1284,7 +1292,7 @@ initGeoJson().then(() => {
       redrawScratchSurface();
     }
     clampMagnifierPoint();
-    fitMapToCurrentViewport();
+    setMapToTownCenter();
     applyPaneVisibility();
   });
 });
