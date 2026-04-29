@@ -1456,6 +1456,10 @@ body.is-map-leaving .hero__content {
   background: transparent;
 }
 
+.time-map-clipped-pane > * {
+  translate: var(--custom-pane-offset-x, 0) var(--custom-pane-offset-y, 0);
+}
+
 .leaflet-control-zoom {
   border: 0;
   box-shadow: var(--md-elevation-2);

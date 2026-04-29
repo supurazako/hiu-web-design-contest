@@ -154,6 +154,15 @@ const customPanes = [
   paneByMode.night.marker,
   magnifierBackgroundPane,
 ];
+const clippedCustomPanes = [
+  paneByMode.day.geo,
+  paneByMode.night.geo,
+  paneByMode.day.marker,
+  paneByMode.night.marker,
+];
+clippedCustomPanes.forEach((pane) => {
+  pane.classList.add("time-map-clipped-pane");
+});
 const scratchContext = scratchSurface.getContext("2d");
 const scratchBrushRadius = 48;
 const scratchMinPointDistance = 4;
@@ -162,11 +171,14 @@ let scratchMaskFrame: number | null = null;
 
 const syncCustomPaneBounds = () => {
   const { width, height } = mapElement.getBoundingClientRect();
-  customPanes.forEach((pane) => {
-    pane.style.width = `${Math.round(width)}px`;
-    pane.style.height = `${Math.round(height)}px`;
-    pane.style.left = "0";
-    pane.style.top = "0";
+  const paneOverscan = Math.round(Math.max(width, height) * 2);
+  clippedCustomPanes.forEach((pane) => {
+    pane.style.width = `${Math.round(width + paneOverscan * 2)}px`;
+    pane.style.height = `${Math.round(height + paneOverscan * 2)}px`;
+    pane.style.left = `${-paneOverscan}px`;
+    pane.style.top = `${-paneOverscan}px`;
+    pane.style.setProperty("--custom-pane-offset-x", `${paneOverscan}px`);
+    pane.style.setProperty("--custom-pane-offset-y", `${paneOverscan}px`);
   });
   const backgroundOverscan = Math.round(Math.max(width, height));
   magnifierBackgroundPane.style.width = `${Math.round(width + backgroundOverscan * 2)}px`;
