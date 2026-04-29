@@ -595,14 +595,15 @@ const renderStaticText = () => {
 };
 
 const applyTheme = () => {
+  const themeMode = state.displayMode === "compare" ? "day" : state.timeMode;
   root.classList.remove(
     themeByMode.day.className,
     themeByMode.night.className,
     themeByMode.compare.className,
     themeByMode.scratch.className,
   );
-  root.classList.add(themeByMode[state.timeMode].className);
-  root.style.setProperty("--theme-glow", themeByMode[state.timeMode].glow);
+  root.classList.add(themeByMode[themeMode].className);
+  root.style.setProperty("--theme-glow", themeByMode[themeMode].glow);
 };
 
 const applyScratchState = () => {
