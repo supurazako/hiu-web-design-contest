@@ -91,15 +91,16 @@ const ui = uiCopy[locale];
           </div>
 
           <div class="map-control-stack" data-control-shell>
-            <div class="map-control-stack__section" data-time-toggle-group>
-              <TimeToggle mode={initialMode} ui={ui} />
-            </div>
-
             <div class="map-control-stack__section map-control-stack__section--mode">
               <div class="map-mode-switch" role="group" aria-label={ui.displayModeLabel} data-display-mode-group>
-                <button class="map-mode-switch__button is-active" type="button" data-display-mode="single" aria-label={ui.singleModeLabel} title={ui.singleModeLabel}>
-                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" aria-hidden="true"><path d="M480-118 120-398l66-50 294 228 294-228 66 50-360 280Zm0-202L120-600l360-280 360 280-360 280Zm0-280Zm0 178 230-178-230-178-230 178 230 178Z"/></svg>
-                </button>
+                <div class="map-mode-switch__single-group is-expanded" data-single-group>
+                  <button class="map-mode-switch__button is-active" type="button" data-display-mode="single" aria-label={ui.singleModeLabel} title={ui.singleModeLabel}>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" aria-hidden="true"><path d="M480-118 120-398l66-50 294 228 294-228 66 50-360 280Zm0-202L120-600l360-280 360 280-360 280Zm0-280Zm0 178 230-178-230-178-230 178 230 178Z"/></svg>
+                  </button>
+                  <div class="map-time-toggle" data-time-toggle-group>
+                    <TimeToggle mode={initialMode} ui={ui} />
+                  </div>
+                </div>
                 <button class="map-mode-switch__button" type="button" data-display-mode="compare" aria-label={ui.compareModeLabel} title={ui.compareModeLabel}>
                   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" aria-hidden="true"><path d="M200-160q-33 0-56.5-23.5T120-240v-480q0-33 23.5-56.5T200-800h160v80H200v480h160v80H200Zm240 80v-800h80v80h240q33 0 56.5 23.5T840-720v480q0 33-23.5 56.5T760-160H520v80h-80Zm80-160h240v-480H520v480Zm-320 0v-480 480Zm560 0v-480 480Z"/></svg>
                 </button>

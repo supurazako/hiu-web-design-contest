@@ -42,6 +42,7 @@ const clockDial = requiredElement<HTMLButtonElement>("[data-clock-dial]");
 const clockHand = requiredElement<HTMLElement>("[data-clock-hand]");
 const clockTime = requiredElement<HTMLElement>("[data-clock-time]");
 const scratchSurface = requiredElement<HTMLCanvasElement>("[data-scratch-surface]");
+const singleGroup = requiredElement<HTMLElement>("[data-single-group]");
 const scratchGroup = requiredElement<HTMLElement>("[data-scratch-group]");
 const scratchResetButton = requiredElement<HTMLButtonElement>("[data-scratch-reset]");
 const floatingSheet = requiredElement<HTMLElement>(".sheet-host--floating");
@@ -541,15 +542,19 @@ const updateCompareUI = () => {
     root.style.setProperty("--magnifier-y", `${state.magnifierPoint.y}px`);
   }
   const isScratch = state.displayMode === "scratch";
+  const isSingle = state.displayMode === "single";
+  singleGroup.classList.toggle("is-expanded", isSingle);
   scratchGroup.classList.toggle("is-expanded", isScratch);
   scratchResetButton.setAttribute("aria-hidden", String(!isScratch));
   scratchResetButton.tabIndex = isScratch ? 0 : -1;
-  const isSingle = state.displayMode === "single";
   controlShell.classList.toggle("is-compare", state.displayMode === "compare");
   controlShell.classList.toggle("is-magnifier", state.displayMode === "magnifier");
   controlShell.classList.toggle("is-clock", state.displayMode === "clock");
   controlShell.classList.toggle("is-scratch", isScratch);
   timeToggleGroup.setAttribute("aria-hidden", String(!isSingle));
+  timeModeButtons.forEach((button) => {
+    button.tabIndex = isSingle ? 0 : -1;
+  });
 };
 
 const renderStaticText = () => {
