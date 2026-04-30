@@ -104,6 +104,12 @@
     padding: 0;
   }
 
+  .hero__brand {
+    margin-bottom: 14px;
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+  }
+
   .content-block {
     width: min(calc(100% - 24px), 1120px);
     padding-bottom: 20px;

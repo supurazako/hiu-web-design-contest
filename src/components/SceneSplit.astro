@@ -1,4 +1,6 @@
 ---
+import TimeModeIcon from "./TimeModeIcon.astro";
+
 type Props = {
   dayLabel: string;
   nightLabel: string;
@@ -11,11 +13,17 @@ const { dayLabel, nightLabel, dayMood, nightMood } = Astro.props;
 
 <div class="scene-split">
   <article class="scene-split__panel scene-split__panel--day">
-    <p class="scene-split__label">{dayLabel}</p>
+    <p class="scene-split__label">
+      <TimeModeIcon mode="day" class="scene-split__label-icon" />
+      <span class="scene-split__label-text">{dayLabel}</span>
+    </p>
     <h3>{dayMood}</h3>
   </article>
   <article class="scene-split__panel scene-split__panel--night">
-    <p class="scene-split__label">{nightLabel}</p>
+    <p class="scene-split__label">
+      <TimeModeIcon mode="night" class="scene-split__label-icon" />
+      <span class="scene-split__label-text">{nightLabel}</span>
+    </p>
     <h3>{nightMood}</h3>
   </article>
 </div>

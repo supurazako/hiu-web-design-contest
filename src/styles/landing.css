@@ -122,6 +122,17 @@ body.is-map-expanded .content-block {
     transform var(--map-transition-duration) var(--map-transition-ease);
 }
 
+.hero__brand {
+  margin: 0 0 16px;
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 78%, var(--md-sys-color-primary));
+  font-size: clamp(0.95rem, 1.1vw, 1.15rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: none;
+  text-shadow: 0 1px 10px rgba(255, 248, 242, 0.72);
+}
+
 .hero__content h1,
 .content-block h2,
 .map-header h1,
@@ -170,7 +181,6 @@ body.is-map-expanded .content-block {
 
 .eyebrow,
 .control-label,
-.scene-split__label,
 .hero__card-label {
   margin: 0 0 8px;
   color: var(--md-sys-color-primary);
@@ -338,6 +348,21 @@ body.is-map-expanded .content-block {
   margin-bottom: 24px;
 }
 
+.content-block--intro {
+  padding-bottom: 0;
+}
+
+.content-block--intro .section-heading {
+  margin-bottom: 0;
+}
+
+.content-block--intro .section-heading > p {
+  max-width: 64ch;
+  font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+  font-weight: 700;
+  line-height: 1.7;
+}
+
 .scene-split,
 .steps-grid {
   display: grid;
@@ -351,6 +376,38 @@ body.is-map-expanded .content-block {
   border-radius: 24px;
   border: 1px solid var(--md-sys-color-outline-variant);
   box-shadow: var(--md-elevation-1);
+}
+
+.scene-split__label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin: 0 0 14px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(126, 87, 0, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.36);
+  color: var(--md-sys-color-primary);
+}
+
+.scene-split__label-icon {
+  width: 28px;
+  height: 28px;
+  fill: currentColor;
+}
+
+.scene-split__label-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .scene-split__panel--day {
@@ -370,6 +427,9 @@ body.is-map-expanded .content-block {
 
 .scene-split__panel--night .scene-split__label {
   color: #a9d1ff;
+  background: rgba(237, 244, 251, 0.08);
+  border-color: rgba(169, 209, 255, 0.24);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .scene-split__panel--night h3 {
