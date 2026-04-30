@@ -15,7 +15,6 @@
   min-height: min(820px, calc(100vh - 8px));
   padding: 52px 0 72px;
   overflow: hidden;
-  border-radius: 0 0 56px 56px;
   background: #fff8f2;
 }
 
@@ -92,7 +91,6 @@ body.is-map-expanded .content-block {
 
 .hero__content,
 .hero__card,
-.content-block,
 .map-header,
 .spot-card,
 .map-panel {
@@ -310,11 +308,25 @@ body.is-map-expanded .content-block {
 }
 
 .content-block {
-  margin-top: 20px;
-  background: var(--md-sys-color-surface-container-low);
+  width: min(calc(100% - 32px), 1120px);
+  margin: 0 auto;
+  padding: 0 0 24px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
   transition:
     opacity 260ms ease,
     transform var(--map-transition-duration) var(--map-transition-ease);
+}
+
+.hero + .content-block {
+  margin-top: 40px;
+}
+
+.content-block + .content-block {
+  margin-top: 40px;
 }
 
 .content-block--cta {

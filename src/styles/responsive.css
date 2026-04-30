@@ -7,10 +7,6 @@
     padding-inline: 0;
   }
 
-  .landing-shell > .content-block {
-    margin-inline: 24px;
-  }
-
   .scene-split {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -106,6 +102,19 @@
     width: min(calc(100% - 24px), 560px);
     margin-inline: auto;
     padding: 0;
+  }
+
+  .content-block {
+    width: min(calc(100% - 24px), 1120px);
+    padding-bottom: 20px;
+  }
+
+  .hero + .content-block {
+    margin-top: 32px;
+  }
+
+  .content-block + .content-block {
+    margin-top: 32px;
   }
 
   .hero__content h1 {

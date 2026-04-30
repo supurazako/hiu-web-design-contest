@@ -105,10 +105,6 @@ img {
   padding-inline: 0;
 }
 
-.landing-shell > .content-block {
-  margin-inline: 16px;
-}
-
 .landing-shell,
 .map-shell {
   position: relative;
