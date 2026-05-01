@@ -28,8 +28,6 @@ const themeByMode = getJsonData<ThemeByMode>("theme-data");
 const root = requiredElement<HTMLElement>("[data-map-shell]");
 const mapElement = requiredElementById<HTMLElement>("map");
 const openMapLink = document.querySelector("[data-open-map]") as HTMLAnchorElement | null;
-const languageMenuTrigger = requiredElement<HTMLButtonElement>("[data-language-menu-trigger]");
-const languageMenu = requiredElement<HTMLElement>("[data-language-menu]");
 const controlShell = requiredElement<HTMLElement>("[data-control-shell]");
 const timeToggleGroup = requiredElement<HTMLElement>("[data-time-toggle-group]");
 const compareOverlay = requiredElement<HTMLElement>("[data-compare-overlay]");
@@ -65,7 +63,33 @@ const mapAttributionText = requiredElement<HTMLElement>(".map-attribution span")
 const displayModeGroup = requiredElement<HTMLElement>("[data-display-mode-group]");
 const timeModeButtons = Array.from(document.querySelectorAll<HTMLElement>("[data-time-mode]"));
 const displayModeButtons = Array.from(document.querySelectorAll<HTMLElement>("[data-display-mode]"));
-const languageOptionButtons = Array.from(document.querySelectorAll<HTMLElement>("[data-language-option]"));
+const landingTitle = document.querySelector<HTMLElement>("[data-landing-title]");
+const landingLead = document.querySelector<HTMLElement>("[data-landing-lead]");
+const landingCta = document.querySelector<HTMLElement>("[data-landing-cta]");
+const conceptTitle = document.querySelector<HTMLElement>("[data-concept-title]");
+const conceptBody = document.querySelector<HTMLElement>("[data-concept-body]");
+const sectionsTitle = document.querySelector<HTMLElement>("[data-sections-title]");
+const sceneLabelDay = document.querySelector<HTMLElement>('[data-scene-label="day"]');
+const sceneLabelNight = document.querySelector<HTMLElement>('[data-scene-label="night"]');
+const sceneMoodDay = document.querySelector<HTMLElement>('[data-scene-mood="day"]');
+const sceneMoodNight = document.querySelector<HTMLElement>('[data-scene-mood="night"]');
+const languageSwitchers = Array.from(document.querySelectorAll<HTMLElement>("[data-language-switcher]")).map((switcherRoot) => {
+  const trigger = switcherRoot.querySelector<HTMLButtonElement>("[data-language-menu-trigger]");
+  const menu = switcherRoot.querySelector<HTMLElement>("[data-language-menu]");
+  const options = Array.from(switcherRoot.querySelectorAll<HTMLButtonElement>("[data-language-option]"));
+  if (!trigger || !menu || options.length === 0) {
+    throw new Error("Language switcher markup is incomplete.");
+  }
+
+  return {
+    id: switcherRoot.dataset.languageSwitcher ?? "",
+    root: switcherRoot,
+    trigger,
+    menu,
+    options,
+  };
+});
+const languageOptionButtons = languageSwitchers.flatMap((switcher) => switcher.options);
 
 const timeModeButtonByMode = {
   day: requiredElement<HTMLElement>('[data-time-mode="day"]'),
@@ -81,6 +105,7 @@ const displayModeButtonByMode = {
 } as const;
 
 const placeholderClasses = ["placeholder-river", "placeholder-steam", "placeholder-forest", "placeholder-light"];
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 const state: {
   locale: Locale;
@@ -89,7 +114,7 @@ const state: {
   splitRatio: number;
   selectedSpotId: string | null;
   selectedSpotMode: TimeMode | null;
-  isLanguageMenuOpen: boolean;
+  openLanguageSwitcherId: string | null;
   isDraggingSplit: boolean;
   hasMagnifierPoint: boolean;
   magnifierPoint: MapPoint;
@@ -103,7 +128,7 @@ const state: {
   splitRatio: 0.5,
   selectedSpotId: null,
   selectedSpotMode: null,
-  isLanguageMenuOpen: false,
+  openLanguageSwitcherId: null,
   isDraggingSplit: false,
   hasMagnifierPoint: false,
   magnifierPoint: { x: 0, y: 0 },
@@ -499,12 +524,6 @@ const updateButtons = () => {
   zoomOutButton.disabled = currentZoom <= map.getMinZoom();
 };
 
-const updateLanguageMenu = () => {
-  languageMenu.hidden = !state.isExpanded || !state.isLanguageMenuOpen;
-  languageMenu.classList.toggle("is-open", state.isLanguageMenuOpen);
-  languageMenuTrigger.setAttribute("aria-expanded", String(state.isLanguageMenuOpen));
-};
-
 const showSpotCard = () => {
   if (spotCardHideTimer !== null) {
     window.clearTimeout(spotCardHideTimer);
@@ -579,6 +598,49 @@ const renderCard = () => {
   spotDetailLabel.textContent = ui.detailsLabel;
 };
 
+const renderLandingTitle = (lines: readonly string[]) => {
+  if (!landingTitle) return;
+  landingTitle.replaceChildren(
+    ...lines.map((line) => {
+      const span = document.createElement("span");
+      span.textContent = line;
+      return span;
+    }),
+  );
+};
+
+const renderLandingText = () => {
+  const ui = uiCopy[state.locale];
+  document.documentElement.lang = state.locale;
+  document.body.dataset.locale = state.locale;
+  renderLandingTitle(ui.landingTitleLines);
+  if (landingLead) landingLead.textContent = ui.landingLead;
+  if (landingCta) landingCta.textContent = ui.landingPrimaryCta;
+  if (conceptTitle) conceptTitle.textContent = ui.conceptTitle;
+  if (conceptBody) conceptBody.textContent = ui.conceptBody;
+  if (sectionsTitle) sectionsTitle.textContent = ui.sectionsTitle;
+  if (sceneLabelDay) sceneLabelDay.textContent = ui.dayLabel;
+  if (sceneLabelNight) sceneLabelNight.textContent = ui.nightLabel;
+  if (sceneMoodDay) sceneMoodDay.textContent = ui.dayMood;
+  if (sceneMoodNight) sceneMoodNight.textContent = ui.nightMood;
+  window.dispatchEvent(new CustomEvent("time-map:locale-change", { detail: { locale: state.locale } }));
+};
+
+const renderLanguageUI = () => {
+  const ui = uiCopy[state.locale];
+  languageSwitchers.forEach((switcher) => {
+    const isOpen = state.openLanguageSwitcherId === switcher.id;
+    switcher.trigger.setAttribute("aria-label", ui.languageLabel);
+    switcher.trigger.setAttribute("aria-expanded", String(isOpen));
+    switcher.menu.setAttribute("aria-label", ui.languageLabel);
+    switcher.menu.hidden = !isOpen;
+    switcher.menu.classList.toggle("is-open", isOpen);
+    switcher.options.forEach((button) => {
+      button.classList.toggle("is-active", button.dataset.locale === state.locale);
+    });
+  });
+};
+
 const updateCompareUI = () => {
   const splitPercent = `${state.splitRatio * 100}%`;
   const clockTimeText = formatClockHour(state.clockHour);
@@ -645,10 +707,10 @@ const renderStaticText = () => {
   });
   splitHandle.setAttribute("aria-label", ui.compareHandleLabel);
   clockDial.setAttribute("aria-label", ui.clockDialLabel);
-  languageMenuTrigger.setAttribute("aria-label", ui.languageLabel);
-  languageMenu.setAttribute("aria-label", ui.languageLabel);
   scratchResetButton.setAttribute("aria-label", ui.scratchResetLabel);
   scratchResetButton.setAttribute("title", ui.scratchResetLabel);
+  renderLandingText();
+  renderLanguageUI();
 };
 
 const applyTheme = () => {
@@ -733,7 +795,6 @@ const render = () => {
   syncCustomPaneBounds();
   ensureSelectionVisibility();
   updateButtons();
-  updateLanguageMenu();
   renderStaticText();
   updateCompareUI();
   applyTheme();
@@ -807,7 +868,7 @@ const syncExpandedState = (nextExpanded: boolean, options: { updateHistory?: boo
   }
 
   state.isExpanded = nextExpanded;
-  state.isLanguageMenuOpen = false;
+  state.openLanguageSwitcherId = null;
 
   if (options.updateHistory) {
     if (nextExpanded) {
@@ -1037,22 +1098,28 @@ clockDial.addEventListener("keydown", (event) => {
   }
 });
 
-languageOptionButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    state.locale = button.dataset.locale as Locale;
-    state.isLanguageMenuOpen = false;
-    render();
+languageSwitchers.forEach((switcher) => {
+  switcher.trigger.addEventListener("click", (event) => {
+    event.stopPropagation();
+    state.openLanguageSwitcherId = state.openLanguageSwitcherId === switcher.id ? null : switcher.id;
+    renderLanguageUI();
+  });
+
+  switcher.menu.addEventListener("click", (event) => {
+    event.stopPropagation();
   });
 });
 
-languageMenuTrigger.addEventListener("click", (event) => {
-  event.stopPropagation();
-  state.isLanguageMenuOpen = !state.isLanguageMenuOpen;
+prefersReducedMotion.addEventListener("change", () => {
   render();
 });
 
-languageMenu.addEventListener("click", (event) => {
-  event.stopPropagation();
+languageOptionButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    state.locale = button.dataset.locale as Locale;
+    state.openLanguageSwitcherId = null;
+    render();
+  });
 });
 
 map.on("zoomstart", () => {
@@ -1160,16 +1227,16 @@ scratchSurface.addEventListener("pointercancel", (event) => {
 document.addEventListener("click", (event) => {
   const target = event.target as Node | null;
   if (!target) return;
-  if (state.isLanguageMenuOpen && !languageMenu.contains(target) && !languageMenuTrigger.contains(target)) {
-    state.isLanguageMenuOpen = false;
-    render();
+  if (state.openLanguageSwitcherId && !languageSwitchers.some((switcher) => switcher.root.contains(target))) {
+    state.openLanguageSwitcherId = null;
+    renderLanguageUI();
   }
 });
 
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && state.isLanguageMenuOpen) {
-    state.isLanguageMenuOpen = false;
-    render();
+  if (event.key === "Escape" && state.openLanguageSwitcherId) {
+    state.openLanguageSwitcherId = null;
+    renderLanguageUI();
   }
 });
 

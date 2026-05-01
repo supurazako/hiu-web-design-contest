@@ -15,15 +15,15 @@ const { dayLabel, nightLabel, dayMood, nightMood } = Astro.props;
   <article class="scene-split__panel scene-split__panel--day">
     <p class="scene-split__label">
       <TimeModeIcon mode="day" class="scene-split__label-icon" />
-      <span class="scene-split__label-text">{dayLabel}</span>
+      <span class="scene-split__label-text" data-scene-label="day">{dayLabel}</span>
     </p>
-    <h3>{dayMood}</h3>
+    <h3 data-scene-mood="day">{dayMood}</h3>
   </article>
   <article class="scene-split__panel scene-split__panel--night">
     <p class="scene-split__label">
       <TimeModeIcon mode="night" class="scene-split__label-icon" />
-      <span class="scene-split__label-text">{nightLabel}</span>
+      <span class="scene-split__label-text" data-scene-label="night">{nightLabel}</span>
     </p>
-    <h3>{nightMood}</h3>
+    <h3 data-scene-mood="night">{nightMood}</h3>
   </article>
 </div>

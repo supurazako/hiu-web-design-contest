@@ -1,0 +1,31 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#F7EDE2"/>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <ellipse cx="799" cy="679" rx="529" ry="157" fill="url(#pool)"/>
+  <ellipse cx="799" cy="698" rx="574" ry="177" fill="#FFF9F2" fill-opacity="0.72"/>
+  <path d="M245 636C327 563 429 527 551 527C675 527 791 573 899 664C970 727 1046 764 1128 774V900H245V636Z" fill="url(#deck)"/>
+  <path d="M1087 219C1174 293 1249 417 1309 593" stroke="#C97B52" stroke-width="34" stroke-linecap="round" stroke-opacity="0.18"/>
+  <path d="M1288 181C1361 259 1427 381 1471 515" stroke="#D59C72" stroke-width="28" stroke-linecap="round" stroke-opacity="0.16"/>
+  <path d="M526 280C562 219 623 181 709 167" stroke="#FFFFFF" stroke-width="26" stroke-linecap="round" stroke-opacity="0.72"/>
+  <path d="M699 170C766 206 812 262 835 339" stroke="#FFFFFF" stroke-width="26" stroke-linecap="round" stroke-opacity="0.66"/>
+  <path d="M840 218C915 262 965 333 991 432" stroke="#FFFFFF" stroke-width="22" stroke-linecap="round" stroke-opacity="0.56"/>
+  <path d="M492 343C546 288 610 259 684 255" stroke="#FFF8EE" stroke-width="20" stroke-linecap="round" stroke-opacity="0.6"/>
+  <path d="M1134 316C1188 378 1230 455 1260 550" stroke="#FFF8EE" stroke-width="22" stroke-linecap="round" stroke-opacity="0.52"/>
+  <circle cx="1268" cy="205" r="98" fill="#FFD8AE" fill-opacity="0.32"/>
+  <circle cx="1298" cy="183" r="54" fill="#FFF8F1" fill-opacity="0.7"/>
+  <defs>
+    <linearGradient id="bg" x1="800" y1="0" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F9F1E8"/>
+      <stop offset="0.55" stop-color="#ECD8C4"/>
+      <stop offset="1" stop-color="#C88A62"/>
+    </linearGradient>
+    <linearGradient id="pool" x1="799" y1="522" x2="799" y2="836" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#DDF2F1"/>
+      <stop offset="1" stop-color="#6EB0B4"/>
+    </linearGradient>
+    <linearGradient id="deck" x1="686.5" y1="527" x2="686.5" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#B06D48" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#8D5637" stop-opacity="0.84"/>
+    </linearGradient>
+  </defs>
+</svg>

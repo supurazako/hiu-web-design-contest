@@ -84,6 +84,11 @@
   .map-magnifier {
     transition: none;
   }
+
+  .feature-carousel__track,
+  .feature-card {
+    transition: none;
+  }
 }
 
 @media (max-width: 767px) {
@@ -96,6 +101,11 @@
     background:
       linear-gradient(180deg, rgba(255, 248, 242, 0.94) 0%, rgba(255, 248, 242, 0.76) 58%, rgba(255, 248, 242, 0.32) 100%),
       linear-gradient(90deg, rgba(255, 248, 242, 0.78), rgba(255, 248, 242, 0.24));
+  }
+
+  .landing-language {
+    top: 16px;
+    right: 12px;
   }
 
   .hero__content {
@@ -129,6 +139,18 @@
 
   .hero__content h1 span {
     white-space: normal;
+  }
+
+  .feature-carousel__track {
+    gap: 16px;
+  }
+
+  .feature-card {
+    border-radius: 24px;
+  }
+
+  .feature-card__body {
+    padding: 20px;
   }
 
   .map-layout {

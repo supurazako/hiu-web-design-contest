@@ -7,6 +7,7 @@ export const uiCopy = {
     siteTagline: "時間で巡る温泉街",
     landingEyebrow: "定山渓を、昼と夜のリズムで旅する。",
     landingTitle: "時間で表情が変わる温泉街を、ひとつの地図で。",
+    landingTitleLines: ["時間で表情が変わる", "温泉街を", "ひとつの地図で。"],
     landingLead:
       "昼は散策やご飯、夜は灯りや絶景。Jozankei Time Map は、その時間に合う温泉、ご飯、宿を地図の上で見比べながら、定山渓の楽しみ方を探せるサイトです。",
     landingPrimaryCta: "地図を見る",
@@ -18,11 +19,23 @@ export const uiCopy = {
     bothLabel: "昼夜",
     dayMood: "散策・自然・カフェ・フォトスポット",
     nightMood: "灯り・湯けむり・静けさ・余韻",
-    sectionsTitle: "使い方",
-    steps: [
-      "まずは時間帯を選び、その瞬間のおすすめスポットを絞り込む",
-      "気になるピンをタップして、下部カードで体験内容を確認する",
-      "言語を切り替えながら、現地利用にも事前計画にも使う",
+    sectionsTitle: "Jozankei Time Mapでできること",
+    featureCards: [
+      {
+        imageSrc: "/features/onsen-placeholder.svg",
+        imageAlt: "湯けむりの立つ露天風呂をイメージした仮画像",
+        body: "昼と夜を切り替えながら、その時間に合う温泉やご飯、宿をひとつの地図で見つけられます。",
+      },
+      {
+        imageSrc: "/features/food-placeholder.svg",
+        imageAlt: "温泉街の食事やカフェをイメージした仮画像",
+        body: "気になるスポットを選ぶと、その場所で楽しめる体験や景色をカードで確認できます。",
+      },
+      {
+        imageSrc: "/features/view-placeholder.svg",
+        imageAlt: "夜景や景色をイメージした仮画像",
+        body: "言語を切り替えながら、現地での散策にも旅行前の計画にも使えます。",
+      },
     ],
     mapIntroTitle: "時間で読む、温泉街の1日",
     mapPageTitle: "Map View",
@@ -48,13 +61,14 @@ export const uiCopy = {
     detailsLabel: "体験メモ",
     routeHint: "この時間に表示中",
     categoryLabel: "カテゴリ",
-    exploreLabel: "Explore",
+    exploreLabel: "魅力",
   },
   en: {
     siteTitle: "Jozankei Time Map",
     siteTagline: "Travel the hot spring town by time",
     landingEyebrow: "Experience Jozankei through the rhythm of day and night.",
     landingTitle: "One map for a hot spring town that changes with time.",
+    landingTitleLines: ["One map for", "a hot spring town", "that changes with time."],
     landingLead:
       "Day is for walks and good food, while night brings lights and scenic views. Jozankei Time Map helps you compare hot springs, meals, and places to stay on one map so you can find the best way to enjoy Jozankei at each time of day.",
     landingPrimaryCta: "Open the time map",
@@ -66,11 +80,23 @@ export const uiCopy = {
     bothLabel: "Both",
     dayMood: "walks, nature, cafes, photo spots",
     nightMood: "lights, steam, stillness, afterglow",
-    sectionsTitle: "How it works",
-    steps: [
-      "Choose a time mode first to focus on spots that fit that moment",
-      "Tap a pin to read the experience in the bottom detail card",
-      "Switch language at any point for local use or trip planning",
+    sectionsTitle: "What You Can Do with Jozankei Time Map",
+    featureCards: [
+      {
+        imageSrc: "/features/onsen-placeholder.svg",
+        imageAlt: "Temporary image suggesting an open-air hot spring with rising steam",
+        body: "Switch between day and night to discover hot springs, food, and places to stay that fit that time of day on one map.",
+      },
+      {
+        imageSrc: "/features/food-placeholder.svg",
+        imageAlt: "Temporary image suggesting food and cafe time in the hot spring town",
+        body: "Select any spot to check the experience, atmosphere, and views you can enjoy there in the detail card.",
+      },
+      {
+        imageSrc: "/features/view-placeholder.svg",
+        imageAlt: "Temporary image suggesting scenic views and night lights",
+        body: "Change the language at any time to use the map both while walking in town and while planning your trip in advance.",
+      },
     ],
     mapIntroTitle: "A one-day story of the town",
     mapPageTitle: "Map View",
