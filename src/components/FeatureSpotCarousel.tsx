@@ -17,6 +17,9 @@ type LocaleChangeDetail = {
 };
 
 const localeChangeEventName = "time-map:locale-change";
+const autoplayResumeDelayMs = 3200;
+const wheelSnapThreshold = 48;
+const wheelGestureIdleMs = 220;
 
 const FeatureSpotCardView = ({
   card,
@@ -55,16 +58,58 @@ export default function FeatureSpotCarousel({
   cardsByLocale,
   initialLocale,
 }: FeatureSpotCarouselProps) {
+  const resumeTimerRef = React.useRef<number | null>(null);
+  const wheelResetTimerRef = React.useRef<number | null>(null);
+  const wheelDeltaRef = React.useRef(0);
+  const wheelGestureLockedRef = React.useRef(false);
+  const isHoveringRef = React.useRef(false);
+  const isManualPausedRef = React.useRef(false);
   const autoplay = React.useRef(
     Autoplay({
       delay: 2500,
-      stopOnInteraction: true,
+      stopOnInteraction: false,
     })
   );
   const [api, setApi] = React.useState<CarouselApi>();
   const [locale, setLocale] = React.useState<Locale>(initialLocale);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const cards = cardsByLocale[locale] ?? cardsByLocale.ja;
+
+  const clearResumeTimer = React.useCallback(() => {
+    if (resumeTimerRef.current === null) return;
+    window.clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = null;
+  }, []);
+
+  const startAutoplay = React.useCallback(() => {
+    autoplay.current.play();
+  }, []);
+
+  const scheduleAutoplayResume = React.useCallback(() => {
+    clearResumeTimer();
+    resumeTimerRef.current = window.setTimeout(() => {
+      if (isHoveringRef.current) {
+        resumeTimerRef.current = null;
+        return;
+      }
+
+      startAutoplay();
+      isManualPausedRef.current = false;
+      resumeTimerRef.current = null;
+    }, autoplayResumeDelayMs);
+  }, [clearResumeTimer, startAutoplay]);
+
+  const clearWheelResetTimer = React.useCallback(() => {
+    if (wheelResetTimerRef.current === null) return;
+    window.clearTimeout(wheelResetTimerRef.current);
+    wheelResetTimerRef.current = null;
+  }, []);
+
+  const stopAutoplayForInteraction = React.useCallback(() => {
+    isManualPausedRef.current = true;
+    autoplay.current.stop();
+    clearResumeTimer();
+  }, [clearResumeTimer]);
 
   React.useEffect(() => {
     const currentLocale = document.body.dataset.locale ?? document.documentElement.lang;
@@ -90,30 +135,108 @@ export default function FeatureSpotCarousel({
     const onSelect = () => {
       setSelectedIndex(api.selectedScrollSnap());
     };
+    const onPointerDown = () => {
+      stopAutoplayForInteraction();
+    };
+    const onSettle = () => {
+      if (!isManualPausedRef.current) return;
+      scheduleAutoplayResume();
+    };
 
     onSelect();
     api.on("select", onSelect);
     api.on("reInit", onSelect);
+    api.on("pointerDown", onPointerDown);
+    api.on("settle", onSettle);
 
     return () => {
       api.off("select", onSelect);
       api.off("reInit", onSelect);
+      api.off("pointerDown", onPointerDown);
+      api.off("settle", onSettle);
     };
-  }, [api, locale]);
+  }, [api, locale, scheduleAutoplayResume, stopAutoplayForInteraction]);
 
   React.useEffect(() => {
     if (!api) return;
     api.reInit();
     api.scrollTo(0, true);
     setSelectedIndex(0);
-    autoplay.current.reset();
-  }, [api, cards]);
+    isManualPausedRef.current = false;
+    startAutoplay();
+  }, [api, cards, startAutoplay]);
+
+  React.useEffect(() => {
+    return () => {
+      clearResumeTimer();
+      clearWheelResetTimer();
+    };
+  }, [clearResumeTimer, clearWheelResetTimer]);
+
+  React.useEffect(() => {
+    if (!api) return;
+
+    const rootNode = api.rootNode();
+
+    const handleWheel = (event: WheelEvent) => {
+      const primaryDelta =
+        Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+
+      if (Math.abs(primaryDelta) < 4) return;
+
+      event.preventDefault();
+      stopAutoplayForInteraction();
+      clearWheelResetTimer();
+
+      const resetWheelGesture = () => {
+        wheelDeltaRef.current = 0;
+        wheelGestureLockedRef.current = false;
+        scheduleAutoplayResume();
+        wheelResetTimerRef.current = null;
+      };
+
+      wheelDeltaRef.current += primaryDelta;
+
+      if (wheelGestureLockedRef.current) {
+        wheelResetTimerRef.current = window.setTimeout(resetWheelGesture, wheelGestureIdleMs);
+        return;
+      }
+
+      if (wheelDeltaRef.current >= wheelSnapThreshold) {
+        wheelGestureLockedRef.current = true;
+        api.scrollNext();
+        wheelResetTimerRef.current = window.setTimeout(resetWheelGesture, wheelGestureIdleMs);
+        return;
+      }
+
+      if (wheelDeltaRef.current <= -wheelSnapThreshold) {
+        wheelGestureLockedRef.current = true;
+        api.scrollPrev();
+        wheelResetTimerRef.current = window.setTimeout(resetWheelGesture, wheelGestureIdleMs);
+        return;
+      }
+
+      wheelResetTimerRef.current = window.setTimeout(resetWheelGesture, wheelGestureIdleMs);
+    };
+
+    rootNode.addEventListener("wheel", handleWheel, { passive: false });
+    return () => {
+      rootNode.removeEventListener("wheel", handleWheel);
+    };
+  }, [api, clearWheelResetTimer, scheduleAutoplayResume, stopAutoplayForInteraction]);
 
   return (
     <div
       className="space-y-5"
-      onMouseEnter={() => autoplay.current.stop()}
-      onMouseLeave={() => autoplay.current.reset()}
+      onMouseEnter={() => {
+        isHoveringRef.current = true;
+        autoplay.current.stop();
+        clearResumeTimer();
+      }}
+      onMouseLeave={() => {
+        isHoveringRef.current = false;
+        scheduleAutoplayResume();
+      }}
     >
       <Carousel
         setApi={setApi}
@@ -144,8 +267,9 @@ export default function FeatureSpotCarousel({
               key={`dot-${locale}-${card.imageSrc}-${index}`}
               type="button"
               onClick={() => {
+                stopAutoplayForInteraction();
                 api?.scrollTo(index);
-                autoplay.current.reset();
+                scheduleAutoplayResume();
               }}
               aria-label={`slide ${index + 1}`}
               aria-current={isActive ? "true" : "false"}
