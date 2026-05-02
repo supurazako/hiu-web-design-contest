@@ -20,6 +20,15 @@ export const uiCopy = {
     dayMood: "散策・自然・カフェ・フォトスポット",
     nightMood: "灯り・湯けむり・静けさ・余韻",
     sectionsTitle: "Jozankei Time Mapでできること",
+    diarySectionTitle: "日記を見る",
+    diarySectionBody:
+      "スポットを見つけると、旅の断片が手帳に記録されます。見つけた日記は読めるようになり、まだ見つけていない日記には次の発見につながるヒントが残ります。",
+    diaryProgressLabel: "発見した日記",
+    diaryDiscoveredLabel: "発見済み",
+    diaryUndiscoveredLabel: "未発見",
+    diaryHintLabel: "ヒント",
+    diaryFallbackHint: "温泉街を歩きながら、気になるスポットを開いてみる",
+    diaryLockedBody: "このページはまだ閉じたままです。",
     featureCards: [
       {
         imageSrc: "/features/onsen-placeholder.svg",
@@ -81,6 +90,15 @@ export const uiCopy = {
     dayMood: "walks, nature, cafes, photo spots",
     nightMood: "lights, steam, stillness, afterglow",
     sectionsTitle: "What You Can Do with Jozankei Time Map",
+    diarySectionTitle: "Read the Travel Diary",
+    diarySectionBody:
+      "When you discover a spot, a fragment of the trip is added to the notebook. Found diary pages become readable, while hidden ones leave small hints for what to look for next.",
+    diaryProgressLabel: "Diary pages found",
+    diaryDiscoveredLabel: "Found",
+    diaryUndiscoveredLabel: "Hidden",
+    diaryHintLabel: "Hint",
+    diaryFallbackHint: "Open the spots that catch your attention as you explore the hot spring town",
+    diaryLockedBody: "This page is still sealed.",
     featureCards: [
       {
         imageSrc: "/features/onsen-placeholder.svg",

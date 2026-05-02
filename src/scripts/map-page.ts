@@ -1,6 +1,7 @@
 import L from "leaflet";
 import type { Spot } from "../data/spots";
 import type { ThemeByMode, UiCopy } from "../data/site";
+import { saveDiscoveredDiary } from "../lib/diary-storage";
 import { getJsonData, requiredElement, requiredElementById } from "./dom-utils";
 import { featureCategory, isSpotVisibleForMode, layerStyleForMode, mapBackgroundForMode } from "./map-style";
 import type { DisplayMode, MapPoint, TimeMode } from "./map-types";
@@ -69,6 +70,8 @@ const landingCta = document.querySelector<HTMLElement>("[data-landing-cta]");
 const conceptTitle = document.querySelector<HTMLElement>("[data-concept-title]");
 const conceptBody = document.querySelector<HTMLElement>("[data-concept-body]");
 const sectionsTitle = document.querySelector<HTMLElement>("[data-sections-title]");
+const diaryTitle = document.querySelector<HTMLElement>("[data-diary-title]");
+const diaryBody = document.querySelector<HTMLElement>("[data-diary-body]");
 const sceneLabelDay = document.querySelector<HTMLElement>('[data-scene-label="day"]');
 const sceneLabelNight = document.querySelector<HTMLElement>('[data-scene-label="night"]');
 const sceneMoodDay = document.querySelector<HTMLElement>('[data-scene-mood="day"]');
@@ -244,6 +247,14 @@ const townZoomMobile = 15.25;
 
 const getSelectedSpot = () => spots.find((spot) => spot.id === state.selectedSpotId) ?? null;
 
+const selectSpot = (spot: Spot, mode: TimeMode) => {
+  state.selectedSpotId = spot.id;
+  state.selectedSpotMode = mode;
+  if (spot.diary) {
+    saveDiscoveredDiary(spot.id);
+  }
+};
+
 const isMarkerModeVisibleAtPoint = (mode: TimeMode, point: MapPoint) => {
   if (state.displayMode === "single") return mode === state.timeMode;
 
@@ -308,8 +319,7 @@ const selectVisibleMarkerFromPointer = (clientX: number, clientY: number) => {
   if (!point) return false;
   const entry = getVisibleMarkerAtPoint(point);
   if (!entry) return false;
-  state.selectedSpotId = entry.spot.id;
-  state.selectedSpotMode = entry.mode;
+  selectSpot(entry.spot, entry.mode);
   render();
   return true;
 };
@@ -351,8 +361,7 @@ const createMarker = (spot: Spot, mode: TimeMode) => {
   });
 
   marker.on("click", () => {
-    state.selectedSpotId = spot.id;
-    state.selectedSpotMode = mode;
+    selectSpot(spot, mode);
     render();
   });
 
@@ -619,6 +628,8 @@ const renderLandingText = () => {
   if (conceptTitle) conceptTitle.textContent = ui.conceptTitle;
   if (conceptBody) conceptBody.textContent = ui.conceptBody;
   if (sectionsTitle) sectionsTitle.textContent = ui.sectionsTitle;
+  if (diaryTitle) diaryTitle.textContent = ui.diarySectionTitle;
+  if (diaryBody) diaryBody.textContent = ui.diarySectionBody;
   if (sceneLabelDay) sceneLabelDay.textContent = ui.dayLabel;
   if (sceneLabelNight) sceneLabelNight.textContent = ui.nightLabel;
   if (sceneMoodDay) sceneMoodDay.textContent = ui.dayMood;

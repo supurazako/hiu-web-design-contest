@@ -379,6 +379,28 @@ body.is-map-expanded .content-block {
   line-height: 1.7;
 }
 
+.content-block--diary {
+  position: relative;
+  padding-bottom: 40px;
+}
+
+.content-block--diary::before {
+  content: "";
+  position: absolute;
+  inset: 12px -8px 0;
+  z-index: -1;
+  border-radius: 36px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 228, 176, 0.52), transparent 28%),
+    linear-gradient(180deg, rgba(255, 247, 234, 0.72), rgba(246, 236, 220, 0.4));
+  filter: blur(2px);
+}
+
+.section-heading--diary {
+  max-width: 780px;
+  margin-bottom: 24px;
+}
+
 .scene-split,
 .steps-grid {
   display: grid;

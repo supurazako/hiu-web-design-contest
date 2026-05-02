@@ -343,11 +343,11 @@ body.is-map-leaving .hero__content {
   width: 52px;
   height: 52px;
   line-height: 0;
-  border: 1px solid var(--map-ui-outline);
+  border: 1px solid var(--map-ui-outline, var(--md-sys-color-outline-variant));
   border-radius: 18px;
-  background: color-mix(in srgb, var(--map-ui-surface-strong) 92%, transparent);
+  background: color-mix(in srgb, var(--map-ui-surface-strong, var(--md-sys-color-surface-container-highest)) 92%, transparent);
   box-shadow: var(--md-elevation-2);
-  color: var(--map-ui-on-surface);
+  color: var(--map-ui-on-surface, var(--md-sys-color-on-surface));
   cursor: pointer;
   text-decoration: none;
 }
@@ -374,8 +374,8 @@ body.is-map-leaving .hero__content {
   gap: 4px;
   padding: 8px;
   border-radius: 18px;
-  border: 1px solid var(--map-ui-outline);
-  background: color-mix(in srgb, var(--map-ui-surface-strong) 96%, transparent);
+  border: 1px solid var(--map-ui-outline, var(--md-sys-color-outline-variant));
+  background: color-mix(in srgb, var(--map-ui-surface-strong, var(--md-sys-color-surface-container-highest)) 96%, transparent);
   box-shadow: var(--md-elevation-3);
 }
 
@@ -389,7 +389,7 @@ body.is-map-leaving .hero__content {
   border: 0;
   border-radius: 12px;
   background: transparent;
-  color: var(--map-ui-on-surface);
+  color: var(--map-ui-on-surface, var(--md-sys-color-on-surface));
   font-weight: 600;
   text-align: left;
   cursor: pointer;
@@ -402,8 +402,8 @@ body.is-map-leaving .hero__content {
 }
 
 .map-language__option.is-active {
-  background: var(--map-ui-secondary-container);
-  color: var(--map-ui-on-secondary-container);
+  background: var(--map-ui-secondary-container, var(--md-sys-color-secondary-container));
+  color: var(--map-ui-on-secondary-container, var(--md-sys-color-on-secondary-container));
 }
 
 .map-attribution {

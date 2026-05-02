@@ -4,6 +4,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import SceneSplit from "../components/SceneSplit.astro";
 import TimeToggle from "../components/TimeToggle.astro";
 import FeatureSpotCarousel from "../components/FeatureSpotCarousel";
+import DiaryNotebook from "../components/DiaryNotebook";
 import mapPageScript from "../scripts/map-page.ts?url";
 import { themeByMode, uiCopy } from "../data/site";
 import { spots } from "../data/spots";
@@ -15,6 +16,16 @@ const featureCardsByLocale = {
   ja: uiCopy.ja.featureCards,
   en: uiCopy.en.featureCards,
 };
+const diaryEntries = spots
+  .filter((spot) => spot.diary)
+  .map((spot) => ({
+    spotId: spot.id,
+    spotName: spot.name,
+    timeMode: spot.timeMode,
+    title: spot.diary!.title,
+    body: spot.diary!.body,
+    unlockHint: spot.diary?.unlockHint,
+  }));
 ---
 
 <BaseLayout title={`${ui.siteTitle} | ${ui.siteTagline}`} description={ui.landingLead}>
@@ -230,6 +241,19 @@ const featureCardsByLocale = {
         </div>
       </div>
       <FeatureSpotCarousel client:visible cardsByLocale={featureCardsByLocale} initialLocale={locale} />
+    </section>
+
+    <section class="content-block content-block--diary" id="diary">
+      <div class="section-heading section-heading--diary">
+        <h2 data-diary-title>{ui.diarySectionTitle}</h2>
+        <p data-diary-body>{ui.diarySectionBody}</p>
+      </div>
+      <DiaryNotebook
+        client:visible
+        entries={diaryEntries}
+        initialLocale={locale}
+        uiCopy={ui}
+      />
     </section>
   </main>
 
