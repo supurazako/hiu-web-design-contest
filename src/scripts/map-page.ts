@@ -118,6 +118,11 @@ const displayModeButtonByMode = {
 
 const placeholderClasses = ["placeholder-river", "placeholder-steam", "placeholder-forest", "placeholder-light"];
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const isMobileViewport = () => window.innerWidth < 768;
+const isVerticalCompareMode = () => state.displayMode === "compare" && isMobileViewport();
+type ComparePaneSide = "day" | "night";
+let pendingSplitRatio: number | null = null;
+let splitAnimationFrame: number | null = null;
 
 const state: {
   locale: Locale;
@@ -285,9 +290,15 @@ const isMarkerModeVisibleAtPoint = (mode: TimeMode, point: MapPoint) => {
   if (state.displayMode === "single") return mode === state.timeMode;
 
   if (state.displayMode === "compare") {
-    const { width } = mapElement.getBoundingClientRect();
-    const splitX = width * state.splitRatio;
-    return mode === "day" ? point.x <= splitX : point.x >= splitX;
+    const mapRect = mapElement.getBoundingClientRect();
+    const splitBoundary = (isVerticalCompareMode() ? mapRect.height : mapRect.width) * state.splitRatio;
+    return isVerticalCompareMode()
+      ? mode === "day"
+        ? point.y <= splitBoundary
+        : point.y >= splitBoundary
+      : mode === "day"
+        ? point.x <= splitBoundary
+        : point.x >= splitBoundary;
   }
 
   if (state.displayMode === "magnifier") {
@@ -495,11 +506,21 @@ const applyPaneVisibility = () => {
   scratchController.clearMask();
 
   const mapRect = mapElement.getBoundingClientRect();
-  const splitX = mapRect.width * state.splitRatio;
-  const clipPathForPane = (pane: HTMLElement, side: "left" | "right") => {
+  const isVerticalCompare = isVerticalCompareMode();
+  const splitWithinMap = (isVerticalCompare ? mapRect.height : mapRect.width) * state.splitRatio;
+  const clipPathForPane = (pane: HTMLElement, side: ComparePaneSide) => {
     const paneRect = pane.getBoundingClientRect();
-    const dividerWithinPane = clamp(mapRect.left - paneRect.left + splitX, 0, paneRect.width);
-    if (side === "left") {
+    if (isVerticalCompare) {
+      const dividerWithinPane = clamp(mapRect.top - paneRect.top + splitWithinMap, 0, paneRect.height);
+      if (side === "day") {
+        const bottomInset = Math.max(0, paneRect.height - dividerWithinPane);
+        return `inset(0px 0px ${bottomInset}px 0px)`;
+      }
+      return `inset(${dividerWithinPane}px 0px 0px 0px)`;
+    }
+
+    const dividerWithinPane = clamp(mapRect.left - paneRect.left + splitWithinMap, 0, paneRect.width);
+    if (side === "day") {
       const rightInset = Math.max(0, paneRect.width - dividerWithinPane);
       return `inset(0px ${rightInset}px 0px 0px)`;
     }
@@ -510,15 +531,15 @@ const applyPaneVisibility = () => {
   magnifierBackgroundPane.style.background = mapBackgroundForMode("night");
   magnifierBackgroundPane.style.opacity = "1";
   magnifierBackgroundPane.style.visibility = "visible";
-  magnifierBackgroundPane.style.clipPath = clipPathForPane(magnifierBackgroundPane, "right");
+  magnifierBackgroundPane.style.clipPath = clipPathForPane(magnifierBackgroundPane, "night");
   paneByMode.day.geo.style.zIndex = "340";
   paneByMode.night.geo.style.zIndex = "342";
   paneByMode.day.marker.style.zIndex = "620";
   paneByMode.night.marker.style.zIndex = "621";
-  setPaneState(paneByMode.day.geo, { visible: true, clipPath: clipPathForPane(paneByMode.day.geo, "left") });
-  setPaneState(paneByMode.day.marker, { visible: true, clipPath: clipPathForPane(paneByMode.day.marker, "left") });
-  setPaneState(paneByMode.night.geo, { visible: true, clipPath: clipPathForPane(paneByMode.night.geo, "right") });
-  setPaneState(paneByMode.night.marker, { visible: true, clipPath: clipPathForPane(paneByMode.night.marker, "right") });
+  setPaneState(paneByMode.day.geo, { visible: true, clipPath: clipPathForPane(paneByMode.day.geo, "day") });
+  setPaneState(paneByMode.day.marker, { visible: true, clipPath: clipPathForPane(paneByMode.day.marker, "day") });
+  setPaneState(paneByMode.night.geo, { visible: true, clipPath: clipPathForPane(paneByMode.night.geo, "night") });
+  setPaneState(paneByMode.night.marker, { visible: true, clipPath: clipPathForPane(paneByMode.night.marker, "night") });
 };
 
 const updateMarkerVisibility = () => {
@@ -712,16 +733,29 @@ const renderControlCluster = () => {
   controlCluster.classList.toggle("is-hidden-by-selection", state.selectedSpotId !== null);
 };
 
+const setCompareDividerPosition = (splitPercent: string) => {
+  if (isVerticalCompareMode()) {
+    splitDivider.style.top = splitPercent;
+    splitDivider.style.removeProperty("left");
+    return;
+  }
+
+  splitDivider.style.left = splitPercent;
+  splitDivider.style.removeProperty("top");
+};
+
 const updateCompareUI = () => {
   const splitPercent = `${state.splitRatio * 100}%`;
   const clockTimeText = formatClockHour(state.clockHour);
   const clockAngle = state.clockHour * 15;
   const clockNightRatio = nightRatioForHour(state.clockHour);
+  const isVerticalCompare = isVerticalCompareMode();
   root.style.setProperty("--compare-split", splitPercent);
   root.style.setProperty("--clock-night-ratio", String(clockNightRatio));
-  splitDivider.style.left = splitPercent;
+  setCompareDividerPosition(splitPercent);
   splitHandle.setAttribute("aria-valuenow", String(Math.round(state.splitRatio * 100)));
   splitHandle.setAttribute("aria-valuetext", `${Math.round(state.splitRatio * 100)}%`);
+  splitHandle.setAttribute("aria-orientation", isVerticalCompare ? "vertical" : "horizontal");
   compareOverlay.hidden = state.displayMode !== "compare";
   magnifierOverlay.hidden = state.displayMode !== "magnifier";
   clockPanel.hidden = state.displayMode !== "clock";
@@ -748,6 +782,62 @@ const updateCompareUI = () => {
   timeModeButtons.forEach((button) => {
     button.tabIndex = isSingle ? 0 : -1;
   });
+};
+
+const cancelPendingSplitFrame = () => {
+  if (splitAnimationFrame === null) return;
+  window.cancelAnimationFrame(splitAnimationFrame);
+  splitAnimationFrame = null;
+};
+
+const commitSplitRatio = (nextRatio: number) => {
+  if (state.splitRatio === nextRatio) return;
+  state.splitRatio = nextRatio;
+  applyPaneVisibility();
+  updateCompareUI();
+};
+
+const flushPendingSplitRatio = () => {
+  if (pendingSplitRatio === null) {
+    cancelPendingSplitFrame();
+    return;
+  }
+
+  const ratio = pendingSplitRatio;
+  pendingSplitRatio = null;
+  cancelPendingSplitFrame();
+  commitSplitRatio(ratio);
+};
+
+const scheduleSplitRatioUpdate = (nextRatio: number) => {
+  if (!isVerticalCompareMode()) {
+    commitSplitRatio(nextRatio);
+    return;
+  }
+
+  pendingSplitRatio = nextRatio;
+  if (splitAnimationFrame !== null) return;
+
+  splitAnimationFrame = window.requestAnimationFrame(() => {
+    splitAnimationFrame = null;
+    if (pendingSplitRatio === null) return;
+    const ratio = pendingSplitRatio;
+    pendingSplitRatio = null;
+    commitSplitRatio(ratio);
+  });
+};
+
+const getSplitRatioFromPointer = (clientX: number, clientY: number) => {
+  const bounds = mapElement.getBoundingClientRect();
+  return isVerticalCompareMode()
+    ? clamp((clientY - bounds.top) / bounds.height, 0.1, 0.9)
+    : clamp((clientX - bounds.left) / bounds.width, 0.1, 0.9);
+};
+
+const adjustSplitRatio = (delta: number) => {
+  state.splitRatio = clamp(state.splitRatio + delta, 0.1, 0.9);
+  applyPaneVisibility();
+  updateCompareUI();
 };
 
 const renderStaticText = () => {
@@ -973,12 +1063,8 @@ const syncExpandedState = (nextExpanded: boolean, options: { updateHistory?: boo
   }, mapTransitionDuration);
 };
 
-const setSplitRatioFromPointer = (clientX: number) => {
-  const bounds = mapElement.getBoundingClientRect();
-  const nextRatio = clamp((clientX - bounds.left) / bounds.width, 0.1, 0.9);
-  state.splitRatio = nextRatio;
-  applyPaneVisibility();
-  updateCompareUI();
+const setSplitRatioFromPointer = (clientX: number, clientY: number) => {
+  scheduleSplitRatioUpdate(getSplitRatioFromPointer(clientX, clientY));
 };
 
 const clampMagnifierPoint = () => {
@@ -1216,16 +1302,17 @@ splitHandle.addEventListener("pointerdown", (event) => {
   if (state.displayMode !== "compare") return;
   state.isDraggingSplit = true;
   splitHandle.setPointerCapture(event.pointerId);
-  setSplitRatioFromPointer(event.clientX);
+  setSplitRatioFromPointer(event.clientX, event.clientY);
 });
 
 splitHandle.addEventListener("pointermove", (event) => {
   if (!state.isDraggingSplit) return;
-  setSplitRatioFromPointer(event.clientX);
+  setSplitRatioFromPointer(event.clientX, event.clientY);
 });
 
 splitHandle.addEventListener("pointerup", (event) => {
   state.isDraggingSplit = false;
+  flushPendingSplitRatio();
   if (splitHandle.hasPointerCapture(event.pointerId)) {
     splitHandle.releasePointerCapture(event.pointerId);
   }
@@ -1233,6 +1320,8 @@ splitHandle.addEventListener("pointerup", (event) => {
 
 splitHandle.addEventListener("pointercancel", (event) => {
   state.isDraggingSplit = false;
+  pendingSplitRatio = null;
+  cancelPendingSplitFrame();
   if (splitHandle.hasPointerCapture(event.pointerId)) {
     splitHandle.releasePointerCapture(event.pointerId);
   }
@@ -1240,17 +1329,14 @@ splitHandle.addEventListener("pointercancel", (event) => {
 
 splitHandle.addEventListener("keydown", (event) => {
   if (state.displayMode !== "compare") return;
-  if (event.key === "ArrowLeft") {
+  const isVerticalCompare = isVerticalCompareMode();
+  if ((!isVerticalCompare && event.key === "ArrowLeft") || (isVerticalCompare && event.key === "ArrowUp")) {
     event.preventDefault();
-    state.splitRatio = clamp(state.splitRatio - 0.02, 0.1, 0.9);
-    applyPaneVisibility();
-    updateCompareUI();
+    adjustSplitRatio(-0.02);
   }
-  if (event.key === "ArrowRight") {
+  if ((!isVerticalCompare && event.key === "ArrowRight") || (isVerticalCompare && event.key === "ArrowDown")) {
     event.preventDefault();
-    state.splitRatio = clamp(state.splitRatio + 0.02, 0.1, 0.9);
-    applyPaneVisibility();
-    updateCompareUI();
+    adjustSplitRatio(0.02);
   }
 });
 

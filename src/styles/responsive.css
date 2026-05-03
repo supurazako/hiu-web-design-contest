@@ -108,6 +108,39 @@
     pointer-events: none;
     transform: translate3d(0, 24px, 0) scale(0.94);
   }
+
+  .map-compare__divider {
+    top: var(--compare-split, 50%);
+    right: 0;
+    bottom: auto;
+    left: 0;
+    width: auto;
+    height: 0;
+    transform: translateY(-50%);
+    will-change: transform;
+  }
+
+  .map-compare__line {
+    top: 50%;
+    right: 0;
+    bottom: auto;
+    left: 0;
+    width: auto;
+    height: 2px;
+    transform: translateY(-50%);
+  }
+
+  .map-compare__handle {
+    top: 50%;
+    left: 50%;
+    cursor: ns-resize;
+    will-change: transform;
+  }
+
+  .map-compare__handle span {
+    display: inline-block;
+    transform: rotate(90deg);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

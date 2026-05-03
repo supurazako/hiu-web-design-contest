@@ -314,6 +314,8 @@ body.is-map-leaving .hero__content {
   cursor: ew-resize;
   transform: translate(-50%, -50%);
   pointer-events: auto;
+  touch-action: none;
+  will-change: transform;
 }
 
 .map-compare__handle:focus-visible {
