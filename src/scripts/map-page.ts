@@ -69,6 +69,7 @@ const diaryToastTitle = requiredElement<HTMLElement>("[data-diary-toast-title]")
 const diaryToastName = requiredElement<HTMLElement>("[data-diary-toast-name]");
 const diaryToastBody = requiredElement<HTMLElement>("[data-diary-toast-body]");
 const backHomeButton = requiredElement<HTMLButtonElement>("[data-back-home-link]");
+const mapAttribution = requiredElement<HTMLElement>("[data-map-attribution]");
 const mapAttributionText = requiredElement<HTMLElement>(".map-attribution span");
 const displayModeGroup = requiredElement<HTMLElement>("[data-display-mode-group]");
 const timeModeButtons = Array.from(document.querySelectorAll<HTMLElement>("[data-time-mode]"));
@@ -262,6 +263,9 @@ const diaryToastDuration = 3200;
 const townCenter = L.latLng(42.9650, 141.16615);
 const townZoomDesktop = 15.5;
 const townZoomMobile = 15.25;
+const mobileAttributionBottomInset = 16;
+const mobileAttributionGap = 12;
+const mobileAttributionMinHeight = 58;
 
 const getSelectedSpot = () => spots.find((spot) => spot.id === state.selectedSpotId) ?? null;
 const getDiscoveredDiaryToastSpot = () =>
@@ -598,6 +602,7 @@ const showSpotCard = () => {
 
   spotCardShowFrame = window.requestAnimationFrame(() => {
     spotCard.classList.add("is-visible-sheet");
+    syncBottomOverlayLayout();
     spotCardShowFrame = null;
   });
 };
@@ -613,6 +618,7 @@ const hideSpotCard = () => {
 
   spotCardHideTimer = window.setTimeout(() => {
     spotCard.hidden = true;
+    syncBottomOverlayLayout();
     spotCardHideTimer = null;
   }, spotCardMotionDuration);
 };
@@ -731,6 +737,34 @@ const renderLanguageUI = () => {
 
 const renderControlCluster = () => {
   controlCluster.classList.toggle("is-hidden-by-selection", state.selectedSpotId !== null);
+};
+
+const clearBottomOverlayLayout = () => {
+  root.style.removeProperty("--map-attribution-measured-height");
+  root.style.removeProperty("--map-selected-sheet-top");
+};
+
+const getMobileAttributionHeight = () =>
+  Math.max(
+    Math.ceil(mapAttribution.getBoundingClientRect().height),
+    mobileAttributionMinHeight,
+  );
+
+const syncBottomOverlayLayout = () => {
+  const hasSelectedSpot = state.selectedSpotId !== null;
+  mapAttribution.classList.toggle("is-raised-by-selection", hasSelectedSpot);
+
+  if (!isMobileViewport()) {
+    clearBottomOverlayLayout();
+    return;
+  }
+
+  const rootRect = root.getBoundingClientRect();
+  const sheetRect = floatingSheet.getBoundingClientRect();
+  const measuredHeight = getMobileAttributionHeight();
+  const selectedSheetTop = hasSelectedSpot ? Math.max(Math.round(sheetRect.top - rootRect.top), 0) : 0;
+  root.style.setProperty("--map-attribution-measured-height", `${measuredHeight}px`);
+  root.style.setProperty("--map-selected-sheet-top", `${selectedSheetTop}px`);
 };
 
 const setCompareDividerPosition = (splitPercent: string) => {
@@ -965,6 +999,7 @@ const render = () => {
   updateMarkerVisibility();
   renderDiscoveryToast();
   renderCard();
+  syncBottomOverlayLayout();
 };
 
 const clearMapTransitionClasses = () => {
@@ -989,8 +1024,11 @@ const setMapTransitionDirection = (direction: "entering" | "leaving" | null) => 
 };
 
 const getFitBoundsPadding = () => {
-  const isMobile = window.innerWidth < 768;
+  const isMobile = isMobileViewport();
   const sheetRect = state.isExpanded ? floatingSheet.getBoundingClientRect() : new DOMRect(0, 0, 0, 0);
+  const attributionHeight = isMobile
+    ? getMobileAttributionHeight() + mobileAttributionBottomInset + mobileAttributionGap
+    : 0;
 
   return {
     paddingTopLeft: [
@@ -999,7 +1037,11 @@ const getFitBoundsPadding = () => {
     ] as [number, number],
     paddingBottomRight: [
       state.isExpanded ? 32 : 28,
-      state.isExpanded ? (isMobile ? Math.round(sheetRect.height + 44) : Math.round(sheetRect.height + 36)) : 28,
+      state.isExpanded
+        ? isMobile
+          ? Math.round(sheetRect.height + 44 + attributionHeight)
+          : Math.round(sheetRect.height + 36)
+        : 28,
     ] as [number, number],
   };
 };
@@ -1415,6 +1457,7 @@ initGeoJson().then(() => {
 });
 
 window.addEventListener("resize", () => {
+  syncBottomOverlayLayout();
   const sizeChanged = syncCustomPaneBounds();
   if (sizeChanged && state.displayMode === "scratch") {
     scratchController.redraw();
