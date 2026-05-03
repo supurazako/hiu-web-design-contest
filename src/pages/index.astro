@@ -165,12 +165,23 @@ const diaryEntries = spots
                 <h2 data-spot-title hidden></h2>
                 <p data-spot-description hidden></p>
                 <p class="spot-card__detail-label" data-spot-detail-label hidden></p>
+                <section class="spot-card__diary" data-spot-diary hidden>
+                  <p class="spot-card__diary-label" data-spot-diary-label></p>
+                  <h3 class="spot-card__diary-title" data-spot-diary-title></h3>
+                  <p class="spot-card__diary-body" data-spot-diary-body></p>
+                </section>
                 <div data-spot-empty>
                   <p class="spot-card__empty-title" data-spot-empty-title>{ui.cardEmptyTitle}</p>
                   <p data-spot-empty-hint>{ui.cardEmptyHint}</p>
                 </div>
               </div>
             </section>
+          </div>
+
+          <div class="map-diary-toast" data-diary-toast hidden aria-live="polite" aria-atomic="true">
+            <p class="map-diary-toast__eyebrow" data-diary-toast-title>{ui.diaryToastTitle}</p>
+            <h3 class="map-diary-toast__name" data-diary-toast-name></h3>
+            <p class="map-diary-toast__body" data-diary-toast-body>{ui.diaryToastBody}</p>
           </div>
 
           <div class="map-attribution">
@@ -252,7 +263,30 @@ const diaryEntries = spots
         client:visible
         entries={diaryEntries}
         initialLocale={locale}
-        uiCopy={ui}
+        uiCopy={{
+          ja: {
+            dayLabel: uiCopy.ja.dayLabel,
+            nightLabel: uiCopy.ja.nightLabel,
+            bothLabel: uiCopy.ja.bothLabel,
+            diaryProgressLabel: uiCopy.ja.diaryProgressLabel,
+            diaryDiscoveredLabel: uiCopy.ja.diaryDiscoveredLabel,
+            diaryUndiscoveredLabel: uiCopy.ja.diaryUndiscoveredLabel,
+            diaryHintLabel: uiCopy.ja.diaryHintLabel,
+            diaryFallbackHint: uiCopy.ja.diaryFallbackHint,
+            diaryLockedBody: uiCopy.ja.diaryLockedBody,
+          },
+          en: {
+            dayLabel: uiCopy.en.dayLabel,
+            nightLabel: uiCopy.en.nightLabel,
+            bothLabel: uiCopy.en.bothLabel,
+            diaryProgressLabel: uiCopy.en.diaryProgressLabel,
+            diaryDiscoveredLabel: uiCopy.en.diaryDiscoveredLabel,
+            diaryUndiscoveredLabel: uiCopy.en.diaryUndiscoveredLabel,
+            diaryHintLabel: uiCopy.en.diaryHintLabel,
+            diaryFallbackHint: uiCopy.en.diaryFallbackHint,
+            diaryLockedBody: uiCopy.en.diaryLockedBody,
+          },
+        }}
       />
     </section>
   </main>

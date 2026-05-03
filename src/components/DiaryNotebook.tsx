@@ -21,17 +21,20 @@ type DiaryNotebookEntry = {
 type DiaryNotebookProps = {
   entries: DiaryNotebookEntry[];
   initialLocale: Locale;
-  uiCopy: Pick<
-    UiCopy[Locale],
-    | "dayLabel"
-    | "nightLabel"
-    | "bothLabel"
-    | "diaryProgressLabel"
-    | "diaryDiscoveredLabel"
-    | "diaryUndiscoveredLabel"
-    | "diaryHintLabel"
-    | "diaryFallbackHint"
-    | "diaryLockedBody"
+  uiCopy: Record<
+    Locale,
+    Pick<
+      UiCopy[Locale],
+      | "dayLabel"
+      | "nightLabel"
+      | "bothLabel"
+      | "diaryProgressLabel"
+      | "diaryDiscoveredLabel"
+      | "diaryUndiscoveredLabel"
+      | "diaryHintLabel"
+      | "diaryFallbackHint"
+      | "diaryLockedBody"
+    >
   >;
 };
 
@@ -46,11 +49,53 @@ type DiaryDiscoveredDetail = {
 
 const localeChangeEventName = "time-map:locale-change";
 
-const timeModeTone = {
-  day: "bg-[#f8d58a] text-[#6d4b07]",
-  night: "bg-[#b7cdf8] text-[#234266]",
-  both: "bg-[#d8c5ee] text-[#5b3b79]",
-} as const;
+const TimeModeBadge = ({
+  mode,
+  label,
+}: {
+  mode: DiaryNotebookEntry["timeMode"];
+  label: string;
+}) => {
+  const iconClassName = "h-4 w-4 fill-current";
+
+  const DayIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" className={iconClassName} aria-hidden="true">
+      <path d="M440-760v-160h80v160h-80Zm266 110-55-55 112-115 56 57-113 113Zm54 210v-80h160v80H760ZM440-40v-160h80v160h-80ZM254-652 140-763l57-56 113 113-56 54Zm508 512L651-255l54-54 114 110-57 59ZM40-440v-80h160v80H40Zm157 300-56-57 112-112 29 27 29 28-114 114Zm113-170q-70-70-70-170t70-170q70-70 170-70t170 70q70 70 70 170t-70 170q-70 70-170 70t-170-70Zm283-57q47-47 47-113t-47-113q-47-47-113-47t-113 47q-47 47-47 113t47 113q47 47 113 47t113-47ZM480-480Z" />
+    </svg>
+  );
+
+  const NightIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" className={iconClassName} aria-hidden="true">
+      <path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Zm0-80q88 0 158-48.5T740-375q-20 5-40 8t-40 3q-123 0-209.5-86.5T364-660q0-20 3-40t8-40q-78 32-126.5 102T200-480q0 116 82 198t198 82Zm-10-270Z" />
+    </svg>
+  );
+
+  if (mode === "both") {
+    return (
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#d8c5ee] px-2.5 py-1 text-[0.68rem] font-semibold tracking-[0.1em] text-[#5b3b79]">
+        <span className="inline-flex items-center -space-x-1">
+          <DayIcon />
+          <NightIcon />
+        </span>
+        <span>{label}</span>
+      </span>
+    );
+  }
+
+  const isDay = mode === "day";
+
+  return (
+      <span
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.68rem] font-semibold tracking-[0.1em]",
+        isDay ? "bg-[#f8d58a] text-[#6d4b07]" : "bg-[#b7cdf8] text-[#6d4b07]",
+      )}
+    >
+      {isDay ? <DayIcon /> : <NightIcon />}
+      <span>{label}</span>
+    </span>
+  );
+};
 
 export default function DiaryNotebook({ entries, initialLocale, uiCopy }: DiaryNotebookProps) {
   const [locale, setLocale] = React.useState<Locale>(initialLocale);
@@ -96,7 +141,7 @@ export default function DiaryNotebook({ entries, initialLocale, uiCopy }: DiaryN
     };
   }, []);
 
-  const localizedUi = uiCopy;
+  const localizedUi = uiCopy[locale] ?? uiCopy.ja;
   const foundCount = entries.filter((entry) => discovered[entry.spotId]).length;
   const hiddenCount = entries.length - foundCount;
 
@@ -154,23 +199,16 @@ export default function DiaryNotebook({ entries, initialLocale, uiCopy }: DiaryN
                       <span className="rounded-full bg-[rgba(255,255,255,0.72)] px-2.5 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-[color:var(--md-sys-color-on-surface-variant)]">
                         {String(index + 1).padStart(2, "0")}
                       </span>
-                      <span
-                        className={cn(
-                          "rounded-full px-2.5 py-1 text-[0.68rem] font-semibold tracking-[0.1em]",
-                          timeModeTone[entry.timeMode],
-                        )}
-                      >
-                        {timeLabel}
-                      </span>
+                      <TimeModeBadge mode={entry.timeMode} label={timeLabel} />
                     </div>
-                    <p className="text-sm text-[color:var(--md-sys-color-on-surface-variant)]">{entry.spotName[locale]}</p>
+                    <p className="text-sm text-[#5c4a38]">{entry.spotName[locale]}</p>
                   </div>
                   <span
                     className={cn(
                       "rounded-full border px-3 py-1 text-[0.72rem] font-semibold",
                       isDiscovered
-                        ? "border-[rgba(126,87,0,0.18)] bg-[rgba(255,255,255,0.72)] text-[color:var(--md-sys-color-primary)]"
-                        : "border-[rgba(84,71,58,0.12)] bg-[rgba(113,103,92,0.08)] text-[color:var(--md-sys-color-on-surface-variant)]",
+                        ? "border-[rgba(126,87,0,0.18)] bg-[rgba(255,255,255,0.78)] text-[#6d4b07]"
+                        : "border-[rgba(84,71,58,0.12)] bg-[rgba(113,103,92,0.08)] text-[#5c4a38]",
                     )}
                   >
                     {isDiscovered ? localizedUi.diaryDiscoveredLabel : localizedUi.diaryUndiscoveredLabel}
@@ -180,13 +218,13 @@ export default function DiaryNotebook({ entries, initialLocale, uiCopy }: DiaryN
                 {isDiscovered ? (
                   <div className="space-y-3">
                     <h3
-                      className="text-[1.45rem] leading-tight text-[color:var(--md-sys-color-on-surface)]"
+                      className="text-[1.45rem] leading-tight text-[#3f2e20]"
                       style={{ fontFamily: "var(--font-diary)" }}
                     >
                       {entry.title[locale]}
                     </h3>
                     <p
-                      className="text-[1.04rem] leading-8 text-[color:var(--md-sys-color-on-surface-variant)]"
+                      className="text-[1.04rem] leading-8 text-[#564536]"
                       style={{ fontFamily: "var(--font-diary)" }}
                     >
                       {entry.body[locale]}

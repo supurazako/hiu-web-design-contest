@@ -1,7 +1,7 @@
 import L from "leaflet";
 import type { Spot } from "../data/spots";
 import type { ThemeByMode, UiCopy } from "../data/site";
-import { saveDiscoveredDiary } from "../lib/diary-storage";
+import { isDiaryDiscovered, saveDiscoveredDiary } from "../lib/diary-storage";
 import { getJsonData, requiredElement, requiredElementById } from "./dom-utils";
 import { featureCategory, isSpotVisibleForMode, layerStyleForMode, mapBackgroundForMode } from "./map-style";
 import type { DisplayMode, MapPoint, TimeMode } from "./map-types";
@@ -56,9 +56,17 @@ const spotRoute = requiredElement<HTMLElement>("[data-spot-route]");
 const spotTitle = requiredElement<HTMLElement>("[data-spot-title]");
 const spotDescription = requiredElement<HTMLElement>("[data-spot-description]");
 const spotDetailLabel = requiredElement<HTMLElement>("[data-spot-detail-label]");
+const spotDiary = requiredElement<HTMLElement>("[data-spot-diary]");
+const spotDiaryLabel = requiredElement<HTMLElement>("[data-spot-diary-label]");
+const spotDiaryTitle = requiredElement<HTMLElement>("[data-spot-diary-title]");
+const spotDiaryBody = requiredElement<HTMLElement>("[data-spot-diary-body]");
 const spotEmpty = requiredElement<HTMLElement>("[data-spot-empty]");
 const spotEmptyTitle = requiredElement<HTMLElement>("[data-spot-empty-title]");
 const spotEmptyHint = requiredElement<HTMLElement>("[data-spot-empty-hint]");
+const diaryToast = requiredElement<HTMLElement>("[data-diary-toast]");
+const diaryToastTitle = requiredElement<HTMLElement>("[data-diary-toast-title]");
+const diaryToastName = requiredElement<HTMLElement>("[data-diary-toast-name]");
+const diaryToastBody = requiredElement<HTMLElement>("[data-diary-toast-body]");
 const backHomeButton = requiredElement<HTMLButtonElement>("[data-back-home-link]");
 const mapAttributionText = requiredElement<HTMLElement>(".map-attribution span");
 const displayModeGroup = requiredElement<HTMLElement>("[data-display-mode-group]");
@@ -124,6 +132,7 @@ const state: {
   clockHour: number;
   isDraggingClock: boolean;
   isExpanded: boolean;
+  discoveredDiaryToastSpotId: string | null;
 } = {
   locale: "ja",
   displayMode: "single",
@@ -138,6 +147,7 @@ const state: {
   clockHour: 12,
   isDraggingClock: false,
   isExpanded: window.location.hash === "#map",
+  discoveredDiaryToastSpotId: null,
 };
 
 const map = L.map(mapElement, {
@@ -239,19 +249,34 @@ let dataBounds: L.LatLngBounds | null = null;
 let transitionCleanupTimer: number | null = null;
 let spotCardHideTimer: number | null = null;
 let spotCardShowFrame: number | null = null;
+let diaryToastHideTimer: number | null = null;
 const mapTransitionDuration = 720;
 const spotCardMotionDuration = 320;
+const diaryToastDuration = 3200;
 const townCenter = L.latLng(42.9650, 141.16615);
 const townZoomDesktop = 15.5;
 const townZoomMobile = 15.25;
 
 const getSelectedSpot = () => spots.find((spot) => spot.id === state.selectedSpotId) ?? null;
+const getDiscoveredDiaryToastSpot = () =>
+  spots.find((spot) => spot.id === state.discoveredDiaryToastSpotId && spot.diary) ?? null;
 
 const selectSpot = (spot: Spot, mode: TimeMode) => {
   state.selectedSpotId = spot.id;
   state.selectedSpotMode = mode;
   if (spot.diary) {
-    saveDiscoveredDiary(spot.id);
+    const didDiscover = saveDiscoveredDiary(spot.id);
+    if (didDiscover) {
+      state.discoveredDiaryToastSpotId = spot.id;
+      if (diaryToastHideTimer !== null) {
+        window.clearTimeout(diaryToastHideTimer);
+      }
+      diaryToastHideTimer = window.setTimeout(() => {
+        state.discoveredDiaryToastSpotId = null;
+        diaryToastHideTimer = null;
+        renderDiscoveryToast();
+      }, diaryToastDuration);
+    }
   }
 };
 
@@ -570,6 +595,24 @@ const hideSpotCard = () => {
   }, spotCardMotionDuration);
 };
 
+const renderDiscoveryToast = () => {
+  const ui = uiCopy[state.locale];
+  const discoveredSpot = getDiscoveredDiaryToastSpot();
+
+  if (!discoveredSpot?.diary) {
+    diaryToast.hidden = true;
+    diaryToast.classList.remove("is-visible");
+    diaryToastName.textContent = "";
+    return;
+  }
+
+  diaryToast.hidden = false;
+  diaryToast.classList.add("is-visible");
+  diaryToastTitle.textContent = ui.diaryToastTitle;
+  diaryToastName.textContent = discoveredSpot.diary.title[state.locale];
+  diaryToastBody.textContent = ui.diaryToastBody;
+};
+
 const renderCard = () => {
   const ui = uiCopy[state.locale];
   const spot = getSelectedSpot();
@@ -597,6 +640,7 @@ const renderCard = () => {
   spotTitle.hidden = false;
   spotDescription.hidden = false;
   spotDetailLabel.hidden = false;
+  spotDiary.hidden = true;
   spotEmpty.hidden = true;
   spotVisual.classList.remove(...placeholderClasses);
   spotVisual.classList.add(`placeholder-${spot.image.placeholderVariant}`);
@@ -605,6 +649,17 @@ const renderCard = () => {
   spotTitle.textContent = spot.name[state.locale];
   spotDescription.textContent = spot.description[state.locale];
   spotDetailLabel.textContent = ui.detailsLabel;
+
+  if (spot.diary && isDiaryDiscovered(spot.id)) {
+    spotDiary.hidden = false;
+    spotDiaryLabel.textContent = ui.diaryCardLabel;
+    spotDiaryTitle.textContent = spot.diary.title[state.locale];
+    spotDiaryBody.textContent = spot.diary.body[state.locale];
+  } else {
+    spotDiary.hidden = true;
+    spotDiaryTitle.textContent = "";
+    spotDiaryBody.textContent = "";
+  }
 };
 
 const renderLandingTitle = (lines: readonly string[]) => {
@@ -812,6 +867,7 @@ const render = () => {
   applyScratchState();
   applyPaneVisibility();
   updateMarkerVisibility();
+  renderDiscoveryToast();
   renderCard();
 };
 

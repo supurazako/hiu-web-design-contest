@@ -29,6 +29,9 @@ export const uiCopy = {
     diaryHintLabel: "ヒント",
     diaryFallbackHint: "温泉街を歩きながら、気になるスポットを開いてみる",
     diaryLockedBody: "このページはまだ閉じたままです。",
+    diaryToastTitle: "日記を発見",
+    diaryToastBody: "スポットカードでそのまま読めます。",
+    diaryCardLabel: "見つけた日記",
     featureCards: [
       {
         imageSrc: "/features/onsen-placeholder.svg",
@@ -95,10 +98,13 @@ export const uiCopy = {
       "When you discover a spot, a fragment of the trip is added to the notebook. Found diary pages become readable, while hidden ones leave small hints for what to look for next.",
     diaryProgressLabel: "Diary pages found",
     diaryDiscoveredLabel: "Found",
-    diaryUndiscoveredLabel: "Hidden",
+    diaryUndiscoveredLabel: "Undiscovered",
     diaryHintLabel: "Hint",
     diaryFallbackHint: "Open the spots that catch your attention as you explore the hot spring town",
     diaryLockedBody: "This page is still sealed.",
+    diaryToastTitle: "Diary discovered",
+    diaryToastBody: "You can read it in the spot card now.",
+    diaryCardLabel: "Discovered diary",
     featureCards: [
       {
         imageSrc: "/features/onsen-placeholder.svg",

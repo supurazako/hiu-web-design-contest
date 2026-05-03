@@ -748,6 +748,39 @@ body.is-map-leaving .hero__content {
   color: var(--clock-primary);
 }
 
+.is-clock-active .sheet-host--floating .spot-card,
+.theme-night .sheet-host--floating .spot-card {
+  background: var(--spot-card-paper);
+  color: var(--spot-card-ink-strong);
+}
+
+.is-clock-active .sheet-host--floating .spot-card p,
+.theme-night .sheet-host--floating .spot-card p,
+.is-clock-active .sheet-host--floating .spot-card__body.is-empty p,
+.theme-night .sheet-host--floating .spot-card__body.is-empty p,
+.is-clock-active .sheet-host--floating .spot-card__pill,
+.theme-night .sheet-host--floating .spot-card__pill {
+  color: var(--spot-card-ink);
+}
+
+.is-clock-active .sheet-host--floating .spot-card h2,
+.theme-night .sheet-host--floating .spot-card h2 {
+  color: var(--spot-card-ink-strong);
+}
+
+.is-clock-active .sheet-host--floating .spot-card__pill,
+.theme-night .sheet-host--floating .spot-card__pill {
+  background: var(--spot-card-pill-bg);
+  border-color: var(--spot-card-pill-border);
+}
+
+.is-clock-active .sheet-host--floating .spot-card__detail-label,
+.theme-night .sheet-host--floating .spot-card__detail-label,
+.is-clock-active .sheet-host--floating .spot-card__empty-title,
+.theme-night .sheet-host--floating .spot-card__empty-title {
+  color: var(--spot-card-accent);
+}
+
 .is-scratch-active .map-scratch-surface {
   opacity: 0;
   pointer-events: auto;
