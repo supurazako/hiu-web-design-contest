@@ -420,6 +420,21 @@ body.is-map-leaving .hero__content {
   box-shadow: var(--md-elevation-1);
   color: var(--map-ui-on-surface-variant);
   font-size: 0.75rem;
+  transition:
+    bottom 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 220ms ease,
+    transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.map-attribution a {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.map-attribution a:hover,
+.map-attribution a:focus-visible {
+  text-decoration: underline;
 }
 
 .map-control-cluster {
@@ -430,6 +445,10 @@ body.is-map-leaving .hero__content {
   display: grid;
   justify-items: stretch;
   gap: 12px;
+  transition:
+    opacity 220ms ease,
+    transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 220ms ease;
 }
 
 .map-zoom-stack {
@@ -628,7 +647,9 @@ body.is-map-leaving .hero__content {
   }
 
   .map-time-toggle,
-  .map-scratch-reset {
+  .map-scratch-reset,
+  .map-control-cluster,
+  .map-attribution {
     transition: opacity 120ms ease;
     transform: translateX(0) scale(1);
   }

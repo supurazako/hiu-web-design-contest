@@ -106,7 +106,7 @@ const diaryEntries = spots
             </div>
           </div>
 
-          <div class="map-control-cluster">
+          <div class="map-control-cluster" data-control-cluster>
             <div class="map-zoom-stack" role="group" aria-label={ui.zoomControlsLabel} data-zoom-controls>
               <div class="map-zoom-stack__section">
                 <button class="map-toolbar__button map-toolbar__button--stacked" type="button" data-zoom-in aria-label={ui.zoomInLabel} title={ui.zoomInLabel}>
@@ -184,7 +184,7 @@ const diaryEntries = spots
             <p class="map-diary-toast__body" data-diary-toast-body>{ui.diaryToastBody}</p>
           </div>
 
-          <div class="map-attribution">
+          <div class="map-attribution" data-map-attribution>
             <span>{ui.mapDataAttribution}</span>
             <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">ODbL</a>
           </div>

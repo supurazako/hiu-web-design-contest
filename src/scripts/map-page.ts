@@ -29,6 +29,7 @@ const themeByMode = getJsonData<ThemeByMode>("theme-data");
 const root = requiredElement<HTMLElement>("[data-map-shell]");
 const mapElement = requiredElementById<HTMLElement>("map");
 const openMapLink = document.querySelector("[data-open-map]") as HTMLAnchorElement | null;
+const controlCluster = requiredElement<HTMLElement>("[data-control-cluster]");
 const controlShell = requiredElement<HTMLElement>("[data-control-shell]");
 const timeToggleGroup = requiredElement<HTMLElement>("[data-time-toggle-group]");
 const compareOverlay = requiredElement<HTMLElement>("[data-compare-overlay]");
@@ -707,6 +708,10 @@ const renderLanguageUI = () => {
   });
 };
 
+const renderControlCluster = () => {
+  controlCluster.classList.toggle("is-hidden-by-selection", state.selectedSpotId !== null);
+};
+
 const updateCompareUI = () => {
   const splitPercent = `${state.splitRatio * 100}%`;
   const clockTimeText = formatClockHour(state.clockHour);
@@ -862,6 +867,7 @@ const render = () => {
   ensureSelectionVisibility();
   updateButtons();
   renderStaticText();
+  renderControlCluster();
   updateCompareUI();
   applyTheme();
   applyScratchState();
