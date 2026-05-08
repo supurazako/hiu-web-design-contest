@@ -376,6 +376,26 @@ export default function DiaryNotebook({ entries, initialLocale, uiCopy }: DiaryN
               );
             })}
           </div>
+          <div className="absolute inset-3 z-30 grid grid-cols-2">
+            <button
+              type="button"
+              onClick={() => turnPage("previous")}
+              disabled={!canGoPrevious}
+              className="cursor-w-resize rounded-l-[24px] bg-transparent disabled:cursor-default"
+              aria-label="Previous diary page"
+            >
+              <span className="sr-only">Previous diary page</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => turnPage("next")}
+              disabled={!canGoNext}
+              className="cursor-e-resize rounded-r-[24px] bg-transparent disabled:cursor-default"
+              aria-label="Next diary page"
+            >
+              <span className="sr-only">Next diary page</span>
+            </button>
+          </div>
         </div>
       </div>
 
