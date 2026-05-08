@@ -156,7 +156,7 @@ const DiaryPage = ({ entry, index, locale, isDiscovered, timeLabel, localizedUi,
               "rounded-full border px-3 py-1 text-[0.72rem] font-semibold",
               isDiscovered
                 ? "border-[rgba(126,87,0,0.18)] bg-[rgba(255,255,255,0.78)] text-[#6d4b07]"
-                : "border-[rgba(84,71,58,0.12)] bg-[rgba(113,103,92,0.08)] text-[#5c4a38]",
+                : "border-[rgba(126,87,0,0.32)] bg-[#f2d38a] text-[#4f3308] shadow-[0_6px_14px_rgba(126,87,0,0.12)]",
             )}
           >
             {isDiscovered ? localizedUi.diaryDiscoveredLabel : localizedUi.diaryUndiscoveredLabel}
