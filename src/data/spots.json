@@ -57,7 +57,21 @@
       }
     },
     "accent": "#dc2626",
-    "published": true
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "湯上がりの一杯",
+        "en": "One Bowl After the Bath"
+      },
+      "body": {
+        "ja": "湯の熱がまだ残る手で器を包む。スープの湯気が、さっきまでの湯けむりとつながって見えた。",
+        "en": "I cupped the bowl with hands still warm from the bath. Its steam looked connected to the mist I had just left."
+      },
+      "unlockHint": {
+        "ja": "夜、湯上がりに温かいスープの匂いを探す",
+        "en": "At night after the bath, look for the smell of warm soup"
+      }
+    }
   },
   {
     "id": "riverside-inn-checkin",
@@ -80,7 +94,21 @@
       }
     },
     "accent": "#6366f1",
-    "published": true
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "鍵札の音",
+        "en": "Sound of the Room Key"
+      },
+      "body": {
+        "ja": "木の鍵札が手の中で小さく鳴った。荷物を置く前から、川の音が部屋まで届いている。",
+        "en": "The wooden room key clicked softly in my palm. Even before dropping my bag, the river had already reached the room."
+      },
+      "unlockHint": {
+        "ja": "昼のうちに川音の近い宿へ向かう",
+        "en": "Head to an inn near the river while it is still day"
+      }
+    }
   },
   {
     "id": "quiet-room-lantern",
@@ -103,7 +131,21 @@
       }
     },
     "accent": "#4f46e5",
-    "published": true
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "小さくなる声",
+        "en": "Voices Growing Small"
+      },
+      "body": {
+        "ja": "行灯の明かりだけにすると、部屋の角が少し遠くなった。話す声まで湯にほどけていく。",
+        "en": "With only the lantern on, the corners of the room seemed farther away. Even our voices loosened like they were in hot water."
+      },
+      "unlockHint": {
+        "ja": "夜の散策後、低い灯りの客室に戻る",
+        "en": "After a night walk, return to a room with low lantern light"
+      }
+    }
   },
   {
     "id": "source-park-steam",
@@ -126,7 +168,21 @@
       }
     },
     "accent": "#f97316",
-    "published": true
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "白い息の柱",
+        "en": "Pillars of White Breath"
+      },
+      "body": {
+        "ja": "源泉のそばでは、地面も息をしているみたいだった。白い湯けむりが空へまっすぐ伸びていく。",
+        "en": "Near the source, even the ground seemed to breathe. White steam rose straight into the daylight."
+      },
+      "unlockHint": {
+        "ja": "昼の光の中で、湯けむりが立つ公園を探す",
+        "en": "In daylight, look for the park where steam rises"
+      }
+    }
   },
   {
     "id": "footbath-night-bridge",
@@ -186,7 +242,21 @@
       }
     },
     "accent": "#22c55e",
-    "published": true
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "木陰の速度",
+        "en": "Speed of the Shade"
+      },
+      "body": {
+        "ja": "川沿いの木陰に入ると、歩く速さが自然に遅くなった。水音だけが先へ進んでいく。",
+        "en": "Under the riverside shade, my pace slowed on its own. Only the sound of water kept moving ahead."
+      },
+      "unlockHint": {
+        "ja": "昼、川沿いの木陰が続く道を歩く",
+        "en": "By day, walk the shaded path along the river"
+      }
+    }
   },
   {
     "id": "moonlit-bridge-view",
@@ -222,6 +292,80 @@
       "unlockHint": {
         "ja": "夜に橋の上で川面の光を見る",
         "en": "Watch the reflected lights from the bridge at night"
+      }
+    }
+  },
+  {
+    "id": "morning-steam-bridge",
+    "categoryId": "sightseeing",
+    "timeMode": "day",
+    "coordinates": [42.9687, 141.1661],
+    "name": {
+      "ja": "朝霧の湯けむり橋",
+      "en": "Morning Steam Bridge"
+    },
+    "description": {
+      "ja": "朝の空気に湯けむりが薄く重なる橋。川と温泉街の境目を、明るい時間にゆっくり眺められる。",
+      "en": "A bridge where morning air and steam overlap softly, giving a slow daytime view of the river and hot spring town."
+    },
+    "image": {
+      "src": "/spots/morning-steam-bridge.jpg",
+      "alt": {
+        "ja": "朝の湯けむりがかかる橋",
+        "en": "A bridge covered with soft morning steam"
+      }
+    },
+    "accent": "#0f9f8f",
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "朝霧の余白",
+        "en": "Blank Space in Morning Mist"
+      },
+      "body": {
+        "ja": "橋の真ん中で息を吸うと、湯けむりと朝霧の境目がわからなくなった。今日の予定にも少し余白ができた。",
+        "en": "Breathing at the center of the bridge, I could not tell steam from morning mist. The day itself gained a little blank space."
+      },
+      "unlockHint": {
+        "ja": "朝、湯けむりが薄くかかる橋を渡る",
+        "en": "In the morning, cross the bridge touched by soft steam"
+      }
+    }
+  },
+  {
+    "id": "lantern-slope-rest",
+    "categoryId": "sightseeing",
+    "timeMode": "night",
+    "coordinates": [42.9671, 141.1628],
+    "name": {
+      "ja": "提灯坂の小休止",
+      "en": "Lantern Slope Pause"
+    },
+    "description": {
+      "ja": "提灯の灯りが坂道に並ぶ夜の休憩スポット。歩いた距離を振り返りながら、温泉街の静けさを感じる。",
+      "en": "A night pause on a slope lined with lanterns, made for looking back on the walk and feeling the quiet of town."
+    },
+    "image": {
+      "src": "/spots/lantern-slope-rest.jpg",
+      "alt": {
+        "ja": "夜の坂道に並ぶ提灯の灯り",
+        "en": "Lantern lights lining a night slope"
+      }
+    },
+    "accent": "#b45309",
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "坂道の灯り",
+        "en": "Lights on the Slope"
+      },
+      "body": {
+        "ja": "坂の途中で振り返ると、提灯が歩いてきた道を点々と教えてくれた。夜は地図より灯りを信じたくなる。",
+        "en": "Looking back halfway up the slope, lanterns marked the path I had taken. At night, lights felt more reliable than a map."
+      },
+      "unlockHint": {
+        "ja": "夜、提灯が並ぶ坂道で足を止める",
+        "en": "At night, pause on the slope lined with lanterns"
       }
     }
   }
