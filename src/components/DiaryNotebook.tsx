@@ -336,7 +336,9 @@ export default function DiaryNotebook({ entries, initialLocale, uiCopy }: DiaryN
             </span>
           </div>
           <span className="rounded-full bg-[rgba(84,71,58,0.08)] px-4 py-2 text-sm font-semibold text-[#5c4a38]">
-            {safeCurrentPage + 1}-{safeCurrentPage + visibleEntries.length} / {entries.length}
+            {visiblePageCount === 1
+              ? `${safeCurrentPage + 1} / ${entries.length}`
+              : `${safeCurrentPage + 1}-${safeCurrentPage + visibleEntries.length} / ${entries.length}`}
           </span>
         </div>
       </div>
