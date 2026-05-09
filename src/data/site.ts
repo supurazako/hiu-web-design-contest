@@ -32,6 +32,8 @@ export const uiCopy = {
     diaryToastTitle: "日記を発見",
     diaryToastBody: "スポットカードでそのまま読めます。",
     diaryCardLabel: "見つけた日記",
+    diaryNotebookOpenLabel: "日記手帳を開く",
+    diaryNotebookCloseLabel: "日記手帳を閉じる",
     featureCards: [
       {
         imageSrc: "/features/onsen-placeholder.svg",
@@ -105,6 +107,8 @@ export const uiCopy = {
     diaryToastTitle: "Diary discovered",
     diaryToastBody: "You can read it in the spot card now.",
     diaryCardLabel: "Discovered diary",
+    diaryNotebookOpenLabel: "Open diary notebook",
+    diaryNotebookCloseLabel: "Close diary notebook",
     featureCards: [
       {
         imageSrc: "/features/onsen-placeholder.svg",

@@ -21,6 +21,7 @@ type DiaryNotebookEntry = {
 type DiaryNotebookProps = {
   entries: DiaryNotebookEntry[];
   initialLocale: Locale;
+  unlockMode?: "discovered" | "all";
   uiCopy: Record<
     Locale,
     Pick<
@@ -198,7 +199,7 @@ const DiaryPage = ({ entry, index, locale, isDiscovered, timeLabel, localizedUi,
   );
 };
 
-export default function DiaryNotebook({ entries, initialLocale, uiCopy }: DiaryNotebookProps) {
+export default function DiaryNotebook({ entries, initialLocale, unlockMode = "discovered", uiCopy }: DiaryNotebookProps) {
   const [locale, setLocale] = React.useState<Locale>(initialLocale);
   const [discovered, setDiscovered] = React.useState<DiscoveredDiaryMap>({});
   const [currentPage, setCurrentPage] = React.useState(0);
@@ -253,7 +254,8 @@ export default function DiaryNotebook({ entries, initialLocale, uiCopy }: DiaryN
   }, []);
 
   const localizedUi = uiCopy[locale] ?? uiCopy.ja;
-  const foundCount = entries.filter((entry) => discovered[entry.spotId]).length;
+  const isAllUnlocked = unlockMode === "all";
+  const foundCount = isAllUnlocked ? entries.length : entries.filter((entry) => discovered[entry.spotId]).length;
   const hiddenCount = entries.length - foundCount;
   const pageStep = visiblePageCount === 2 ? 2 : 1;
   const maxPage = Math.max(0, entries.length - pageStep);
@@ -368,7 +370,7 @@ export default function DiaryNotebook({ entries, initialLocale, uiCopy }: DiaryN
                   entry={entry}
                   index={pageIndex}
                   locale={locale}
-                  isDiscovered={Boolean(discovered[entry.spotId])}
+                  isDiscovered={isAllUnlocked || Boolean(discovered[entry.spotId])}
                   timeLabel={timeLabel}
                   localizedUi={localizedUi}
                   side={visiblePageCount === 1 ? "single" : visibleIndex === 0 ? "left" : "right"}
@@ -413,7 +415,7 @@ export default function DiaryNotebook({ entries, initialLocale, uiCopy }: DiaryN
         <div className="flex flex-wrap justify-center gap-2">
           {entries.map((entry, index) => {
             const isCurrent = index >= safeCurrentPage && index < safeCurrentPage + pageStep;
-            const isDiscovered = Boolean(discovered[entry.spotId]);
+            const isDiscovered = isAllUnlocked || Boolean(discovered[entry.spotId]);
 
             return (
               <button

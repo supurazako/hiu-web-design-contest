@@ -68,6 +68,11 @@ const diaryToast = requiredElement<HTMLElement>("[data-diary-toast]");
 const diaryToastTitle = requiredElement<HTMLElement>("[data-diary-toast-title]");
 const diaryToastName = requiredElement<HTMLElement>("[data-diary-toast-name]");
 const diaryToastBody = requiredElement<HTMLElement>("[data-diary-toast-body]");
+const diaryNotebookOpenButton = requiredElement<HTMLButtonElement>("[data-map-diary-notebook-open]");
+const diaryNotebookModal = requiredElement<HTMLElement>("[data-map-diary-notebook-modal]");
+const diaryNotebookPanel = requiredElement<HTMLElement>("[data-map-diary-notebook-panel]");
+const diaryNotebookClose = requiredElement<HTMLButtonElement>("[data-map-diary-notebook-close]");
+const diaryNotebookTitle = requiredElement<HTMLElement>("[data-map-diary-notebook-title]");
 const backHomeButton = requiredElement<HTMLButtonElement>("[data-back-home-link]");
 const mapAttribution = requiredElement<HTMLElement>("[data-map-attribution]");
 const mapAttributionText = requiredElement<HTMLElement>(".map-attribution span");
@@ -140,6 +145,7 @@ const state: {
   isDraggingClock: boolean;
   isExpanded: boolean;
   discoveredDiaryToastSpotId: string | null;
+  isDiaryNotebookOpen: boolean;
 } = {
   locale: "ja",
   displayMode: "single",
@@ -155,6 +161,7 @@ const state: {
   isDraggingClock: false,
   isExpanded: window.location.hash === "#map",
   discoveredDiaryToastSpotId: null,
+  isDiaryNotebookOpen: false,
 };
 
 const map = L.map(mapElement, {
@@ -641,6 +648,35 @@ const renderDiscoveryToast = () => {
   diaryToastBody.textContent = ui.diaryToastBody;
 };
 
+const renderDiaryNotebookModal = () => {
+  const ui = uiCopy[state.locale];
+  diaryNotebookOpenButton.setAttribute("aria-label", ui.diaryNotebookOpenLabel);
+  diaryNotebookOpenButton.setAttribute("title", ui.diaryNotebookOpenLabel);
+  diaryNotebookClose.setAttribute("aria-label", ui.diaryNotebookCloseLabel);
+  diaryNotebookTitle.textContent = ui.diarySectionTitle;
+
+  if (!state.isDiaryNotebookOpen) {
+    diaryNotebookModal.hidden = true;
+    diaryNotebookModal.classList.remove("is-visible");
+    return;
+  }
+
+  diaryNotebookModal.hidden = false;
+  diaryNotebookModal.classList.add("is-visible");
+};
+
+const openDiaryNotebook = () => {
+  state.isDiaryNotebookOpen = true;
+  renderDiaryNotebookModal();
+  diaryNotebookClose.focus({ preventScroll: true });
+};
+
+const closeDiaryNotebook = () => {
+  state.isDiaryNotebookOpen = false;
+  renderDiaryNotebookModal();
+  diaryNotebookOpenButton.focus({ preventScroll: true });
+};
+
 const renderCard = () => {
   const ui = uiCopy[state.locale];
   const spot = getSelectedSpot();
@@ -904,6 +940,10 @@ const renderStaticText = () => {
   clockDial.setAttribute("aria-label", ui.clockDialLabel);
   scratchResetButton.setAttribute("aria-label", ui.scratchResetLabel);
   scratchResetButton.setAttribute("title", ui.scratchResetLabel);
+  diaryNotebookOpenButton.setAttribute("aria-label", ui.diaryNotebookOpenLabel);
+  diaryNotebookOpenButton.setAttribute("title", ui.diaryNotebookOpenLabel);
+  diaryNotebookClose.setAttribute("aria-label", ui.diaryNotebookCloseLabel);
+  diaryNotebookTitle.textContent = ui.diarySectionTitle;
   renderLandingText();
   renderLanguageUI();
 };
@@ -999,6 +1039,7 @@ const render = () => {
   updateMarkerVisibility();
   renderDiscoveryToast();
   renderCard();
+  renderDiaryNotebookModal();
   syncBottomOverlayLayout();
 };
 
@@ -1226,6 +1267,25 @@ zoomOutButton.addEventListener("click", () => {
   map.zoomOut();
 });
 
+diaryNotebookOpenButton.addEventListener("click", (event) => {
+  event.stopPropagation();
+  openDiaryNotebook();
+});
+
+diaryNotebookClose.addEventListener("click", () => {
+  closeDiaryNotebook();
+});
+
+diaryNotebookModal.addEventListener("click", (event) => {
+  if (event.target === diaryNotebookModal) {
+    closeDiaryNotebook();
+  }
+});
+
+diaryNotebookPanel.addEventListener("click", (event) => {
+  event.stopPropagation();
+});
+
 mapElement.addEventListener("pointerdown", (event) => {
   if (!state.isExpanded || state.displayMode === "magnifier" || state.displayMode === "scratch") return;
   const target = event.target;
@@ -1435,6 +1495,11 @@ document.addEventListener("click", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && state.isDiaryNotebookOpen) {
+    closeDiaryNotebook();
+    return;
+  }
+
   if (event.key === "Escape" && state.openLanguageSwitcherId) {
     state.openLanguageSwitcherId = null;
     renderLanguageUI();

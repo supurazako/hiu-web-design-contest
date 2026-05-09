@@ -453,6 +453,7 @@ body.is-map-leaving .hero__content {
     visibility 220ms ease;
 }
 
+.map-diary-stack,
 .map-zoom-stack {
   display: grid;
   gap: 4px;
@@ -462,6 +463,10 @@ body.is-map-leaving .hero__content {
   border-radius: 32px;
   background: color-mix(in srgb, var(--map-ui-surface-strong) 92%, transparent);
   box-shadow: var(--md-elevation-2);
+}
+
+.map-diary-stack .map-toolbar__button--stacked {
+  border-radius: 26px;
 }
 
 .map-zoom-stack__section {

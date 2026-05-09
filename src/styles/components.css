@@ -138,6 +138,104 @@
   line-height: 1.5;
 }
 
+.map-diary-notebook-modal {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(28, 20, 13, 0.42);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+
+.map-diary-notebook-modal[hidden] {
+  display: none;
+}
+
+.map-diary-notebook-modal.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.map-diary-notebook-modal__panel {
+  position: relative;
+  width: min(100%, 980px);
+  max-height: min(86vh, 820px);
+  overflow: auto;
+  padding: 24px;
+  border: 1px solid rgba(188, 163, 132, 0.64);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255, 250, 240, 0.99), rgba(246, 235, 218, 0.97));
+  box-shadow: 0 26px 68px rgba(26, 16, 7, 0.34);
+  color: #2f2217;
+  transform: translateY(14px) scale(0.98);
+  transition: transform 260ms var(--map-transition-ease);
+}
+
+.map-diary-notebook-modal.is-visible .map-diary-notebook-modal__panel {
+  transform: translateY(0) scale(1);
+}
+
+.map-diary-notebook-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.map-diary-notebook-modal__header h2 {
+  margin: 0;
+  color: #2f2217;
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  line-height: 1.25;
+}
+
+.map-diary-notebook-modal__close {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(126, 87, 0, 0.16);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.72);
+  color: #5b410d;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(85, 61, 35, 0.12);
+}
+
+.map-diary-notebook-modal__close svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+@media (max-width: 767px) {
+  .map-diary-notebook-modal {
+    align-items: end;
+    padding: 12px;
+  }
+
+  .map-diary-notebook-modal__panel {
+    max-height: min(84vh, 720px);
+    padding: 18px 14px;
+    border-radius: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-diary-notebook-modal,
+  .map-diary-notebook-modal__panel {
+    transition: none;
+  }
+}
+
 .sheet-host--floating .spot-card.is-visible-sheet {
   opacity: 1;
   pointer-events: auto;
