@@ -1,372 +1,1380 @@
 [
   {
-    "id": "bakery-morning-window",
+    "id": "spot-001",
     "categoryId": "food",
-    "timeMode": "day",
-    "coordinates": [42.9719, 141.1667],
+    "timeMode": "both",
+    "coordinates": [
+      42.96529,
+      141.16244
+    ],
     "name": {
-      "ja": "朝のベーカリー窓辺",
-      "en": "Morning Bakery Window"
+      "ja": "好吃亭（はおつーてい）",
+      "en": "Hao-Tsu Tei"
     },
     "description": {
-      "ja": "散策前に立ち寄る小さなベーカリー。焼きたての香りと窓辺の光で、定山渓の朝を始める。",
-      "en": "A small bakery stop before a walk, where warm bread and window light begin the morning in Jozankei."
+      "ja": "名物は土鍋仕立ての四川麻婆。昼は定食、夜は単品料理とお酒を楽しめる",
+      "en": "A Chinese restaurant known for clay-pot Sichuan mapo tofu. Set meals are served at lunch, while evenings are for a la carte dishes and drinks."
     },
     "image": {
-      "src": "/spots/bakery-morning-window.jpg",
+      "src": "/features/food-placeholder.svg",
       "alt": {
-        "ja": "朝の光が入るベーカリーの窓辺",
-        "en": "A bakery window filled with morning light"
+        "ja": "好吃亭（はおつーてい）のイメージ",
+        "en": "Hao-Tsu Tei image"
       }
     },
     "accent": "#ef4444",
-    "published": true,
-    "diary": {
-      "title": {
-        "ja": "紙袋の温度",
-        "en": "Warm Paper Bag"
-      },
-      "body": {
-        "ja": "パンを受け取ると、紙袋の底が少しだけ温かかった。川へ向かう足取りも軽くなる。",
-        "en": "The bottom of the paper bag was still warm. It made the walk toward the river feel lighter."
-      },
-      "unlockHint": {
-        "ja": "朝の散策前に、焼きたての香りを探す",
-        "en": "Look for the smell of fresh bread before the morning walk"
-      }
-    }
+    "published": true
   },
   {
-    "id": "soup-afterglow-counter",
+    "id": "spot-002",
+    "categoryId": "food",
+    "timeMode": "day",
+    "coordinates": [
+      42.96782,
+      141.16782
+    ],
+    "name": {
+      "ja": "渓谷レストラン みなも",
+      "en": "Valley Restaurant Minamo"
+    },
+    "description": {
+      "ja": "大きな窓から森を眺められる洋食レストラン。秋は紅葉を楽しめる",
+      "en": "A Western-style restaurant with wide windows facing the forest. Autumn brings a clear view of the changing leaves."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "渓谷レストラン みなものイメージ",
+        "en": "Valley Restaurant Minamo image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-003",
+    "categoryId": "food",
+    "timeMode": "day",
+    "coordinates": [
+      42.96562,
+      141.16218
+    ],
+    "name": {
+      "ja": "山の味処 円旬",
+      "en": "Mountain Kitchen Enjun"
+    },
+    "description": {
+      "ja": "山菜天ぷらが名物の和食処。季節の山の幸を使った定食が人気",
+      "en": "A Japanese restaurant known for wild vegetable tempura. Set meals using seasonal mountain ingredients are especially popular."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "山の味処 円旬のイメージ",
+        "en": "Mountain Kitchen Enjun image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-004",
+    "categoryId": "food",
+    "timeMode": "day",
+    "coordinates": [
+      42.9658,
+      141.15974
+    ],
+    "name": {
+      "ja": "森のテラス こもれび",
+      "en": "Forest Terrace Komorebi"
+    },
+    "description": {
+      "ja": "焼きたてチーズケーキと深煎りコーヒーが人気のカフェ。ペット同伴も可能",
+      "en": "A cafe popular for fresh cheesecake and dark-roast coffee. Pets are welcome on the terrace."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "森のテラス こもれびのイメージ",
+        "en": "Forest Terrace Komorebi image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-005",
+    "categoryId": "food",
+    "timeMode": "day",
+    "coordinates": [
+      42.96533,
+      141.16236
+    ],
+    "name": {
+      "ja": "Mangiare!（マンジャーレ）",
+      "en": "Mangiare!"
+    },
+    "description": {
+      "ja": "年間100日だけ営業するジェラート店。季節ごとの限定フレーバーが人気",
+      "en": "A gelato shop open only about one hundred days a year, with seasonal limited flavors drawing repeat visits."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "Mangiare!（マンジャーレ）のイメージ",
+        "en": "Mangiare! image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-006",
+    "categoryId": "food",
+    "timeMode": "day",
+    "coordinates": [
+      42.96498,
+      141.16308
+    ],
+    "name": {
+      "ja": "渓流麺屋 しぶき",
+      "en": "Keiryu Menya Shibuki"
+    },
+    "description": {
+      "ja": "山椒香る味噌ラーメンが名物。川沿いの席から湯けむりが見える",
+      "en": "A ramen shop known for miso ramen scented with Japanese pepper. Riverside seats look toward the rising steam."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "渓流麺屋 しぶきのイメージ",
+        "en": "Keiryu Menya Shibuki image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-007",
     "categoryId": "food",
     "timeMode": "night",
-    "coordinates": [42.9662, 141.1648],
+    "coordinates": [
+      42.96318,
+      141.16239
+    ],
     "name": {
-      "ja": "余韻のスープカウンター",
-      "en": "Afterglow Soup Counter"
+      "ja": "川魚酒場 定山渓",
+      "en": "Jozankei River Fish Tavern"
     },
     "description": {
-      "ja": "湯上がりに寄りたい静かなカウンター。湯けむりの余韻を、温かいスープでゆっくりほどく。",
-      "en": "A quiet counter for after the bath, where a warm bowl of soup softens the afterglow of steam."
+      "ja": "川魚を使った料理が楽しめる居酒屋。塩焼きや唐揚げが人気",
+      "en": "An izakaya serving river fish dishes, from salt-grilled fish to crisp fried bites."
     },
     "image": {
-      "src": "/spots/soup-afterglow-counter.jpg",
+      "src": "/features/food-placeholder.svg",
       "alt": {
-        "ja": "夜に温かいスープを出す静かなカウンター",
-        "en": "A quiet night counter serving warm soup"
+        "ja": "川魚酒場 定山渓のイメージ",
+        "en": "Jozankei River Fish Tavern image"
       }
     },
-    "accent": "#dc2626",
-    "published": true,
-    "diary": {
-      "title": {
-        "ja": "湯上がりの一杯",
-        "en": "One Bowl After the Bath"
-      },
-      "body": {
-        "ja": "湯の熱がまだ残る手で器を包む。スープの湯気が、さっきまでの湯けむりとつながって見えた。",
-        "en": "I cupped the bowl with hands still warm from the bath. Its steam looked connected to the mist I had just left."
-      },
-      "unlockHint": {
-        "ja": "夜、湯上がりに温かいスープの匂いを探す",
-        "en": "At night after the bath, look for the smell of warm soup"
-      }
-    }
+    "accent": "#ef4444",
+    "published": true
   },
   {
-    "id": "riverside-inn-checkin",
-    "categoryId": "stay",
+    "id": "spot-008",
+    "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [42.9694, 141.1681],
+    "coordinates": [
+      42.96464,
+      141.16007
+    ],
     "name": {
-      "ja": "川沿いの宿チェックイン",
-      "en": "Riverside Inn Check-in"
+      "ja": "Deer Table",
+      "en": "Deer Table"
     },
     "description": {
-      "ja": "川音が聞こえる宿の玄関。荷物を置いたら、昼のうちに温泉街へ歩き出せる。",
-      "en": "An inn entrance close to the river sound, ready for dropping bags and stepping back into the town by day."
+      "ja": "鹿肉を中心に扱うジビエ料理店。鹿バーガーが名物",
+      "en": "A game-meat restaurant centered on venison, with a deer burger as its signature dish."
     },
     "image": {
-      "src": "/spots/riverside-inn-checkin.jpg",
+      "src": "/features/food-placeholder.svg",
       "alt": {
-        "ja": "川沿いに建つ宿の明るい玄関",
-        "en": "A bright inn entrance beside the river"
+        "ja": "Deer Tableのイメージ",
+        "en": "Deer Table image"
       }
     },
-    "accent": "#6366f1",
-    "published": true,
-    "diary": {
-      "title": {
-        "ja": "鍵札の音",
-        "en": "Sound of the Room Key"
-      },
-      "body": {
-        "ja": "木の鍵札が手の中で小さく鳴った。荷物を置く前から、川の音が部屋まで届いている。",
-        "en": "The wooden room key clicked softly in my palm. Even before dropping my bag, the river had already reached the room."
-      },
-      "unlockHint": {
-        "ja": "昼のうちに川音の近い宿へ向かう",
-        "en": "Head to an inn near the river while it is still day"
-      }
-    }
+    "accent": "#ef4444",
+    "published": true
   },
   {
-    "id": "quiet-room-lantern",
-    "categoryId": "stay",
+    "id": "spot-009",
+    "categoryId": "food",
     "timeMode": "night",
-    "coordinates": [42.9678, 141.1692],
+    "coordinates": [
+      42.96324,
+      141.16249
+    ],
     "name": {
-      "ja": "行灯の静かな客室",
-      "en": "Quiet Room with Lantern Light"
+      "ja": "Bar KEI",
+      "en": "Bar KEI"
     },
     "description": {
-      "ja": "夜の温泉街を歩いたあとに戻る客室。低い灯りが、会話も足音も自然に小さくする。",
-      "en": "A room to return to after a night walk, where low lantern light naturally quiets voices and footsteps."
+      "ja": "定山渓の森や渓谷をイメージしたカクテルが人気のバー。夜の散策後に立ち寄りやすい",
+      "en": "A bar known for cocktails inspired by Jozankei forests and valleys. It is easy to stop by after a night walk."
     },
     "image": {
-      "src": "/spots/quiet-room-lantern.jpg",
+      "src": "/features/food-placeholder.svg",
       "alt": {
-        "ja": "行灯の光が落ちる静かな客室",
-        "en": "A quiet guest room lit by a lantern"
+        "ja": "Bar KEIのイメージ",
+        "en": "Bar KEI image"
       }
     },
-    "accent": "#4f46e5",
-    "published": true,
-    "diary": {
-      "title": {
-        "ja": "小さくなる声",
-        "en": "Voices Growing Small"
-      },
-      "body": {
-        "ja": "行灯の明かりだけにすると、部屋の角が少し遠くなった。話す声まで湯にほどけていく。",
-        "en": "With only the lantern on, the corners of the room seemed farther away. Even our voices loosened like they were in hot water."
-      },
-      "unlockHint": {
-        "ja": "夜の散策後、低い灯りの客室に戻る",
-        "en": "After a night walk, return to a room with low lantern light"
-      }
-    }
+    "accent": "#ef4444",
+    "published": true
   },
   {
-    "id": "source-park-steam",
-    "categoryId": "onsen",
+    "id": "spot-010",
+    "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [42.965, 141.1632],
+    "coordinates": [
+      42.96572,
+      141.15963
+    ],
     "name": {
-      "ja": "湯けむりの源泉公園",
-      "en": "Steam Source Park"
+      "ja": "梟カフェ こだま",
+      "en": "Owl Cafe Kodama"
     },
     "description": {
-      "ja": "昼の光の中で湯けむりが立ち上る公園。温泉街らしさを短い散策で感じられる。",
-      "en": "A park where steam rises in daylight, giving a quick walking glimpse of the hot spring town."
+      "ja": "フクロウを眺めながら過ごせるカフェ。餌やり体験も人気",
+      "en": "A cafe where guests can spend time watching owls. Feeding experiences are also popular."
     },
     "image": {
-      "src": "/spots/source-park-steam.jpg",
+      "src": "/features/food-placeholder.svg",
       "alt": {
-        "ja": "昼の光に包まれた源泉公園の湯けむり",
-        "en": "Steam rising through daylight in the source park"
+        "ja": "梟カフェ こだまのイメージ",
+        "en": "Owl Cafe Kodama image"
       }
     },
-    "accent": "#f97316",
-    "published": true,
-    "diary": {
-      "title": {
-        "ja": "白い息の柱",
-        "en": "Pillars of White Breath"
-      },
-      "body": {
-        "ja": "源泉のそばでは、地面も息をしているみたいだった。白い湯けむりが空へまっすぐ伸びていく。",
-        "en": "Near the source, even the ground seemed to breathe. White steam rose straight into the daylight."
-      },
-      "unlockHint": {
-        "ja": "昼の光の中で、湯けむりが立つ公園を探す",
-        "en": "In daylight, look for the park where steam rises"
-      }
-    }
+    "accent": "#ef4444",
+    "published": true
   },
   {
-    "id": "footbath-night-bridge",
-    "categoryId": "onsen",
+    "id": "spot-011",
+    "categoryId": "food",
+    "timeMode": "day",
+    "coordinates": [
+      42.96543,
+      141.16206
+    ],
+    "name": {
+      "ja": "和菓子処 ゆの花",
+      "en": "Yunohana Japanese Sweets"
+    },
+    "description": {
+      "ja": "温泉まんじゅうと季節の練り切りが人気。お土産用の詰め合わせもある",
+      "en": "A sweet shop known for onsen manju and seasonal nerikiri. Gift boxes are available for souvenirs."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "和菓子処 ゆの花のイメージ",
+        "en": "Yunohana Japanese Sweets image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-012",
+    "categoryId": "food",
     "timeMode": "night",
-    "coordinates": [42.9653, 141.1653],
+    "coordinates": [
+      42.96672,
+      141.16674
+    ],
     "name": {
-      "ja": "夜橋そばの足湯",
-      "en": "Night Footbath by the Bridge"
+      "ja": "ジンギスカン 窪田",
+      "en": "Jingisukan Kubota"
     },
     "description": {
-      "ja": "橋の近くで湯けむりに包まれる足湯。夜は川音と灯りが混ざり、短い休憩が記憶に残る。",
-      "en": "A footbath wrapped in steam near the bridge, where river sound and light make a short pause memorable."
+      "ja": "秘伝のタレで味わうジンギスカン専門店。夕方からは観光客と地元客でにぎわう",
+      "en": "A jingisukan restaurant serving lamb with a secret sauce. It fills with visitors and locals from early evening."
     },
     "image": {
-      "src": "/spots/footbath-night-bridge.jpg",
+      "src": "/features/food-placeholder.svg",
       "alt": {
-        "ja": "夜の橋の近くにある湯けむりの足湯",
-        "en": "A steamy footbath near a bridge at night"
+        "ja": "ジンギスカン 窪田のイメージ",
+        "en": "Jingisukan Kubota image"
       }
     },
-    "accent": "#ea580c",
-    "published": true,
-    "diary": {
-      "title": {
-        "ja": "湯けむりの向こう",
-        "en": "Beyond the Steam"
-      },
-      "body": {
-        "ja": "足だけ湯に沈めると、夜の川音が少し遠くなった。灯りは湯けむりの中で輪郭をなくしていた。",
-        "en": "Once my feet sank into the bath, the night river sounded farther away. The lights lost their edges in the steam."
-      },
-      "unlockHint": {
-        "ja": "夜の橋のそばで、湯けむりを探す",
-        "en": "Look for steam near the bridge at night"
-      }
-    }
+    "accent": "#ef4444",
+    "published": true
   },
   {
-    "id": "futami-river-walk",
+    "id": "spot-013",
+    "categoryId": "food",
+    "timeMode": "day",
+    "coordinates": [
+      42.96616,
+      141.167
+    ],
+    "name": {
+      "ja": "珈琲 ヒロ",
+      "en": "Coffee Hiro"
+    },
+    "description": {
+      "ja": "自家焙煎コーヒーの小さな店。定山渓の朝をイメージしたブレンドが人気",
+      "en": "A small self-roasting coffee shop. Its signature blend is inspired by mornings in Jozankei."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "珈琲 ヒロのイメージ",
+        "en": "Coffee Hiro image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-014",
+    "categoryId": "food",
+    "timeMode": "day",
+    "coordinates": [
+      42.9655,
+      141.16193
+    ],
+    "name": {
+      "ja": "そば処 時",
+      "en": "Soba Tokijikan"
+    },
+    "description": {
+      "ja": "十割そばと山菜天ぷらの店。昼だけ営業する落ち着いたそば処",
+      "en": "A quiet soba restaurant serving juwari soba and wild vegetable tempura, open only during the day."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "そば処 時のイメージ",
+        "en": "Soba Tokijikan image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-015",
+    "categoryId": "food",
+    "timeMode": "day",
+    "coordinates": [
+      42.96486,
+      141.16569
+    ],
+    "name": {
+      "ja": "手打ちうどん 麦食",
+      "en": "Handmade Udon Mugishoku"
+    },
+    "description": {
+      "ja": "北海道産小麦を使った手打ちうどんの店。きのこたっぷりの釜揚げうどんが名物",
+      "en": "A handmade udon shop using Hokkaido wheat. Mushroom-rich kamaage udon is the specialty."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "手打ちうどん 麦食のイメージ",
+        "en": "Handmade Udon Mugishoku image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-016",
+    "categoryId": "food",
+    "timeMode": "day",
+    "coordinates": [
+      42.96636,
+      141.16389
+    ],
+    "name": {
+      "ja": "BETRINKEN（ベトリンケン）",
+      "en": "BETRINKEN"
+    },
+    "description": {
+      "ja": "ドイツ風の料理とクラフトビールが楽しめる店。飲み比べセットが人気",
+      "en": "A place for German-style dishes and craft beer, with tasting sets as a favorite choice."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "BETRINKEN（ベトリンケン）のイメージ",
+        "en": "BETRINKEN image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-017",
+    "categoryId": "food",
+    "timeMode": "day",
+    "coordinates": [
+      42.96651,
+      141.16688
+    ],
+    "name": {
+      "ja": "朝霧ベーカリー",
+      "en": "Asagiri Bakery"
+    },
+    "description": {
+      "ja": "朝7時から開くパン屋。鹿肉カレーパンと焼きたてクロワッサンが名物",
+      "en": "A bakery opening from 7 a.m. Signature items include venison curry bread and fresh croissants."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "朝霧ベーカリーのイメージ",
+        "en": "Asagiri Bakery image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-018",
+    "categoryId": "food",
+    "timeMode": "day",
+    "coordinates": [
+      42.96734,
+      141.16242
+    ],
+    "name": {
+      "ja": "石窯ピッツァ 谷の音",
+      "en": "Stone-Oven Pizza Taninone"
+    },
+    "description": {
+      "ja": "石窯で焼くピザ専門店。山菜とチーズを使った季節限定ピザが人気",
+      "en": "A pizza shop using a stone oven. Seasonal pizzas with wild vegetables and cheese are popular."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "石窯ピッツァ 谷の音のイメージ",
+        "en": "Stone-Oven Pizza Taninone image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-019",
+    "categoryId": "food",
+    "timeMode": "night",
+    "coordinates": [
+      42.96506,
+      141.16319
+    ],
+    "name": {
+      "ja": "湯の坂らぁめん",
+      "en": "Yunosaka Ramen"
+    },
+    "description": {
+      "ja": "温泉卵をのせた白味噌ラーメンが人気。夜は締めの一杯を求める客でにぎわう",
+      "en": "A ramen shop known for white miso ramen topped with an onsen egg. At night it draws guests looking for a final bowl."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "湯の坂らぁめんのイメージ",
+        "en": "Yunosaka Ramen image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-020",
+    "categoryId": "food",
+    "timeMode": "day",
+    "coordinates": [
+      42.9654,
+      141.16228
+    ],
+    "name": {
+      "ja": "茶房 こはるとゆき",
+      "en": "Tea Room Koharu to Yuki"
+    },
+    "description": {
+      "ja": "抹茶ラテを楽しめる茶房。冬はホット甘酒も人気",
+      "en": "A tea room serving matcha lattes. Hot amazake is a favorite in winter."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "茶房 こはるとゆきのイメージ",
+        "en": "Tea Room Koharu to Yuki image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-021",
+    "categoryId": "food",
+    "timeMode": "day",
+    "coordinates": [
+      42.96476,
+      141.16327
+    ],
+    "name": {
+      "ja": "湯けむり菓子舗",
+      "en": "Yukemuri Confectionery"
+    },
+    "description": {
+      "ja": "温泉まんじゅうと焼きたてどら焼きの店。お土産にも人気",
+      "en": "A shop for onsen manju and fresh dorayaki, also popular as a souvenir stop."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "湯けむり菓子舗のイメージ",
+        "en": "Yukemuri Confectionery image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-022",
+    "categoryId": "food",
+    "timeMode": "night",
+    "coordinates": [
+      42.9631,
+      141.1623
+    ],
+    "name": {
+      "ja": "炉端 山灯り",
+      "en": "Robata Yamadori"
+    },
+    "description": {
+      "ja": "川魚や山菜を炭火で焼く、夜だけ開く炉端焼きの店",
+      "en": "A night-only robata grill serving river fish and wild vegetables cooked over charcoal."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "炉端 山灯りのイメージ",
+        "en": "Robata Yamadori image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-023",
+    "categoryId": "food",
+    "timeMode": "day",
+    "coordinates": [
+      42.96773,
+      141.16239
+    ],
+    "name": {
+      "ja": "渓谷そば 霧音",
+      "en": "Valley Soba Kirine"
+    },
+    "description": {
+      "ja": "十割そばと山菜天ぷらが人気のそば処。昼だけ営業",
+      "en": "A daytime soba restaurant popular for juwari soba and wild vegetable tempura."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "渓谷そば 霧音のイメージ",
+        "en": "Valley Soba Kirine image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-024",
+    "categoryId": "food",
+    "timeMode": "day",
+    "coordinates": [
+      42.96588,
+      141.16137
+    ],
+    "name": {
+      "ja": "こもれびブレッド",
+      "en": "Komorebi Bread"
+    },
+    "description": {
+      "ja": "森を眺めながら焼きたてパンを選べるベーカリー。くるみパンとミルク食パンが人気",
+      "en": "A bakery where guests choose fresh bread while looking into the forest. Walnut bread and milk bread are favorites."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "こもれびブレッドのイメージ",
+        "en": "Komorebi Bread image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-025",
+    "categoryId": "food",
+    "timeMode": "night",
+    "coordinates": [
+      42.96623,
+      141.16398
+    ],
+    "name": {
+      "ja": "定山渓ブリューハウス",
+      "en": "Jozankei Brewhouse"
+    },
+    "description": {
+      "ja": "定山渓の水をイメージしたクラフトビールの店。夜のハッピーアワーは混雑必至",
+      "en": "A craft beer spot inspired by Jozankei water. The evening happy hour is expected to be busy."
+    },
+    "image": {
+      "src": "/features/food-placeholder.svg",
+      "alt": {
+        "ja": "定山渓ブリューハウスのイメージ",
+        "en": "Jozankei Brewhouse image"
+      }
+    },
+    "accent": "#ef4444",
+    "published": true
+  },
+  {
+    "id": "spot-026",
     "categoryId": "sightseeing",
-    "timeMode": "day",
-    "coordinates": [42.9645, 141.1595],
+    "timeMode": "both",
+    "coordinates": [
+      42.96386,
+      141.15815
+    ],
     "name": {
-      "ja": "二見川沿い散策",
-      "en": "Futami Riverside Walk"
+      "ja": "翡翠川",
+      "en": "Hisui River"
     },
     "description": {
-      "ja": "川沿いをゆっくり歩く昼の散策路。水音と木陰が、温泉前の時間をほどよく整える。",
-      "en": "A slow daytime riverside path where water sound and shade set the pace before the bath."
+      "ja": "渓谷の間をゆっくり流れる川。大きな音はしないが、耳を澄ますと絶えず水の音が続いている。何もしなくても時間が進むのを感じられる。",
+      "en": "A river moving slowly between the valley walls. Its constant water sound makes time feel present even without doing anything."
     },
     "image": {
-      "src": "/spots/futami-river-walk.jpg",
+      "src": "/features/view-placeholder.svg",
       "alt": {
-        "ja": "昼の川沿いを歩く散策路",
-        "en": "A daytime walking path along the river"
+        "ja": "翡翠川のイメージ",
+        "en": "Hisui River image"
       }
     },
     "accent": "#22c55e",
-    "published": true,
-    "diary": {
-      "title": {
-        "ja": "木陰の速度",
-        "en": "Speed of the Shade"
-      },
-      "body": {
-        "ja": "川沿いの木陰に入ると、歩く速さが自然に遅くなった。水音だけが先へ進んでいく。",
-        "en": "Under the riverside shade, my pace slowed on its own. Only the sound of water kept moving ahead."
-      },
-      "unlockHint": {
-        "ja": "昼、川沿いの木陰が続く道を歩く",
-        "en": "By day, walk the shaded path along the river"
-      }
-    }
+    "published": true
   },
   {
-    "id": "moonlit-bridge-view",
+    "id": "spot-027",
     "categoryId": "sightseeing",
-    "timeMode": "night",
-    "coordinates": [42.9708, 141.178],
+    "timeMode": "both",
+    "coordinates": [
+      42.96904,
+      141.16981
+    ],
     "name": {
-      "ja": "月明かりの橋景色",
-      "en": "Moonlit Bridge View"
+      "ja": "糸雨の滝",
+      "en": "Itoame Falls"
     },
     "description": {
-      "ja": "夜の橋から川面を眺めるフォトスポット。灯りの反射が、昼とは違う温泉街の表情を見せる。",
-      "en": "A night photo spot from the bridge, where reflected lights reveal another face of the hot spring town."
+      "ja": "岩肌に沿って細く落ちる滝。水が流れる様子が白い糸雨のように見える。",
+      "en": "A slender waterfall running down the rock face, its white streams looking like threads of rain."
     },
     "image": {
-      "src": "/spots/moonlit-bridge-view.jpg",
+      "src": "/features/view-placeholder.svg",
       "alt": {
-        "ja": "月明かりと灯りが映る夜の橋景色",
-        "en": "A night bridge view with moonlight and reflected lights"
+        "ja": "糸雨の滝のイメージ",
+        "en": "Itoame Falls image"
       }
     },
-    "accent": "#16a34a",
-    "published": true,
-    "diary": {
-      "title": {
-        "ja": "川面に残る光",
-        "en": "Light Left on the River"
-      },
-      "body": {
-        "ja": "橋の上で少し立ち止まると、流れているのは水だけではない気がした。夜の光も、ゆっくり下っていた。",
-        "en": "Standing still on the bridge, it felt like more than water was flowing. The night lights were drifting downstream too."
-      },
-      "unlockHint": {
-        "ja": "夜に橋の上で川面の光を見る",
-        "en": "Watch the reflected lights from the bridge at night"
-      }
-    }
+    "accent": "#22c55e",
+    "published": true
   },
   {
-    "id": "morning-steam-bridge",
+    "id": "spot-028",
+    "categoryId": "sightseeing",
+    "timeMode": "both",
+    "coordinates": [
+      42.9667,
+      141.15246
+    ],
+    "name": {
+      "ja": "錦重ね山",
+      "en": "Nishikigasane Mountain"
+    },
+    "description": {
+      "ja": "赤や黄色が幾重にも重なる山の景色。",
+      "en": "A mountain view layered with reds and yellows, especially vivid in the turning season."
+    },
+    "image": {
+      "src": "/features/view-placeholder.svg",
+      "alt": {
+        "ja": "錦重ね山のイメージ",
+        "en": "Nishikigasane Mountain image"
+      }
+    },
+    "accent": "#22c55e",
+    "published": true
+  },
+  {
+    "id": "spot-029",
+    "categoryId": "sightseeing",
+    "timeMode": "both",
+    "coordinates": [
+      42.96074,
+      141.17464
+    ],
+    "name": {
+      "ja": "月見の高台",
+      "en": "Tsukimi Lookout"
+    },
+    "description": {
+      "ja": "温泉街と渓谷の位置関係を見渡せる小さな高台。昼は川筋や宿の並びが読み取りやすく、夕方以降は月明かりが斜面を静かに照らす。",
+      "en": "A small lookout for reading the shape of the hot spring town and valley. By day, the river line and inns are easy to trace; after dusk, moonlight settles quietly on the slope."
+    },
+    "image": {
+      "src": "/features/view-placeholder.svg",
+      "alt": {
+        "ja": "月見の高台のイメージ",
+        "en": "Tsukimi Lookout image"
+      }
+    },
+    "accent": "#22c55e",
+    "published": true
+  },
+  {
+    "id": "spot-030",
+    "categoryId": "sightseeing",
+    "timeMode": "both",
+    "coordinates": [
+      42.96412,
+      141.15938
+    ],
+    "name": {
+      "ja": "鏡葉の渕",
+      "en": "Kagamiha Pool"
+    },
+    "description": {
+      "ja": "二見公園のそばにある、流れがゆるむ川辺。風のない朝は水面に木々の色が映り、季節によって違う表情に見える。",
+      "en": "A quiet riverside pool near Futami Park. On still mornings, trees reflect on the surface and the colors shift with the season."
+    },
+    "image": {
+      "src": "/features/view-placeholder.svg",
+      "alt": {
+        "ja": "鏡葉の渕のイメージ",
+        "en": "Kagamiha Pool image"
+      }
+    },
+    "accent": "#22c55e",
+    "published": true
+  },
+  {
+    "id": "spot-031",
+    "categoryId": "sightseeing",
+    "timeMode": "both",
+    "coordinates": [
+      42.97216,
+      141.17422
+    ],
+    "name": {
+      "ja": "ゆらぎ橋",
+      "en": "Yuragi Bridge"
+    },
+    "description": {
+      "ja": "渓谷にかかる小さな歩道橋。下を流れる川の音と、橋の上を抜ける風が心地よい。",
+      "en": "A small pedestrian bridge over the valley, where river sound below and wind across the deck feel refreshing."
+    },
+    "image": {
+      "src": "/features/view-placeholder.svg",
+      "alt": {
+        "ja": "ゆらぎ橋のイメージ",
+        "en": "Yuragi Bridge image"
+      }
+    },
+    "accent": "#22c55e",
+    "published": true
+  },
+  {
+    "id": "spot-032",
     "categoryId": "sightseeing",
     "timeMode": "day",
-    "coordinates": [42.9687, 141.1661],
+    "coordinates": [
+      42.97006,
+      141.17122
+    ],
     "name": {
-      "ja": "朝霧の湯けむり橋",
-      "en": "Morning Steam Bridge"
+      "ja": "浅霧川",
+      "en": "Asagiri River"
     },
     "description": {
-      "ja": "朝の空気に湯けむりが薄く重なる橋。川と温泉街の境目を、明るい時間にゆっくり眺められる。",
-      "en": "A bridge where morning air and steam overlap softly, giving a slow daytime view of the river and hot spring town."
+      "ja": "朝になると薄い霧がかかる川。水面近くが白く霞み、散歩道から眺めると温泉街の朝らしさを感じられる。",
+      "en": "A river veiled by light morning mist. From the walking path, the white surface feels like a Jozankei morning."
     },
     "image": {
-      "src": "/spots/morning-steam-bridge.jpg",
+      "src": "/features/view-placeholder.svg",
       "alt": {
-        "ja": "朝の湯けむりがかかる橋",
-        "en": "A bridge covered with soft morning steam"
+        "ja": "浅霧川のイメージ",
+        "en": "Asagiri River image"
       }
     },
-    "accent": "#0f9f8f",
-    "published": true,
-    "diary": {
-      "title": {
-        "ja": "朝霧の余白",
-        "en": "Blank Space in Morning Mist"
-      },
-      "body": {
-        "ja": "橋の真ん中で息を吸うと、湯けむりと朝霧の境目がわからなくなった。今日の予定にも少し余白ができた。",
-        "en": "Breathing at the center of the bridge, I could not tell steam from morning mist. The day itself gained a little blank space."
-      },
-      "unlockHint": {
-        "ja": "朝、湯けむりが薄くかかる橋を渡る",
-        "en": "In the morning, cross the bridge touched by soft steam"
-      }
-    }
+    "accent": "#22c55e",
+    "published": true
   },
   {
-    "id": "lantern-slope-rest",
+    "id": "spot-033",
     "categoryId": "sightseeing",
-    "timeMode": "night",
-    "coordinates": [42.9671, 141.1628],
+    "timeMode": "both",
+    "coordinates": [
+      42.965,
+      141.16296
+    ],
     "name": {
-      "ja": "提灯坂の小休止",
-      "en": "Lantern Slope Pause"
+      "ja": "こだま滝",
+      "en": "Kodama Falls"
     },
     "description": {
-      "ja": "提灯の灯りが坂道に並ぶ夜の休憩スポット。歩いた距離を振り返りながら、温泉街の静けさを感じる。",
-      "en": "A night pause on a slope lined with lanterns, made for looking back on the walk and feeling the quiet of town."
+      "ja": "温泉街の散策中に立ち寄れる小さな滝。岩に当たる水音が湯けむりの気配と混ざり、街中でも少し足を止めたくなる。",
+      "en": "A small waterfall to pause by while walking through the hot spring town. Water striking the rocks mixes with the sense of rising steam, making the town feel briefly still."
     },
     "image": {
-      "src": "/spots/lantern-slope-rest.jpg",
+      "src": "/features/view-placeholder.svg",
       "alt": {
-        "ja": "夜の坂道に並ぶ提灯の灯り",
-        "en": "Lantern lights lining a night slope"
+        "ja": "こだま滝のイメージ",
+        "en": "Kodama Falls image"
       }
     },
-    "accent": "#b45309",
-    "published": true,
-    "diary": {
-      "title": {
-        "ja": "坂道の灯り",
-        "en": "Lights on the Slope"
-      },
-      "body": {
-        "ja": "坂の途中で振り返ると、提灯が歩いてきた道を点々と教えてくれた。夜は地図より灯りを信じたくなる。",
-        "en": "Looking back halfway up the slope, lanterns marked the path I had taken. At night, lights felt more reliable than a map."
-      },
-      "unlockHint": {
-        "ja": "夜、提灯が並ぶ坂道で足を止める",
-        "en": "At night, pause on the slope lined with lanterns"
+    "accent": "#22c55e",
+    "published": true
+  },
+  {
+    "id": "spot-034",
+    "categoryId": "sightseeing",
+    "timeMode": "both",
+    "coordinates": [
+      42.96446,
+      141.1581
+    ],
+    "name": {
+      "ja": "静音の渓谷",
+      "en": "Silent Valley"
+    },
+    "description": {
+      "ja": "川と森に挟まれた細い渓谷。観光地のにぎわいから少し離れて、静かに歩きたいときに向いている。",
+      "en": "A narrow valley between river and forest, suited to a quiet walk away from the busier sightseeing area."
+    },
+    "image": {
+      "src": "/features/view-placeholder.svg",
+      "alt": {
+        "ja": "静音の渓谷のイメージ",
+        "en": "Silent Valley image"
       }
-    }
+    },
+    "accent": "#22c55e",
+    "published": true
+  },
+  {
+    "id": "spot-035",
+    "categoryId": "sightseeing",
+    "timeMode": "night",
+    "coordinates": [
+      42.96092,
+      141.17482
+    ],
+    "name": {
+      "ja": "星待ち展望台",
+      "en": "Hoshimachi Observatory"
+    },
+    "description": {
+      "ja": "夜に空を見上げるための展望台。街灯りから少し距離を置ける場所で、晴れた日は温泉街の上に星が増えていくのを待てる。",
+      "en": "An observatory for looking up at the night sky. Set slightly away from the town lights, it is a place to wait as stars gather above Jozankei on clear nights."
+    },
+    "image": {
+      "src": "/features/view-placeholder.svg",
+      "alt": {
+        "ja": "星待ち展望台のイメージ",
+        "en": "Hoshimachi Observatory image"
+      }
+    },
+    "accent": "#22c55e",
+    "published": true
+  },
+  {
+    "id": "spot-036",
+    "categoryId": "onsen",
+    "timeMode": "day",
+    "coordinates": [
+      42.96493,
+      141.1633
+    ],
+    "name": {
+      "ja": "せせらぎ足湯",
+      "en": "Seseragi Footbath"
+    },
+    "description": {
+      "ja": "川の音を聞きながら足を温められる足湯。散策の途中で少し休むのにちょうどよい。",
+      "en": "A footbath where guests warm their feet while listening to the river, ideal for a short pause during a walk."
+    },
+    "image": {
+      "src": "/features/onsen-placeholder.svg",
+      "alt": {
+        "ja": "せせらぎ足湯のイメージ",
+        "en": "Seseragi Footbath image"
+      }
+    },
+    "accent": "#f97316",
+    "published": true
+  },
+  {
+    "id": "spot-037",
+    "categoryId": "onsen",
+    "timeMode": "night",
+    "coordinates": [
+      42.96521,
+      141.16518
+    ],
+    "name": {
+      "ja": "湯けむり足湯",
+      "en": "Yukemuri Footbath"
+    },
+    "description": {
+      "ja": "湯けむりがふわりと上がる川沿いの足湯。夕方は空の色が変わっていく様子を眺められる。",
+      "en": "A riverside footbath with soft rising steam. In the evening, guests can watch the sky slowly change color."
+    },
+    "image": {
+      "src": "/features/onsen-placeholder.svg",
+      "alt": {
+        "ja": "湯けむり足湯のイメージ",
+        "en": "Yukemuri Footbath image"
+      }
+    },
+    "accent": "#f97316",
+    "published": true
+  },
+  {
+    "id": "spot-039",
+    "categoryId": "stay",
+    "timeMode": "night",
+    "coordinates": [
+      42.9679,
+      141.16871
+    ],
+    "name": {
+      "ja": "山灯りの宿",
+      "en": "Yamaakari Inn"
+    },
+    "description": {
+      "ja": "木のぬくもりを感じる落ち着いた旅館。夜になると窓の外に小さな灯りが並び、静かな時間を過ごせる。",
+      "en": "A calm inn with warm wooden textures. At night, small lights line the windows for a quiet stay."
+    },
+    "image": {
+      "src": "/features/view-placeholder.svg",
+      "alt": {
+        "ja": "山灯りの宿のイメージ",
+        "en": "Yamaakari Inn image"
+      }
+    },
+    "accent": "#6366f1",
+    "published": true
+  },
+  {
+    "id": "spot-040",
+    "categoryId": "stay",
+    "timeMode": "both",
+    "coordinates": [
+      42.96582,
+      141.16313
+    ],
+    "name": {
+      "ja": "湯守の宿 まつかぜ",
+      "en": "Yumori Inn Matsukaze"
+    },
+    "description": {
+      "ja": "昔ながらの温泉旅館。湯上がりに休める広間があり、ゆっくり過ごす旅に向いている。",
+      "en": "An old-fashioned hot spring inn with a lounge for resting after the bath, suited to a slow trip."
+    },
+    "image": {
+      "src": "/features/view-placeholder.svg",
+      "alt": {
+        "ja": "湯守の宿 まつかぜのイメージ",
+        "en": "Yumori Inn Matsukaze image"
+      }
+    },
+    "accent": "#6366f1",
+    "published": true
+  },
+  {
+    "id": "spot-041",
+    "categoryId": "stay",
+    "timeMode": "day",
+    "coordinates": [
+      42.96778,
+      141.16862
+    ],
+    "name": {
+      "ja": "渓泉楼",
+      "en": "Keisenro"
+    },
+    "description": {
+      "ja": "渓谷を望む部屋がある温泉旅館。朝は川の音で目が覚める。",
+      "en": "A hot spring inn with rooms facing the valley. In the morning, guests wake to the sound of the river."
+    },
+    "image": {
+      "src": "/features/view-placeholder.svg",
+      "alt": {
+        "ja": "渓泉楼のイメージ",
+        "en": "Keisenro image"
+      }
+    },
+    "accent": "#6366f1",
+    "published": true
+  },
+  {
+    "id": "spot-042",
+    "categoryId": "stay",
+    "timeMode": "both",
+    "coordinates": [
+      42.96932,
+      141.16737
+    ],
+    "name": {
+      "ja": "ホテル水音",
+      "en": "Hotel Mizune"
+    },
+    "description": {
+      "ja": "温泉街の中心にあるホテル。観光スポットを巡りやすく、初めて訪れる人にも使いやすい。",
+      "en": "A hotel in the center of the hot spring town, convenient for first-time visitors exploring nearby sights."
+    },
+    "image": {
+      "src": "/features/view-placeholder.svg",
+      "alt": {
+        "ja": "ホテル水音のイメージ",
+        "en": "Hotel Mizune image"
+      }
+    },
+    "accent": "#6366f1",
+    "published": true
+  },
+  {
+    "id": "spot-043",
+    "categoryId": "stay",
+    "timeMode": "both",
+    "coordinates": [
+      42.96589,
+      141.16201
+    ],
+    "name": {
+      "ja": "花霞の宿",
+      "en": "Hanagasumi Inn"
+    },
+    "description": {
+      "ja": "季節の花を飾った小さな旅館。派手さはないが、手入れの行き届いた庭を眺められる。",
+      "en": "A small inn decorated with seasonal flowers. Its well-kept garden gives the stay a quiet charm."
+    },
+    "image": {
+      "src": "/features/view-placeholder.svg",
+      "alt": {
+        "ja": "花霞の宿のイメージ",
+        "en": "Hanagasumi Inn image"
+      }
+    },
+    "accent": "#6366f1",
+    "published": true
+  },
+  {
+    "id": "spot-044",
+    "categoryId": "stay",
+    "timeMode": "day",
+    "coordinates": [
+      42.96568,
+      141.16116
+    ],
+    "name": {
+      "ja": "民宿こまどり",
+      "en": "Komadori Guesthouse"
+    },
+    "description": {
+      "ja": "家庭的な雰囲気の民宿。地元の食材を使った朝食が人気。",
+      "en": "A homey guesthouse known for breakfast made with local ingredients."
+    },
+    "image": {
+      "src": "/features/view-placeholder.svg",
+      "alt": {
+        "ja": "民宿こまどりのイメージ",
+        "en": "Komadori Guesthouse image"
+      }
+    },
+    "accent": "#6366f1",
+    "published": true
+  },
+  {
+    "id": "spot-045",
+    "categoryId": "stay",
+    "timeMode": "both",
+    "coordinates": [
+      42.9705,
+      141.1647
+    ],
+    "name": {
+      "ja": "森のコテージ ノカ",
+      "en": "Forest Cottage Noka"
+    },
+    "description": {
+      "ja": "森の中に建つ一棟貸しのコテージ。友人や家族で静かに過ごしたい人に向いている。",
+      "en": "A private cottage in the forest for friends or families who want a quiet stay together."
+    },
+    "image": {
+      "src": "/features/view-placeholder.svg",
+      "alt": {
+        "ja": "森のコテージ ノカのイメージ",
+        "en": "Forest Cottage Noka image"
+      }
+    },
+    "accent": "#6366f1",
+    "published": true
+  },
+  {
+    "id": "spot-046",
+    "categoryId": "stay",
+    "timeMode": "both",
+    "coordinates": [
+      42.96649,
+      141.16969
+    ],
+    "name": {
+      "ja": "渓谷リゾートホテル",
+      "en": "Valley Resort Hotel"
+    },
+    "description": {
+      "ja": "広いロビーと大きな窓が特徴のホテル。温泉街と自然の両方を楽しめる。",
+      "en": "A hotel with a broad lobby and large windows, making it easy to enjoy both the town and nature."
+    },
+    "image": {
+      "src": "/features/view-placeholder.svg",
+      "alt": {
+        "ja": "渓谷リゾートホテルのイメージ",
+        "en": "Valley Resort Hotel image"
+      }
+    },
+    "accent": "#6366f1",
+    "published": true
+  },
+  {
+    "id": "spot-047",
+    "categoryId": "onsen",
+    "timeMode": "day",
+    "coordinates": [
+      42.96297,
+      141.15855
+    ],
+    "name": {
+      "ja": "湯の庭",
+      "en": "Yunoniwa"
+    },
+    "description": {
+      "ja": "散策の途中に立ち寄れる日帰り温泉。内湯と休憩スペースがあり、短い滞在でも使いやすい。",
+      "en": "A day-use hot spring for stopping by during a walk, with indoor baths and a resting space for short visits."
+    },
+    "image": {
+      "src": "/features/onsen-placeholder.svg",
+      "alt": {
+        "ja": "湯の庭のイメージ",
+        "en": "Yunoniwa image"
+      }
+    },
+    "accent": "#f97316",
+    "published": true
+  },
+  {
+    "id": "spot-048",
+    "categoryId": "onsen",
+    "timeMode": "both",
+    "coordinates": [
+      42.96489,
+      141.16334
+    ],
+    "name": {
+      "ja": "森見の湯",
+      "en": "Morimi no Yu"
+    },
+    "description": {
+      "ja": "木々に囲まれた露天風呂。季節ごとに変わる森の色を眺めながら入れる。",
+      "en": "An open-air bath surrounded by trees, with forest colors that change from season to season."
+    },
+    "image": {
+      "src": "/features/onsen-placeholder.svg",
+      "alt": {
+        "ja": "森見の湯のイメージ",
+        "en": "Morimi no Yu image"
+      }
+    },
+    "accent": "#f97316",
+    "published": true
+  },
+  {
+    "id": "spot-049",
+    "categoryId": "onsen",
+    "timeMode": "night",
+    "coordinates": [
+      42.97211,
+      141.16617
+    ],
+    "name": {
+      "ja": "星影の湯",
+      "en": "Hoshikage no Yu"
+    },
+    "description": {
+      "ja": "夜に入ると空が広く見える露天風呂。晴れた日は星を眺めながら温まれる。",
+      "en": "An open-air bath where the sky feels wide at night. On clear evenings, guests can soak under the stars."
+    },
+    "image": {
+      "src": "/features/onsen-placeholder.svg",
+      "alt": {
+        "ja": "星影の湯のイメージ",
+        "en": "Hoshikage no Yu image"
+      }
+    },
+    "accent": "#f97316",
+    "published": true
+  },
+  {
+    "id": "spot-050",
+    "categoryId": "onsen",
+    "timeMode": "both",
+    "coordinates": [
+      42.96519,
+      141.16515
+    ],
+    "name": {
+      "ja": "源泉処 ましろ",
+      "en": "Gensen-dokoro Mashiro"
+    },
+    "description": {
+      "ja": "源泉かけ流しの湯を楽しめる温泉。湯の香りが強く、温泉らしさをしっかり感じられる。",
+      "en": "A hot spring using free-flowing source water, with a strong mineral scent and a deeply onsen-like feel."
+    },
+    "image": {
+      "src": "/features/onsen-placeholder.svg",
+      "alt": {
+        "ja": "源泉処 ましろのイメージ",
+        "en": "Gensen-dokoro Mashiro image"
+      }
+    },
+    "accent": "#f97316",
+    "published": true
+  },
+  {
+    "id": "spot-051",
+    "categoryId": "onsen",
+    "timeMode": "day",
+    "coordinates": [
+      42.96483,
+      141.16013
+    ],
+    "name": {
+      "ja": "こもれび温泉",
+      "en": "Komorebi Onsen"
+    },
+    "description": {
+      "ja": "昼の休憩に使いやすい日帰り温泉。窓から木漏れ日が入り、明るく落ち着いた雰囲気。",
+      "en": "A day-use hot spring suited to a midday break, bright and calm with sunlight filtering through the windows."
+    },
+    "image": {
+      "src": "/features/onsen-placeholder.svg",
+      "alt": {
+        "ja": "こもれび温泉のイメージ",
+        "en": "Komorebi Onsen image"
+      }
+    },
+    "accent": "#f97316",
+    "published": true
+  },
+  {
+    "id": "spot-052",
+    "categoryId": "onsen",
+    "timeMode": "both",
+    "coordinates": [
+      42.96504,
+      141.16292
+    ],
+    "name": {
+      "ja": "結びの湯",
+      "en": "Musubi no Yu"
+    },
+    "description": {
+      "ja": "少人数で使える貸切風呂。家族や友人と周囲を気にせずゆっくり入れる。",
+      "en": "A private bath for small groups, where family or friends can relax without worrying about others."
+    },
+    "image": {
+      "src": "/features/onsen-placeholder.svg",
+      "alt": {
+        "ja": "結びの湯のイメージ",
+        "en": "Musubi no Yu image"
+      }
+    },
+    "accent": "#f97316",
+    "published": true
+  },
+  {
+    "id": "spot-053",
+    "categoryId": "onsen",
+    "timeMode": "both",
+    "coordinates": [
+      42.96531,
+      141.16301
+    ],
+    "name": {
+      "ja": "蒸し処 鹿火",
+      "en": "Mushidokoro Shikabi"
+    },
+    "description": {
+      "ja": "木の香りがするサウナと水風呂がある温浴施設。外気浴スペースから山の空気を感じられる。",
+      "en": "A bathing facility with a wood-scented sauna and cold bath. The outdoor rest area opens to mountain air."
+    },
+    "image": {
+      "src": "/features/onsen-placeholder.svg",
+      "alt": {
+        "ja": "蒸し処 鹿火のイメージ",
+        "en": "Mushidokoro Shikabi image"
+      }
+    },
+    "accent": "#f97316",
+    "published": true
+  },
+  {
+    "id": "spot-054",
+    "categoryId": "onsen",
+    "timeMode": "both",
+    "coordinates": [
+      42.96591,
+      141.16322
+    ],
+    "name": {
+      "ja": "大湯殿 ひびき",
+      "en": "Oyudono Hibiki"
+    },
+    "description": {
+      "ja": "広い湯船がある大浴場。天井が高く、湯の音がゆっくり響く。",
+      "en": "A spacious public bath with a high ceiling, where the sound of hot water echoes slowly through the room."
+    },
+    "image": {
+      "src": "/features/onsen-placeholder.svg",
+      "alt": {
+        "ja": "大湯殿 ひびきのイメージ",
+        "en": "Oyudono Hibiki image"
+      }
+    },
+    "accent": "#f97316",
+    "published": true
   }
 ]
