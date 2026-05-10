@@ -182,7 +182,7 @@ const map = L.map(mapElement, {
   boxZoom: false,
   zoomSnap: 0.25,
   minZoom: 13,
-  maxZoom: 18,
+  maxZoom: 20,
 });
 
 const paneByMode = {
@@ -432,7 +432,8 @@ function createMarkerClusterGroup(mode: TimeMode) {
     showCoverageOnHover: false,
     spiderfyOnMaxZoom: true,
     zoomToBoundsOnClick: true,
-    maxClusterRadius: (zoom) => (zoom >= 17 ? 28 : 48),
+    disableClusteringAtZoom: 20,
+    maxClusterRadius: (zoom) => (zoom >= 19 ? 18 : zoom >= 17 ? 28 : 48),
   });
 }
 
