@@ -1,4 +1,5 @@
 import L from "leaflet";
+import "leaflet.markercluster";
 import type { Spot } from "../data/spots";
 import type { ThemeByMode, UiCopy } from "../data/site";
 import { isDiaryDiscovered, saveDiscoveredDiary } from "../lib/diary-storage";
@@ -123,6 +124,13 @@ const displayModeButtonByMode = {
 } as const;
 
 const placeholderClasses = ["placeholder-river", "placeholder-steam", "placeholder-forest", "placeholder-light"];
+const timeModes = ["day", "night"] as const satisfies readonly TimeMode[];
+const markerPaneByMode = {
+  day: "day-marker-pane",
+  night: "night-marker-pane",
+} as const satisfies Record<TimeMode, string>;
+const pinIconSize: [number, number] = [36, 36];
+const pinIconAnchor: [number, number] = [18, 18];
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const isMobileViewport = () => window.innerWidth < 768;
 const isVerticalCompareMode = () => state.displayMode === "compare" && isMobileViewport();
@@ -258,6 +266,9 @@ const geoRendererByMode = {
 } as const;
 
 const markerEntries = new Map<string, MarkerEntry>();
+const markerClusterGroupsByMode = Object.fromEntries(
+  timeModes.map((mode) => [mode, createMarkerClusterGroup(mode)]),
+) as Record<TimeMode, L.MarkerClusterGroup>;
 const geoJsonLayers: Partial<Record<TimeMode, L.GeoJSON>> = {};
 let dataBounds: L.LatLngBounds | null = null;
 let transitionCleanupTimer: number | null = null;
@@ -340,7 +351,8 @@ const getVisibleMarkerAtPoint = (point: MapPoint): MarkerEntry | null => {
 
   markerEntries.forEach((entry) => {
     const { marker, mode } = entry;
-    if (!map.hasLayer(marker) || !isMarkerModeVisibleAtPoint(mode, point)) return;
+    if (!map.hasLayer(markerClusterGroupsByMode[mode]) || !isMarkerModeVisibleAtPoint(mode, point)) return;
+    if (!marker.getElement()) return;
 
     const markerPoint = map.latLngToContainerPoint(marker.getLatLng());
     const distance = Math.hypot(point.x - markerPoint.x, point.y - markerPoint.y);
@@ -397,14 +409,41 @@ const createPinHtml = (spot: Spot, mode: TimeMode) => `
   </span>
 `;
 
+function createClusterIcon(cluster: L.MarkerCluster, mode: TimeMode) {
+  const count = cluster.getChildCount();
+  const size = count >= 10 ? 48 : 42;
+
+  return L.divIcon({
+    className: "time-cluster-wrapper",
+    html: `
+      <span class="time-cluster time-cluster--${mode}" aria-hidden="true">
+        <span class="time-cluster__count">${count}</span>
+      </span>
+    `,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2],
+  });
+}
+
+function createMarkerClusterGroup(mode: TimeMode) {
+  return L.markerClusterGroup({
+    clusterPane: markerPaneByMode[mode],
+    iconCreateFunction: (cluster) => createClusterIcon(cluster, mode),
+    showCoverageOnHover: false,
+    spiderfyOnMaxZoom: true,
+    zoomToBoundsOnClick: true,
+    maxClusterRadius: (zoom) => (zoom >= 17 ? 28 : 48),
+  });
+}
+
 const createMarker = (spot: Spot, mode: TimeMode) => {
   const marker = L.marker(spot.coordinates, {
-    pane: mode === "day" ? "day-marker-pane" : "night-marker-pane",
+    pane: markerPaneByMode[mode],
     icon: L.divIcon({
       className: "time-pin-wrapper",
       html: createPinHtml(spot, mode),
-      iconSize: [36, 36],
-      iconAnchor: [18, 18],
+      iconSize: pinIconSize,
+      iconAnchor: pinIconAnchor,
     }),
   });
 
@@ -413,6 +452,7 @@ const createMarker = (spot: Spot, mode: TimeMode) => {
     render();
   });
 
+  markerClusterGroupsByMode[mode].addLayer(marker);
   markerEntries.set(`${spot.id}:${mode}`, { marker, spot, mode });
 };
 
@@ -554,17 +594,20 @@ const applyPaneVisibility = () => {
 };
 
 const updateMarkerVisibility = () => {
-  markerEntries.forEach(({ marker, spot, mode }) => {
+  timeModes.forEach((mode) => {
+    const clusterGroup = markerClusterGroupsByMode[mode];
     const shouldShow = state.displayMode === "single" ? mode === state.timeMode : true;
 
-    if (shouldShow && !map.hasLayer(marker)) {
-      marker.addTo(map);
+    if (shouldShow && !map.hasLayer(clusterGroup)) {
+      clusterGroup.addTo(map);
     }
 
-    if (!shouldShow && map.hasLayer(marker)) {
-      map.removeLayer(marker);
+    if (!shouldShow && map.hasLayer(clusterGroup)) {
+      map.removeLayer(clusterGroup);
     }
+  });
 
+  markerEntries.forEach(({ marker, spot, mode }) => {
     const pin = marker.getElement()?.querySelector(".time-pin");
     if (pin) {
       const isSelected =
@@ -1190,7 +1233,7 @@ const initGeoJson = async () => {
   const response = await fetch("/geodata/map.geojson");
   const data = (await response.json()) as GeoJSON.GeoJsonObject;
 
-  (["day", "night"] as TimeMode[]).forEach((mode) => {
+  timeModes.forEach((mode) => {
     const layer = L.geoJSON(data, {
       filter: (feature: GeoJSON.Feature | undefined) => {
         const category = featureCategory(feature);
@@ -1289,7 +1332,7 @@ diaryNotebookPanel.addEventListener("click", (event) => {
 mapElement.addEventListener("pointerdown", (event) => {
   if (!state.isExpanded || state.displayMode === "magnifier" || state.displayMode === "scratch") return;
   const target = event.target;
-  if (target instanceof Element && target.closest(".time-pin, .time-pin-wrapper")) return;
+  if (target instanceof Element && target.closest(".time-pin, .time-pin-wrapper, .time-cluster, .time-cluster-wrapper")) return;
   clearSelectedSpot();
 });
 

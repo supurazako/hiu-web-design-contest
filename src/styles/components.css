@@ -422,25 +422,30 @@
   border-bottom-color: var(--md-sys-color-outline-variant);
 }
 
-.time-pin-wrapper {
+.time-pin-wrapper,
+.time-cluster-wrapper {
   background: transparent;
   border: 0;
 }
 
-.time-pin {
+.time-pin,
+.time-cluster {
   display: grid;
   place-items: center;
+  border-radius: 50%;
+  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+}
+
+.time-pin {
   width: 36px;
   height: 36px;
   border: 3px solid var(--pin-color);
-  border-radius: 50%;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 250, 252, 0.9)),
     var(--md-sys-color-surface);
   box-shadow:
     0 5px 14px rgba(20, 24, 32, 0.28);
   cursor: default;
-  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
 }
 
 .time-pin__icon {
@@ -456,4 +461,37 @@
     0 8px 18px rgba(20, 24, 32, 0.32);
   filter: saturate(1.08);
   transform: scale(1.08);
+}
+
+.time-cluster {
+  --cluster-color: var(--md-sys-color-primary);
+  width: 100%;
+  height: 100%;
+  min-width: 42px;
+  min-height: 42px;
+  border: 3px solid var(--cluster-color);
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.98), rgba(247, 250, 252, 0.9) 56%, rgba(232, 238, 244, 0.94)),
+    var(--md-sys-color-surface);
+  box-shadow:
+    0 0 0 6px color-mix(in srgb, var(--cluster-color) 18%, transparent),
+    0 8px 18px rgba(20, 24, 32, 0.3);
+  color: color-mix(in srgb, var(--cluster-color) 72%, #161b22);
+  font-size: 0.86rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.time-cluster--day {
+  --cluster-color: #d97706;
+}
+
+.time-cluster--night {
+  --cluster-color: #6366f1;
+}
+
+.time-cluster__count {
+  display: block;
+  min-width: 2ch;
+  text-align: center;
 }
