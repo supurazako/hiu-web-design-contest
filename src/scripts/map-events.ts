@@ -1,5 +1,4 @@
 import type L from "leaflet";
-import type { Spot } from "../data/spots";
 import type { MapDomRefs } from "./map-dom-refs";
 import type { DisplayMode, Locale, MapPageState, TimeMode } from "./map-types";
 
