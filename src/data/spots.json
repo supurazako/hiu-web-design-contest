@@ -439,7 +439,21 @@
       }
     },
     "accent": "#ef4444",
-    "published": true
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "朝の紙袋",
+        "en": "Morning Paper Bag"
+      },
+      "body": {
+        "ja": "朝霧がまだ通りに残るうちに、焼きたてのパンを紙袋へ入れてもらった。袋の底が少し温かくて、今日の散歩はここから始まる気がした。",
+        "en": "While morning mist still lingered on the street, fresh bread was tucked into a paper bag. The warm bottom of the bag made the walk feel like it began here."
+      },
+      "unlockHint": {
+        "ja": "朝に開くパン屋を探す。川の東側、宿が集まる道の近く。",
+        "en": "Look for the bakery that opens in the morning, east of the river near the inns."
+      }
+    }
   },
   {
     "id": "spot-018",
@@ -647,7 +661,21 @@
       }
     },
     "accent": "#ef4444",
-    "published": true
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "水色の一杯",
+        "en": "A Water-Clear Glass"
+      },
+      "body": {
+        "ja": "グラスの泡がほどけるたび、定山渓の水のことを少しだけ知った気になった。外の夜風に当たる前に、最後の一口をゆっくり飲んだ。",
+        "en": "Each time the foam settled, I felt as if I understood Jozankei water a little better. Before stepping into the night air, I took the last sip slowly."
+      },
+      "unlockHint": {
+        "ja": "夜ににぎわうクラフトビールの店。温泉街中心部の少し東側を探す。",
+        "en": "Find the nighttime craft beer spot slightly east of the town center."
+      }
+    }
   },
   {
     "id": "spot-026",
@@ -829,7 +857,21 @@
       }
     },
     "accent": "#22c55e",
-    "published": true
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "白い川面",
+        "en": "White River Surface"
+      },
+      "body": {
+        "ja": "川面の上だけが白くぼやけて、向こう岸の木々が少し遅れて目を覚ますように見えた。足音を小さくすると、水の流れだけが朝を進めていた。",
+        "en": "Only the river surface blurred white, and the trees across the water seemed to wake a moment late. When my steps grew quiet, only the current carried the morning forward."
+      },
+      "unlockHint": {
+        "ja": "北東側の川沿い、朝霧が出る散歩道を探す。",
+        "en": "Search the northeastern riverside path where morning mist gathers."
+      }
+    }
   },
   {
     "id": "spot-033",
@@ -907,7 +949,21 @@
       }
     },
     "accent": "#22c55e",
-    "published": true
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "星を待つ場所",
+        "en": "A Place to Wait for Stars"
+      },
+      "body": {
+        "ja": "街の灯りから離れると、空の暗さが急に深くなった。星が増えるのを待っている間、自分の息だけが白く残った。",
+        "en": "Away from the town lights, the sky suddenly grew deeper. While I waited for more stars to appear, only my breath stayed white."
+      },
+      "unlockHint": {
+        "ja": "南東の高台にある、夜空を見上げる展望台を探す。",
+        "en": "Search the southeastern high ground for the observatory made for looking at the night sky."
+      }
+    }
   },
   {
     "id": "spot-036",
@@ -933,7 +989,21 @@
       }
     },
     "accent": "#f97316",
-    "published": true
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "川音の休憩",
+        "en": "A Rest by the River Sound"
+      },
+      "body": {
+        "ja": "足を湯に入れると、川の音が少し丸く聞こえた。長く歩いたわけではないのに、ここで休む理由はもう十分だった。",
+        "en": "Once I slipped my feet into the bath, the river sounded softer. I had not walked far, but I already had enough reason to rest here."
+      },
+      "unlockHint": {
+        "ja": "中心部の川沿いで、せせらぎを聞きながら入れる昼の足湯を探す。",
+        "en": "Find the daytime footbath near the central riverside where the stream can be heard."
+      }
+    }
   },
   {
     "id": "spot-037",
@@ -959,7 +1029,21 @@
       }
     },
     "accent": "#f97316",
-    "published": true
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "夜の湯けむり",
+        "en": "Night Steam"
+      },
+      "body": {
+        "ja": "足元の湯から上がる湯けむりが、街灯の下でほどけていった。昼よりも静かな川沿いで、時間だけがゆっくり冷えていく。",
+        "en": "Steam rising from the footbath loosened under the streetlights. Along the quieter riverside, only time seemed to cool slowly."
+      },
+      "unlockHint": {
+        "ja": "川沿いで湯けむりが見える夜の足湯。中心部から少し東を探す。",
+        "en": "Look slightly east of the center for the nighttime riverside footbath with visible steam."
+      }
+    }
   },
   {
     "id": "spot-039",
@@ -985,7 +1069,21 @@
       }
     },
     "accent": "#6366f1",
-    "published": true
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "窓の灯り",
+        "en": "Window Lights"
+      },
+      "body": {
+        "ja": "窓の外に並ぶ小さな灯りを数えていたら、いつの間にか声を落としていた。木の匂いのする部屋で、夜は静かに長くなった。",
+        "en": "Counting the small lights beyond the window, I found my voice had grown quiet. In the room scented with wood, the night stretched gently."
+      },
+      "unlockHint": {
+        "ja": "北東の宿エリアで、夜に窓明かりが並ぶ旅館を探す。",
+        "en": "Search the northeastern inn area for the ryokan with window lights at night."
+      }
+    }
   },
   {
     "id": "spot-040",
@@ -1037,7 +1135,21 @@
       }
     },
     "accent": "#6366f1",
-    "published": true
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "窓辺の朝",
+        "en": "Morning by the Window"
+      },
+      "body": {
+        "ja": "部屋の窓を開けると、渓谷の風が布団の端を揺らした。目覚ましより先に川の音で起きる朝は、旅先の時間だと思った。",
+        "en": "When I opened the room window, valley air moved the edge of the futon. Waking to the river before an alarm felt like travel time."
+      },
+      "unlockHint": {
+        "ja": "北東の宿エリアで、渓谷を望む昼の旅館を探す。",
+        "en": "Look in the northeastern inn area for the daytime ryokan facing the valley."
+      }
+    }
   },
   {
     "id": "spot-042",
@@ -1193,7 +1305,21 @@
       }
     },
     "accent": "#f97316",
-    "published": true
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "短い湯治",
+        "en": "A Short Hot-Spring Cure"
+      },
+      "body": {
+        "ja": "湯から上がって休憩所に座ると、短い滞在でも体の芯だけが旅を覚えていた。次の道へ戻る前に、もう一度だけ手ぬぐいを絞った。",
+        "en": "After the bath, I sat in the rest area, and even a short visit stayed warm at my core. Before returning to the path, I wrung out the towel once more."
+      },
+      "unlockHint": {
+        "ja": "南西側の散策路寄りにある、日帰りで立ち寄れる温泉を探す。",
+        "en": "Search the southwest walking-route side for a day-use hot spring."
+      }
+    }
   },
   {
     "id": "spot-048",
@@ -1245,7 +1371,21 @@
       }
     },
     "accent": "#f97316",
-    "published": true
+    "published": true,
+    "diary": {
+      "title": {
+        "ja": "湯面の星",
+        "en": "Stars on the Bath"
+      },
+      "body": {
+        "ja": "露天の湯面に星が揺れて、本物の空とどちらを見ているのか分からなくなった。肩まで沈むと、夜の冷たさが遠ざかった。",
+        "en": "Stars trembled on the open-air bath, and I could not tell whether I was watching the water or the real sky. Once I sank to my shoulders, the night chill moved away."
+      },
+      "unlockHint": {
+        "ja": "北側の広い空が見える場所にある、星を眺める夜の湯を探す。",
+        "en": "Find the nighttime bath on the northern side where the sky feels wide."
+      }
+    }
   },
   {
     "id": "spot-050",

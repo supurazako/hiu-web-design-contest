@@ -248,12 +248,12 @@ export default function FeatureSpotCarousel({
         className="w-full"
       >
         <CarouselContent className="-ml-4">
-          {cards.map((card) => (
+          {cards.map((card, index) => (
             <CarouselItem
               key={`${locale}-${card.imageSrc}-${card.body}`}
               className="basis-[88%] pl-4 sm:basis-[72%] lg:basis-full"
             >
-              <FeatureSpotCardView card={card} index={cards.indexOf(card)} />
+              <FeatureSpotCardView card={card} index={index} />
             </CarouselItem>
           ))}
         </CarouselContent>
