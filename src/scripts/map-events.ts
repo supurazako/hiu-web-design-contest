@@ -64,6 +64,7 @@ export const registerMapPageEvents = ({
   });
 
   refs.backHomeButton.addEventListener("click", () => {
+    state.isDiaryNotebookOpen = false;
     if (window.location.hash === "#map") {
       window.history.back();
       return;
@@ -102,11 +103,31 @@ export const registerMapPageEvents = ({
     map.zoomOut();
   });
 
-  refs.diaryNotebookOpenButton.addEventListener("click", (event) => {
-    event.stopPropagation();
+  const openDiaryNotebook = () => {
+    if (state.isDiaryNotebookOpen) {
+      state.isDiaryNotebookOpen = false;
+      render();
+      refs.diaryNotebookOpenButton.focus({ preventScroll: true });
+      return;
+    }
+
+    if (state.displayMode !== "single") {
+      transitionDisplayMode({
+        state,
+        nextMode: "single",
+        scratchController,
+        ensureMagnifierPoint,
+      });
+    }
+
     state.isDiaryNotebookOpen = true;
     render();
     refs.diaryNotebookClose.focus({ preventScroll: true });
+  };
+
+  refs.diaryNotebookOpenButton.addEventListener("click", (event) => {
+    event.stopPropagation();
+    openDiaryNotebook();
   });
 
   refs.diaryNotebookClose.addEventListener("click", () => {

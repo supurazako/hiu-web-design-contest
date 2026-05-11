@@ -208,6 +208,10 @@ export const renderDiaryNotebookModal = ({
   uiCopy: UiCopy;
 }) => {
   const ui = uiCopy[state.locale];
+  refs.root.classList.toggle(
+    "is-diary-notebook-open",
+    state.isDiaryNotebookOpen,
+  );
   refs.diaryNotebookOpenButton.setAttribute(
     "aria-label",
     ui.diaryNotebookOpenLabel,

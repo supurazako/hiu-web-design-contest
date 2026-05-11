@@ -520,6 +520,22 @@ body.is-map-leaving .hero__content {
   border-radius: 26px;
 }
 
+.is-diary-notebook-open .map-zoom-stack,
+.is-diary-notebook-open .map-control-stack,
+.is-diary-notebook-open .sheet-host--floating,
+.is-diary-notebook-open .map-attribution,
+.is-diary-notebook-open .map-clock,
+.is-diary-notebook-open .map-magnifier,
+.is-diary-notebook-open .map-compare,
+.is-diary-notebook-open .map-diary-toast {
+  display: none;
+}
+
+.is-diary-notebook-open .map-scratch-surface {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .map-zoom-stack__section {
   min-width: 0;
 }

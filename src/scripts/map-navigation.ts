@@ -161,6 +161,9 @@ export const createMapNavigationController = ({
     }
 
     state.isExpanded = nextExpanded;
+    if (!nextExpanded) {
+      state.isDiaryNotebookOpen = false;
+    }
     state.openLanguageSwitcherId = null;
 
     if (options.updateHistory) {
