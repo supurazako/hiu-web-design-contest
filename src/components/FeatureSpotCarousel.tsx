@@ -276,7 +276,7 @@ export default function FeatureSpotCarousel({
                 api?.scrollTo(index);
                 scheduleAutoplayResume();
               }}
-              aria-label={`slide ${index + 1}`}
+              aria-label={`Slide ${index + 1}`}
               aria-current={isActive ? "true" : "false"}
               className={cn(
                 "h-2.5 w-2.5 rounded-full border-0 p-0 transition-transform duration-200",

@@ -94,6 +94,11 @@ const sceneLabelDay = document.querySelector<HTMLElement>('[data-scene-label="da
 const sceneLabelNight = document.querySelector<HTMLElement>('[data-scene-label="night"]');
 const sceneMoodDay = document.querySelector<HTMLElement>('[data-scene-mood="day"]');
 const sceneMoodNight = document.querySelector<HTMLElement>('[data-scene-mood="night"]');
+const metaDescription = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+const ogTitle = document.querySelector<HTMLMetaElement>('meta[property="og:title"]');
+const ogDescription = document.querySelector<HTMLMetaElement>('meta[property="og:description"]');
+const twitterTitle = document.querySelector<HTMLMetaElement>('meta[name="twitter:title"]');
+const twitterDescription = document.querySelector<HTMLMetaElement>('meta[name="twitter:description"]');
 const languageSwitchers = Array.from(document.querySelectorAll<HTMLElement>("[data-language-switcher]")).map((switcherRoot) => {
   const trigger = switcherRoot.querySelector<HTMLButtonElement>("[data-language-menu-trigger]");
   const menu = switcherRoot.querySelector<HTMLElement>("[data-language-menu]");
@@ -977,9 +982,21 @@ const adjustSplitRatio = (delta: number) => {
   updateCompareUI();
 };
 
+const renderDocumentMetadata = () => {
+  const ui = uiCopy[state.locale];
+  const title = state.isExpanded ? `${ui.siteTitle} | ${ui.mapPageTitle}` : `${ui.siteTitle} | ${ui.siteTagline}`;
+  document.title = title;
+  document.documentElement.lang = state.locale;
+  if (metaDescription) metaDescription.content = ui.metaDescription;
+  if (ogTitle) ogTitle.content = title;
+  if (ogDescription) ogDescription.content = ui.metaDescription;
+  if (twitterTitle) twitterTitle.content = title;
+  if (twitterDescription) twitterDescription.content = ui.metaDescription;
+};
+
 const renderStaticText = () => {
   const ui = uiCopy[state.locale];
-  document.title = state.isExpanded ? `${ui.siteTitle} | ${ui.mapPageTitle}` : `${ui.siteTitle} | ${ui.siteTagline}`;
+  renderDocumentMetadata();
   backHomeButton.setAttribute("aria-label", ui.backHome);
   zoomControls.setAttribute("aria-label", ui.zoomControlsLabel);
   zoomInButton.setAttribute("aria-label", ui.zoomInLabel);
