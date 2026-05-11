@@ -6,8 +6,22 @@ export type ScratchMaskGeometry = {
 };
 
 type ScratchMaskLayout = {
-  targets: { pane: HTMLElement; maskId: string; maskX: number; maskY: number; width: number; height: number }[];
-  inverseTargets: { pane: HTMLElement; maskId: string; maskX: number; maskY: number; width: number; height: number }[];
+  targets: {
+    pane: HTMLElement;
+    maskId: string;
+    maskX: number;
+    maskY: number;
+    width: number;
+    height: number;
+  }[];
+  inverseTargets: {
+    pane: HTMLElement;
+    maskId: string;
+    maskX: number;
+    maskY: number;
+    width: number;
+    height: number;
+  }[];
 };
 
 type ScratchMaskOptions = {
@@ -19,8 +33,9 @@ type ScratchMaskOptions = {
 const SVG_NS = "http://www.w3.org/2000/svg";
 let scratchMaskIdCounter = 0;
 
-export const createSvgElement = <K extends keyof SVGElementTagNameMap>(tagName: K) =>
-  document.createElementNS(SVG_NS, tagName);
+export const createSvgElement = <K extends keyof SVGElementTagNameMap>(
+  tagName: K,
+) => document.createElementNS(SVG_NS, tagName);
 
 export const createScratchMaskController = ({
   mapElement,
@@ -144,12 +159,28 @@ export const createScratchMaskController = ({
     inverseContent.id = inverseContentId;
 
     targets.forEach(({ pane, maskId, maskX, maskY, width, height }) => {
-      ensureMaskDefinition(maskId, width, height, maskX, maskY, revealContentId, false);
+      ensureMaskDefinition(
+        maskId,
+        width,
+        height,
+        maskX,
+        maskY,
+        revealContentId,
+        false,
+      );
       setMaskReference(pane, maskId);
     });
 
     inverseTargets.forEach(({ pane, maskId, maskX, maskY, width, height }) => {
-      ensureMaskDefinition(maskId, width, height, maskX, maskY, inverseContentId, true);
+      ensureMaskDefinition(
+        maskId,
+        width,
+        height,
+        maskX,
+        maskY,
+        inverseContentId,
+        true,
+      );
       setMaskReference(pane, maskId);
     });
   };

@@ -20,6 +20,11 @@ const iconByMode = {
 const icon = iconByMode[mode];
 ---
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox={icon.viewBox} class={className} aria-hidden="true">
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox={icon.viewBox}
+  class={className}
+  aria-hidden="true"
+>
   <path d={icon.path}></path>
 </svg>

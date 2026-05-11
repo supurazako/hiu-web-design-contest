@@ -83,7 +83,8 @@
     --map-selected-sheet-top: 0px;
     --map-attribution-bar-gap: 12px;
     --map-attribution-safe-offset: calc(
-      var(--map-attribution-bar-bottom) + var(--map-attribution-measured-height) + var(--map-attribution-bar-gap)
+      var(--map-attribution-bar-bottom) +
+        var(--map-attribution-measured-height) + var(--map-attribution-bar-gap)
     );
   }
 
@@ -95,7 +96,11 @@
     min-height: var(--map-attribution-bar-height);
     padding: 10px 16px;
     border-radius: 24px;
-    background: color-mix(in srgb, var(--map-ui-surface-strong) 82%, transparent);
+    background: color-mix(
+      in srgb,
+      var(--map-ui-surface-strong) 82%,
+      transparent
+    );
     box-shadow: 0 10px 24px rgba(69, 49, 27, 0.14);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -118,7 +123,10 @@
   .map-attribution.is-raised-by-selection {
     top: max(
       16px,
-      calc(var(--map-selected-sheet-top) - var(--map-attribution-measured-height) - var(--map-attribution-bar-gap))
+      calc(
+        var(--map-selected-sheet-top) - var(--map-attribution-measured-height) -
+          var(--map-attribution-bar-gap)
+      )
     );
     bottom: auto;
   }
@@ -176,8 +184,17 @@
 
   .hero::before {
     background:
-      linear-gradient(180deg, rgba(255, 248, 242, 0.94) 0%, rgba(255, 248, 242, 0.76) 58%, rgba(255, 248, 242, 0.32) 100%),
-      linear-gradient(90deg, rgba(255, 248, 242, 0.78), rgba(255, 248, 242, 0.24));
+      linear-gradient(
+        180deg,
+        rgba(255, 248, 242, 0.94) 0%,
+        rgba(255, 248, 242, 0.76) 58%,
+        rgba(255, 248, 242, 0.32) 100%
+      ),
+      linear-gradient(
+        90deg,
+        rgba(255, 248, 242, 0.78),
+        rgba(255, 248, 242, 0.24)
+      );
   }
 
   .landing-language {
@@ -256,5 +273,4 @@
   .sheet-host--floating .spot-card {
     width: 100%;
   }
-
 }

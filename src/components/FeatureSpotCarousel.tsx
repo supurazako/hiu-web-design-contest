@@ -2,7 +2,11 @@ import * as React from "react";
 import Autoplay from "embla-carousel-autoplay";
 
 import type { CarouselApi } from "@/components/ui/carousel";
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { Locale, UiCopy } from "@/data/site";
@@ -73,7 +77,7 @@ export default function FeatureSpotCarousel({
     Autoplay({
       delay: 2500,
       stopOnInteraction: false,
-    })
+    }),
   );
   const [api, setApi] = React.useState<CarouselApi>();
   const [locale, setLocale] = React.useState<Locale>(initialLocale);
@@ -117,7 +121,8 @@ export default function FeatureSpotCarousel({
   }, [clearResumeTimer]);
 
   React.useEffect(() => {
-    const currentLocale = document.body.dataset.locale ?? document.documentElement.lang;
+    const currentLocale =
+      document.body.dataset.locale ?? document.documentElement.lang;
     if (currentLocale === "ja" || currentLocale === "en") {
       setLocale(currentLocale);
     }
@@ -185,7 +190,9 @@ export default function FeatureSpotCarousel({
 
     const handleWheel = (event: WheelEvent) => {
       const primaryDelta =
-        Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+        Math.abs(event.deltaX) > Math.abs(event.deltaY)
+          ? event.deltaX
+          : event.deltaY;
 
       if (Math.abs(primaryDelta) < 4) return;
 
@@ -203,32 +210,49 @@ export default function FeatureSpotCarousel({
       wheelDeltaRef.current += primaryDelta;
 
       if (wheelGestureLockedRef.current) {
-        wheelResetTimerRef.current = window.setTimeout(resetWheelGesture, wheelGestureIdleMs);
+        wheelResetTimerRef.current = window.setTimeout(
+          resetWheelGesture,
+          wheelGestureIdleMs,
+        );
         return;
       }
 
       if (wheelDeltaRef.current >= wheelSnapThreshold) {
         wheelGestureLockedRef.current = true;
         api.scrollNext();
-        wheelResetTimerRef.current = window.setTimeout(resetWheelGesture, wheelGestureIdleMs);
+        wheelResetTimerRef.current = window.setTimeout(
+          resetWheelGesture,
+          wheelGestureIdleMs,
+        );
         return;
       }
 
       if (wheelDeltaRef.current <= -wheelSnapThreshold) {
         wheelGestureLockedRef.current = true;
         api.scrollPrev();
-        wheelResetTimerRef.current = window.setTimeout(resetWheelGesture, wheelGestureIdleMs);
+        wheelResetTimerRef.current = window.setTimeout(
+          resetWheelGesture,
+          wheelGestureIdleMs,
+        );
         return;
       }
 
-      wheelResetTimerRef.current = window.setTimeout(resetWheelGesture, wheelGestureIdleMs);
+      wheelResetTimerRef.current = window.setTimeout(
+        resetWheelGesture,
+        wheelGestureIdleMs,
+      );
     };
 
     rootNode.addEventListener("wheel", handleWheel, { passive: false });
     return () => {
       rootNode.removeEventListener("wheel", handleWheel);
     };
-  }, [api, clearWheelResetTimer, scheduleAutoplayResume, stopAutoplayForInteraction]);
+  }, [
+    api,
+    clearWheelResetTimer,
+    scheduleAutoplayResume,
+    stopAutoplayForInteraction,
+  ]);
 
   return (
     <div
@@ -282,7 +306,7 @@ export default function FeatureSpotCarousel({
                 "h-2.5 w-2.5 rounded-full border-0 p-0 transition-transform duration-200",
                 isActive
                   ? "scale-110 bg-[color:var(--md-sys-color-primary)]"
-                  : "bg-[color:var(--md-sys-color-outline)] opacity-50"
+                  : "bg-[color:var(--md-sys-color-outline)] opacity-50",
               )}
             />
           );

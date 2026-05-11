@@ -1,5 +1,9 @@
 import type { MapPoint } from "./map-types";
-import { applyTransformToPoint, getTransformScale, type ScratchTransform } from "./scratch-transform";
+import {
+  applyTransformToPoint,
+  getTransformScale,
+  type ScratchTransform,
+} from "./scratch-transform";
 
 export type ScratchCanvasStroke = {
   localBrushRadius: number;
@@ -42,7 +46,8 @@ export const createScratchCanvasController = ({
     const { width, height } = getLogicalSurfaceSize();
     const nextWidth = Math.round(width * pixelRatio);
     const nextHeight = Math.round(height * pixelRatio);
-    const sizeChanged = surface.width !== nextWidth || surface.height !== nextHeight;
+    const sizeChanged =
+      surface.width !== nextWidth || surface.height !== nextHeight;
     if (!sizeChanged) return false;
 
     surface.width = nextWidth;
@@ -53,10 +58,16 @@ export const createScratchCanvasController = ({
     return true;
   };
 
-  const syncStroke = (stroke: ScratchCanvasStroke, transform: ScratchTransform) => {
+  const syncStroke = (
+    stroke: ScratchCanvasStroke,
+    transform: ScratchTransform,
+  ) => {
     if (!context || stroke.points.length === 0) return;
-    const points = stroke.points.map((point) => applyTransformToPoint(point, transform));
-    const currentBrushRadius = stroke.localBrushRadius * getTransformScale(transform);
+    const points = stroke.points.map((point) =>
+      applyTransformToPoint(point, transform),
+    );
+    const currentBrushRadius =
+      stroke.localBrushRadius * getTransformScale(transform);
 
     context.globalCompositeOperation = "source-over";
     context.lineCap = "round";
@@ -80,7 +91,10 @@ export const createScratchCanvasController = ({
     context.stroke();
   };
 
-  const renderStrokes = (strokes: ScratchCanvasStroke[], transform: ScratchTransform) => {
+  const renderStrokes = (
+    strokes: ScratchCanvasStroke[],
+    transform: ScratchTransform,
+  ) => {
     clearSurface();
     strokes.forEach((stroke) => syncStroke(stroke, transform));
   };
@@ -89,7 +103,13 @@ export const createScratchCanvasController = ({
     if (!context || surface.hidden) return false;
     const sampleX = Math.round(point.x * pixelRatio);
     const sampleY = Math.round(point.y * pixelRatio);
-    if (sampleX < 0 || sampleY < 0 || sampleX >= surface.width || sampleY >= surface.height) return false;
+    if (
+      sampleX < 0 ||
+      sampleY < 0 ||
+      sampleX >= surface.width ||
+      sampleY >= surface.height
+    )
+      return false;
     const pixel = context.getImageData(sampleX, sampleY, 1, 1).data;
     return pixel[3] > 0;
   };

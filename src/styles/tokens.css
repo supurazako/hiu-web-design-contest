@@ -27,9 +27,12 @@
   --md-sys-color-tertiary-container: rgba(202, 233, 243, 0.84);
   --md-sys-color-state-hover: rgba(126, 87, 0, 0.08);
   --md-sys-color-state-press: rgba(126, 87, 0, 0.14);
-  --md-elevation-1: 0 1px 2px rgba(45, 28, 12, 0.1), 0 1px 3px rgba(45, 28, 12, 0.16);
-  --md-elevation-2: 0 2px 6px rgba(45, 28, 12, 0.12), 0 1px 2px rgba(45, 28, 12, 0.08);
-  --md-elevation-3: 0 8px 24px rgba(45, 28, 12, 0.12), 0 2px 8px rgba(45, 28, 12, 0.1);
+  --md-elevation-1:
+    0 1px 2px rgba(45, 28, 12, 0.1), 0 1px 3px rgba(45, 28, 12, 0.16);
+  --md-elevation-2:
+    0 2px 6px rgba(45, 28, 12, 0.12), 0 1px 2px rgba(45, 28, 12, 0.08);
+  --md-elevation-3:
+    0 8px 24px rgba(45, 28, 12, 0.12), 0 2px 8px rgba(45, 28, 12, 0.1);
   --md-shape-corner-extra-small: 4px;
   --md-shape-corner-small: 8px;
   --md-shape-corner-medium: 16px;
@@ -68,7 +71,11 @@ body {
   margin: 0;
   min-height: 100%;
   background:
-    radial-gradient(circle at top left, rgba(255, 211, 140, 0.2), transparent 26%),
+    radial-gradient(
+      circle at top left,
+      rgba(255, 211, 140, 0.2),
+      transparent 26%
+    ),
     linear-gradient(180deg, #fff8f2 0%, #f7efe6 100%);
   color: var(--md-sys-color-on-surface);
 }
@@ -119,7 +126,11 @@ img {
   inset: 0;
   background:
     radial-gradient(circle at 12% 14%, var(--theme-glow), transparent 24%),
-    radial-gradient(circle at 84% 16%, rgba(255, 255, 255, 0.48), transparent 18%);
+    radial-gradient(
+      circle at 84% 16%,
+      rgba(255, 255, 255, 0.48),
+      transparent 18%
+    );
   pointer-events: none;
   transition: background 240ms ease;
 }

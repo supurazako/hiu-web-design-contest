@@ -2,9 +2,11 @@ import type { TimeMode } from "./map-types";
 
 export type { TimeMode } from "./map-types";
 
-export const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+export const clamp = (value: number, min: number, max: number) =>
+  Math.min(max, Math.max(min, value));
 
-export const oppositeTimeMode = (mode: TimeMode): TimeMode => (mode === "day" ? "night" : "day");
+export const oppositeTimeMode = (mode: TimeMode): TimeMode =>
+  mode === "day" ? "night" : "day";
 
 const smoothstep = (edge0: number, edge1: number, value: number) => {
   const x = clamp((value - edge0) / (edge1 - edge0), 0, 1);
@@ -15,7 +17,8 @@ export const nightRatioForHour = (hour: number) => {
   const normalizedHour = ((hour % 24) + 24) % 24;
   if (normalizedHour >= 20 || normalizedHour < 4) return 1;
   if (normalizedHour >= 8 && normalizedHour < 16) return 0;
-  if (normalizedHour >= 4 && normalizedHour < 8) return 1 - smoothstep(4, 8, normalizedHour);
+  if (normalizedHour >= 4 && normalizedHour < 8)
+    return 1 - smoothstep(4, 8, normalizedHour);
   return smoothstep(16, 20, normalizedHour);
 };
 

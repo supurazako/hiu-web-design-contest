@@ -1,6 +1,11 @@
 import type L from "leaflet";
 import type { Spot } from "../data/spots";
-import type { MapPageState, MapPoint, MarkerEntry, TimeMode } from "./map-types";
+import type {
+  MapPageState,
+  MapPoint,
+  MarkerEntry,
+  TimeMode,
+} from "./map-types";
 import { nightRatioForHour, oppositeTimeMode } from "./map-utils";
 
 type ScratchMarkerController = {
@@ -36,7 +41,9 @@ export const createVisibleMarkerSelector = ({
 
     if (state.displayMode === "compare") {
       const mapRect = mapElement.getBoundingClientRect();
-      const splitBoundary = (isVerticalCompareMode() ? mapRect.height : mapRect.width) * state.splitRatio;
+      const splitBoundary =
+        (isVerticalCompareMode() ? mapRect.height : mapRect.width) *
+        state.splitRatio;
       return isVerticalCompareMode()
         ? mode === "day"
           ? point.y <= splitBoundary
@@ -48,8 +55,15 @@ export const createVisibleMarkerSelector = ({
 
     if (state.displayMode === "magnifier") {
       const activeMode = state.timeMode;
-      const radius = Number.parseFloat(getComputedStyle(root).getPropertyValue("--magnifier-radius")) || 90;
-      const isInsideLens = Math.hypot(point.x - state.magnifierPoint.x, point.y - state.magnifierPoint.y) <= radius;
+      const radius =
+        Number.parseFloat(
+          getComputedStyle(root).getPropertyValue("--magnifier-radius"),
+        ) || 90;
+      const isInsideLens =
+        Math.hypot(
+          point.x - state.magnifierPoint.x,
+          point.y - state.magnifierPoint.y,
+        ) <= radius;
       return mode === activeMode ? !isInsideLens : isInsideLens;
     }
 
@@ -74,20 +88,33 @@ export const createVisibleMarkerSelector = ({
 
     getMarkerEntries().forEach((entry) => {
       const { marker, mode } = entry;
-      if (!map.hasLayer(markerClusterGroupsByMode[mode]) || !isMarkerModeVisibleAtPoint(mode, point)) return;
+      if (
+        !map.hasLayer(markerClusterGroupsByMode[mode]) ||
+        !isMarkerModeVisibleAtPoint(mode, point)
+      )
+        return;
       if (!marker.getElement()) return;
 
       const markerPoint = map.latLngToContainerPoint(marker.getLatLng());
-      const distance = Math.hypot(point.x - markerPoint.x, point.y - markerPoint.y);
+      const distance = Math.hypot(
+        point.x - markerPoint.x,
+        point.y - markerPoint.y,
+      );
       if (distance > hitRadius) return;
 
       const priority =
-        (state.displayMode === "magnifier" && mode === oppositeTimeMode(state.timeMode)) ||
-        (state.displayMode === "scratch" && mode === "night" && scratchController.isRevealedAtPoint(point))
+        (state.displayMode === "magnifier" &&
+          mode === oppositeTimeMode(state.timeMode)) ||
+        (state.displayMode === "scratch" &&
+          mode === "night" &&
+          scratchController.isRevealedAtPoint(point))
           ? 1
           : 0;
 
-      if (priority > closestPriority || (priority === closestPriority && distance < closestDistance)) {
+      if (
+        priority > closestPriority ||
+        (priority === closestPriority && distance < closestDistance)
+      ) {
         closest = entry;
         closestDistance = distance;
         closestPriority = priority;

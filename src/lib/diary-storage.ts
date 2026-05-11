@@ -3,7 +3,8 @@ export const diaryDiscoveredEventName = "time-map:diary-discovered";
 
 export type DiscoveredDiaryMap = Record<string, true>;
 
-const canUseStorage = () => typeof window !== "undefined" && typeof window.localStorage !== "undefined";
+const canUseStorage = () =>
+  typeof window !== "undefined" && typeof window.localStorage !== "undefined";
 
 export const loadDiscoveredDiaries = (): DiscoveredDiaryMap => {
   if (!canUseStorage()) return {};
@@ -13,11 +14,13 @@ export const loadDiscoveredDiaries = (): DiscoveredDiaryMap => {
     if (!raw) return {};
 
     const parsed = JSON.parse(raw) as unknown;
-    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return {};
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed))
+      return {};
 
     return Object.fromEntries(
       Object.entries(parsed).filter(
-        (entry): entry is [string, true] => typeof entry[0] === "string" && entry[1] === true,
+        (entry): entry is [string, true] =>
+          typeof entry[0] === "string" && entry[1] === true,
       ),
     );
   } catch {
@@ -30,7 +33,8 @@ const writeDiscoveredDiaries = (next: DiscoveredDiaryMap) => {
   window.localStorage.setItem(diaryStorageKey, JSON.stringify(next));
 };
 
-export const isDiaryDiscovered = (spotId: string) => Boolean(loadDiscoveredDiaries()[spotId]);
+export const isDiaryDiscovered = (spotId: string) =>
+  Boolean(loadDiscoveredDiaries()[spotId]);
 
 export const saveDiscoveredDiary = (spotId: string) => {
   if (!canUseStorage()) return false;

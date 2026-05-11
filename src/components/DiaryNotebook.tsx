@@ -50,7 +50,8 @@ type DiaryDiscoveredDetail = {
 
 const localeChangeEventName = "time-map:locale-change";
 
-const getVisiblePageCount = () => (window.matchMedia("(min-width: 768px)").matches ? 2 : 1);
+const getVisiblePageCount = () =>
+  window.matchMedia("(min-width: 768px)").matches ? 2 : 1;
 
 const TimeModeBadge = ({
   mode,
@@ -62,13 +63,23 @@ const TimeModeBadge = ({
   const iconClassName = "h-4 w-4 fill-current";
 
   const DayIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" className={iconClassName} aria-hidden="true">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 -960 960 960"
+      className={iconClassName}
+      aria-hidden="true"
+    >
       <path d="M440-760v-160h80v160h-80Zm266 110-55-55 112-115 56 57-113 113Zm54 210v-80h160v80H760ZM440-40v-160h80v160h-80ZM254-652 140-763l57-56 113 113-56 54Zm508 512L651-255l54-54 114 110-57 59ZM40-440v-80h160v80H40Zm157 300-56-57 112-112 29 27 29 28-114 114Zm113-170q-70-70-70-170t70-170q70-70 170-70t170 70q70 70 70 170t-70 170q-70 70-170 70t-170-70Zm283-57q47-47 47-113t-47-113q-47-47-113-47t-113 47q-47 47-47 113t47 113q47 47 113 47t113-47ZM480-480Z" />
     </svg>
   );
 
   const NightIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" className={iconClassName} aria-hidden="true">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 -960 960 960"
+      className={iconClassName}
+      aria-hidden="true"
+    >
       <path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Zm0-80q88 0 158-48.5T740-375q-20 5-40 8t-40 3q-123 0-209.5-86.5T364-660q0-20 3-40t8-40q-78 32-126.5 102T200-480q0 116 82 198t198 82Zm-10-270Z" />
     </svg>
   );
@@ -101,7 +112,12 @@ const TimeModeBadge = ({
 };
 
 const PageTurnIcon = ({ direction }: { direction: "previous" | "next" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" className="h-5 w-5 fill-current" aria-hidden="true">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    className="h-5 w-5 fill-current"
+    aria-hidden="true"
+  >
     {direction === "previous" ? (
       <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
     ) : (
@@ -120,7 +136,15 @@ type DiaryPageProps = {
   side: "left" | "right" | "single";
 };
 
-const DiaryPage = ({ entry, index, locale, isDiscovered, timeLabel, localizedUi, side }: DiaryPageProps) => {
+const DiaryPage = ({
+  entry,
+  index,
+  locale,
+  isDiscovered,
+  timeLabel,
+  localizedUi,
+  side,
+}: DiaryPageProps) => {
   const hint = entry.unlockHint?.[locale] || localizedUi.diaryFallbackHint;
 
   return (
@@ -150,7 +174,9 @@ const DiaryPage = ({ entry, index, locale, isDiscovered, timeLabel, localizedUi,
               </span>
               <TimeModeBadge mode={entry.timeMode} label={timeLabel} />
             </div>
-            <p className="text-sm leading-6 text-[#5c4a38]">{entry.spotName[locale]}</p>
+            <p className="text-sm leading-6 text-[#5c4a38]">
+              {entry.spotName[locale]}
+            </p>
           </div>
           <span
             className={cn(
@@ -160,17 +186,25 @@ const DiaryPage = ({ entry, index, locale, isDiscovered, timeLabel, localizedUi,
                 : "border-[rgba(126,87,0,0.32)] bg-[#f2d38a] text-[#4f3308] shadow-[0_6px_14px_rgba(126,87,0,0.12)]",
             )}
           >
-            {isDiscovered ? localizedUi.diaryDiscoveredLabel : localizedUi.diaryUndiscoveredLabel}
+            {isDiscovered
+              ? localizedUi.diaryDiscoveredLabel
+              : localizedUi.diaryUndiscoveredLabel}
           </span>
         </div>
 
         {isDiscovered ? (
           <div className="flex flex-1 flex-col justify-between gap-6">
             <div className="space-y-4">
-              <h3 className="text-[1.7rem] leading-tight text-[#3f2e20]" style={{ fontFamily: "var(--font-diary)" }}>
+              <h3
+                className="text-[1.7rem] leading-tight text-[#3f2e20]"
+                style={{ fontFamily: "var(--font-diary)" }}
+              >
                 {entry.title[locale]}
               </h3>
-              <p className="text-[1.08rem] leading-9 text-[#564536]" style={{ fontFamily: "var(--font-diary)" }}>
+              <p
+                className="text-[1.08rem] leading-9 text-[#564536]"
+                style={{ fontFamily: "var(--font-diary)" }}
+              >
                 {entry.body[locale]}
               </p>
             </div>
@@ -181,7 +215,10 @@ const DiaryPage = ({ entry, index, locale, isDiscovered, timeLabel, localizedUi,
         ) : (
           <div className="flex flex-1 flex-col justify-between gap-5">
             <div className="rounded-[20px] border border-dashed border-[rgba(117,101,80,0.26)] bg-[rgba(255,255,255,0.42)] px-4 py-5">
-              <p className="text-[1.42rem] text-[rgba(84,71,58,0.58)]" style={{ fontFamily: "var(--font-diary)" }}>
+              <p
+                className="text-[1.42rem] text-[rgba(84,71,58,0.58)]"
+                style={{ fontFamily: "var(--font-diary)" }}
+              >
                 ????
               </p>
               <p className="mt-4 select-none text-sm leading-7 text-[rgba(84,71,58,0.68)] blur-[0.8px]">
@@ -189,7 +226,9 @@ const DiaryPage = ({ entry, index, locale, isDiscovered, timeLabel, localizedUi,
               </p>
             </div>
             <div className="rounded-[18px] bg-[linear-gradient(180deg,#f7d873,#efc654)] px-4 py-4 text-[#5b410d] shadow-[0_10px_20px_rgba(145,106,24,0.16)]">
-              <p className="text-[0.72rem] font-semibold uppercase tracking-[0.14em]">{localizedUi.diaryHintLabel}</p>
+              <p className="text-[0.72rem] font-semibold uppercase tracking-[0.14em]">
+                {localizedUi.diaryHintLabel}
+              </p>
               <p className="mt-2 text-[0.96rem] leading-7">{hint}</p>
             </div>
           </div>
@@ -199,18 +238,26 @@ const DiaryPage = ({ entry, index, locale, isDiscovered, timeLabel, localizedUi,
   );
 };
 
-export default function DiaryNotebook({ entries, initialLocale, unlockMode = "discovered", uiCopy }: DiaryNotebookProps) {
+export default function DiaryNotebook({
+  entries,
+  initialLocale,
+  unlockMode = "discovered",
+  uiCopy,
+}: DiaryNotebookProps) {
   const [locale, setLocale] = React.useState<Locale>(initialLocale);
   const [discovered, setDiscovered] = React.useState<DiscoveredDiaryMap>({});
   const [currentPage, setCurrentPage] = React.useState(0);
   const [visiblePageCount, setVisiblePageCount] = React.useState(1);
-  const [turnDirection, setTurnDirection] = React.useState<"previous" | "next" | null>(null);
+  const [turnDirection, setTurnDirection] = React.useState<
+    "previous" | "next" | null
+  >(null);
 
   React.useEffect(() => {
     setDiscovered(loadDiscoveredDiaries());
     setVisiblePageCount(getVisiblePageCount());
 
-    const currentLocale = document.body.dataset.locale ?? document.documentElement.lang;
+    const currentLocale =
+      document.body.dataset.locale ?? document.documentElement.lang;
     if (currentLocale === "ja" || currentLocale === "en") {
       setLocale(currentLocale);
     }
@@ -247,7 +294,10 @@ export default function DiaryNotebook({ entries, initialLocale, unlockMode = "di
 
     return () => {
       window.removeEventListener(localeChangeEventName, handleLocaleChange);
-      window.removeEventListener(diaryDiscoveredEventName, handleDiaryDiscovered);
+      window.removeEventListener(
+        diaryDiscoveredEventName,
+        handleDiaryDiscovered,
+      );
       window.removeEventListener("storage", handleStorage);
       window.removeEventListener("resize", handleResize);
     };
@@ -255,17 +305,24 @@ export default function DiaryNotebook({ entries, initialLocale, unlockMode = "di
 
   const localizedUi = uiCopy[locale] ?? uiCopy.ja;
   const isAllUnlocked = unlockMode === "all";
-  const foundCount = isAllUnlocked ? entries.length : entries.filter((entry) => discovered[entry.spotId]).length;
+  const foundCount = isAllUnlocked
+    ? entries.length
+    : entries.filter((entry) => discovered[entry.spotId]).length;
   const hiddenCount = entries.length - foundCount;
   const pageStep = visiblePageCount === 2 ? 2 : 1;
   const maxPage = Math.max(0, entries.length - pageStep);
   const safeCurrentPage = Math.min(currentPage, maxPage);
-  const visibleEntries = entries.slice(safeCurrentPage, safeCurrentPage + pageStep);
+  const visibleEntries = entries.slice(
+    safeCurrentPage,
+    safeCurrentPage + pageStep,
+  );
   const canGoPrevious = safeCurrentPage > 0;
   const canGoNext = safeCurrentPage + pageStep < entries.length;
 
   React.useEffect(() => {
-    setCurrentPage((page) => Math.min(page, Math.max(0, entries.length - visiblePageCount)));
+    setCurrentPage((page) =>
+      Math.min(page, Math.max(0, entries.length - visiblePageCount)),
+    );
   }, [entries.length, visiblePageCount]);
 
   const turnPage = (direction: "previous" | "next") => {
@@ -334,7 +391,8 @@ export default function DiaryNotebook({ entries, initialLocale, unlockMode = "di
           <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(126,87,0,0.12)] bg-white/65 px-4 py-2 text-sm text-[color:var(--md-sys-color-on-surface-variant)] shadow-[0_10px_24px_rgba(85,61,35,0.08)]">
             <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#d68729]" />
             <span>
-              {localizedUi.diaryDiscoveredLabel} {foundCount} / {localizedUi.diaryUndiscoveredLabel} {hiddenCount}
+              {localizedUi.diaryDiscoveredLabel} {foundCount} /{" "}
+              {localizedUi.diaryUndiscoveredLabel} {hiddenCount}
             </span>
           </div>
           <span className="rounded-full bg-[rgba(84,71,58,0.08)] px-4 py-2 text-sm font-semibold text-[#5c4a38]">
@@ -370,10 +428,18 @@ export default function DiaryNotebook({ entries, initialLocale, unlockMode = "di
                   entry={entry}
                   index={pageIndex}
                   locale={locale}
-                  isDiscovered={isAllUnlocked || Boolean(discovered[entry.spotId])}
+                  isDiscovered={
+                    isAllUnlocked || Boolean(discovered[entry.spotId])
+                  }
                   timeLabel={timeLabel}
                   localizedUi={localizedUi}
-                  side={visiblePageCount === 1 ? "single" : visibleIndex === 0 ? "left" : "right"}
+                  side={
+                    visiblePageCount === 1
+                      ? "single"
+                      : visibleIndex === 0
+                        ? "left"
+                        : "right"
+                  }
                 />
               );
             })}
@@ -414,21 +480,28 @@ export default function DiaryNotebook({ entries, initialLocale, unlockMode = "di
 
         <div className="flex flex-wrap justify-center gap-2">
           {entries.map((entry, index) => {
-            const isCurrent = index >= safeCurrentPage && index < safeCurrentPage + pageStep;
-            const isDiscovered = isAllUnlocked || Boolean(discovered[entry.spotId]);
+            const isCurrent =
+              index >= safeCurrentPage && index < safeCurrentPage + pageStep;
+            const isDiscovered =
+              isAllUnlocked || Boolean(discovered[entry.spotId]);
 
             return (
               <button
                 key={entry.spotId}
                 type="button"
                 onClick={() => {
-                  const targetPage = visiblePageCount === 2 ? index - (index % 2) : index;
-                  setTurnDirection(targetPage > safeCurrentPage ? "next" : "previous");
+                  const targetPage =
+                    visiblePageCount === 2 ? index - (index % 2) : index;
+                  setTurnDirection(
+                    targetPage > safeCurrentPage ? "next" : "previous",
+                  );
                   setCurrentPage(Math.min(targetPage, maxPage));
                 }}
                 className={cn(
                   "h-2.5 rounded-full transition-all",
-                  isCurrent ? "w-8 bg-[#7a4c20]" : "w-2.5 bg-[rgba(122,76,32,0.24)]",
+                  isCurrent
+                    ? "w-8 bg-[#7a4c20]"
+                    : "w-2.5 bg-[rgba(122,76,32,0.24)]",
                   isDiscovered && !isCurrent && "bg-[#d68729]",
                 )}
                 aria-label={`Diary page ${index + 1}`}

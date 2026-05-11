@@ -4,7 +4,12 @@ import { isDiaryDiscovered } from "../lib/diary-storage";
 import type { MapDomRefs } from "./map-dom-refs";
 import type { MapPageState } from "./map-types";
 
-const placeholderClasses = ["placeholder-river", "placeholder-steam", "placeholder-forest", "placeholder-light"];
+const placeholderClasses = [
+  "placeholder-river",
+  "placeholder-steam",
+  "placeholder-forest",
+  "placeholder-light",
+];
 
 export const createSpotCardRenderer = ({
   refs,
@@ -37,7 +42,8 @@ export const createSpotCardRenderer = ({
     const wasHidden = refs.spotCard.hidden;
     refs.spotCard.hidden = false;
 
-    if (!wasHidden && refs.spotCard.classList.contains("is-visible-sheet")) return;
+    if (!wasHidden && refs.spotCard.classList.contains("is-visible-sheet"))
+      return;
 
     showFrame = window.requestAnimationFrame(() => {
       refs.spotCard.classList.add("is-visible-sheet");
@@ -78,9 +84,15 @@ export const createSpotCardRenderer = ({
 
     show();
     const activeTimeMode =
-      state.displayMode === "single" ? state.timeMode : state.selectedSpotMode ?? state.timeMode;
+      state.displayMode === "single"
+        ? state.timeMode
+        : (state.selectedSpotMode ?? state.timeMode);
     const activeTimeLabel =
-      activeTimeMode === "day" ? ui.dayLabel : activeTimeMode === "night" ? ui.nightLabel : ui.bothLabel;
+      activeTimeMode === "day"
+        ? ui.dayLabel
+        : activeTimeMode === "night"
+          ? ui.nightLabel
+          : ui.bothLabel;
 
     refs.spotCard.classList.add("is-selected-sheet");
     refs.spotCard.classList.remove("is-empty-sheet");
@@ -92,7 +104,9 @@ export const createSpotCardRenderer = ({
     refs.spotDiary.hidden = true;
     refs.spotEmpty.hidden = true;
     refs.spotVisual.classList.remove(...placeholderClasses);
-    refs.spotVisual.classList.add(`placeholder-${spot.image.placeholderVariant}`);
+    refs.spotVisual.classList.add(
+      `placeholder-${spot.image.placeholderVariant}`,
+    );
 
     if (spot.image_url) {
       refs.spotVisual.classList.add("has-image");

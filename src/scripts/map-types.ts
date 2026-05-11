@@ -1,10 +1,18 @@
 import type L from "leaflet";
 import type { Spot } from "../data/spots";
 
-export type DisplayMode = "single" | "compare" | "magnifier" | "clock" | "scratch";
+export type DisplayMode =
+  | "single"
+  | "compare"
+  | "magnifier"
+  | "clock"
+  | "scratch";
 export type TimeMode = "day" | "night";
 export type MapPoint = { x: number; y: number };
-export type PointerBounds = Pick<DOMRectReadOnly, "left" | "right" | "top" | "bottom">;
+export type PointerBounds = Pick<
+  DOMRectReadOnly,
+  "left" | "right" | "top" | "bottom"
+>;
 
 export type Locale = "ja" | "en";
 export type ComparePaneSide = "day" | "night";

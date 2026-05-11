@@ -59,23 +59,37 @@ const geoJsonStyleTokens = {
       opacity: 0.82,
     },
   },
-} as const satisfies Record<TimeMode, Record<FeatureCategory, GeoJsonStyleToken>>;
+} as const satisfies Record<
+  TimeMode,
+  Record<FeatureCategory, GeoJsonStyleToken>
+>;
 
 const cssVariableValue = (styleRoot: HTMLElement, token: ColorToken) =>
   getComputedStyle(styleRoot).getPropertyValue(token).trim();
 
-const resolveGeoJsonStyle = (styleRoot: HTMLElement, style: GeoJsonStyleToken) => ({
+const resolveGeoJsonStyle = (
+  styleRoot: HTMLElement,
+  style: GeoJsonStyleToken,
+) => ({
   ...style,
   color: cssVariableValue(styleRoot, style.color),
-  fillColor: style.fillColor ? cssVariableValue(styleRoot, style.fillColor) : undefined,
+  fillColor: style.fillColor
+    ? cssVariableValue(styleRoot, style.fillColor)
+    : undefined,
 });
 
-export const featureCategory = (feature: GeoJSON.Feature | undefined): FeatureCategory | null => {
+export const featureCategory = (
+  feature: GeoJSON.Feature | undefined,
+): FeatureCategory | null => {
   const props = feature?.properties ?? {};
   if (props.waterway) return "waterway";
   if (props.building) return "building";
   if (props.highway) {
-    if (["primary", "secondary", "tertiary", "residential", "service"].includes(props.highway)) {
+    if (
+      ["primary", "secondary", "tertiary", "residential", "service"].includes(
+        props.highway,
+      )
+    ) {
       return "highway";
     }
     if (["footway", "path", "track", "steps"].includes(props.highway)) {
@@ -85,7 +99,11 @@ export const featureCategory = (feature: GeoJSON.Feature | undefined): FeatureCa
   return null;
 };
 
-export const layerStyleForMode = (mode: TimeMode, feature: GeoJSON.Feature | undefined, styleRoot: HTMLElement) => {
+export const layerStyleForMode = (
+  mode: TimeMode,
+  feature: GeoJSON.Feature | undefined,
+  styleRoot: HTMLElement,
+) => {
   const category = featureCategory(feature);
   if (!category) {
     return {

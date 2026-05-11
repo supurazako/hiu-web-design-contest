@@ -85,7 +85,10 @@ export const spotCategories = {
       iconViewBox: "0 -960 960 960",
     },
   },
-} as const satisfies Record<SpotCategoryId, { label: LocalizedText; marker: MarkerIcon }>;
+} as const satisfies Record<
+  SpotCategoryId,
+  { label: LocalizedText; marker: MarkerIcon }
+>;
 
 const placeholderVariantByCategory = {
   food: "forest",

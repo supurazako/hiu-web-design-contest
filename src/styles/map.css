@@ -12,7 +12,9 @@
   --map-ui-outline: var(--md-sys-color-outline-variant);
   --map-ui-secondary-container: var(--md-sys-color-secondary-container);
   --map-ui-on-secondary-container: var(--md-sys-color-on-secondary-container);
-  transition: background 240ms ease, color 240ms ease;
+  transition:
+    background 240ms ease,
+    color 240ms ease;
 }
 
 .map-shell--immersive {
@@ -38,8 +40,16 @@
   overflow: hidden;
   border: 1px solid var(--md-sys-color-outline-variant);
   background:
-    radial-gradient(circle at 20% 20%, var(--map-day-background-glow), transparent 20%),
-    linear-gradient(160deg, var(--map-day-background-start), var(--map-day-background-end));
+    radial-gradient(
+      circle at 20% 20%,
+      var(--map-day-background-glow),
+      transparent 20%
+    ),
+    linear-gradient(
+      160deg,
+      var(--map-day-background-start),
+      var(--map-day-background-end)
+    );
 }
 
 .map-canvas--full {
@@ -50,8 +60,16 @@
 
 .theme-night .map-canvas {
   background:
-    radial-gradient(circle at 20% 20%, var(--map-night-background-glow), transparent 18%),
-    linear-gradient(160deg, var(--map-night-background-start), var(--map-night-background-end));
+    radial-gradient(
+      circle at 20% 20%,
+      var(--map-night-background-glow),
+      transparent 18%
+    ),
+    linear-gradient(
+      160deg,
+      var(--map-night-background-start),
+      var(--map-night-background-end)
+    );
 }
 
 .map-scratch-surface {
@@ -97,7 +115,9 @@
 .hero__map-background:not(.is-map-expanded) .map-overlay > .map-back,
 .hero__map-background:not(.is-map-expanded) .map-overlay > .map-language,
 .hero__map-background:not(.is-map-expanded) .map-overlay > .map-control-cluster,
-.hero__map-background:not(.is-map-expanded) .map-overlay > .sheet-host--floating,
+.hero__map-background:not(.is-map-expanded)
+  .map-overlay
+  > .sheet-host--floating,
 .hero__map-background:not(.is-map-expanded) .map-overlay > .map-attribution,
 .hero__map-background:not(.is-map-expanded) .map-overlay > .map-clock,
 .hero__map-background:not(.is-map-expanded) .map-overlay > .map-magnifier,
@@ -111,11 +131,15 @@
   transform: translateY(-14px) scale(0.96);
 }
 
-.hero__map-background:not(.is-map-expanded) .map-overlay > .map-control-cluster {
+.hero__map-background:not(.is-map-expanded)
+  .map-overlay
+  > .map-control-cluster {
   transform: translateX(-18px) scale(0.96);
 }
 
-.hero__map-background:not(.is-map-expanded) .map-overlay > .sheet-host--floating,
+.hero__map-background:not(.is-map-expanded)
+  .map-overlay
+  > .sheet-host--floating,
 .hero__map-background:not(.is-map-expanded) .map-overlay > .map-attribution {
   transform: translateY(18px) scale(0.98);
 }
@@ -172,9 +196,14 @@ body.is-map-leaving .hero__content {
   justify-items: center;
   gap: 8px;
   padding: 10px;
-  border: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 80%, transparent);
+  border: 1px solid
+    color-mix(in srgb, var(--md-sys-color-outline-variant) 80%, transparent);
   border-radius: 18px;
-  background: color-mix(in srgb, var(--md-sys-color-surface-container-highest) 92%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container-highest) 92%,
+    transparent
+  );
   box-shadow: var(--md-elevation-2);
 }
 
@@ -189,8 +218,11 @@ body.is-map-leaving .hero__content {
   padding: 0;
   border: 2px solid var(--md-sys-color-outline);
   border-radius: 50%;
-  background:
-    radial-gradient(circle, rgba(255, 248, 241, 0.94), rgba(225, 231, 237, 0.7));
+  background: radial-gradient(
+    circle,
+    rgba(255, 248, 241, 0.94),
+    rgba(225, 231, 237, 0.7)
+  );
   color: var(--md-sys-color-on-surface);
   cursor: grab;
   overflow: hidden;
@@ -202,15 +234,14 @@ body.is-map-leaving .hero__content {
   position: absolute;
   inset: 4px;
   border-radius: 50%;
-  background:
-    conic-gradient(
-      from 0deg,
-      rgba(18, 28, 39, 0.88) 0deg 60deg,
-      rgba(110, 137, 163, 0.76) 60deg 120deg,
-      rgba(255, 222, 169, 0.95) 120deg 240deg,
-      rgba(110, 137, 163, 0.76) 240deg 300deg,
-      rgba(18, 28, 39, 0.88) 300deg 360deg
-    );
+  background: conic-gradient(
+    from 0deg,
+    rgba(18, 28, 39, 0.88) 0deg 60deg,
+    rgba(110, 137, 163, 0.76) 60deg 120deg,
+    rgba(255, 222, 169, 0.95) 120deg 240deg,
+    rgba(110, 137, 163, 0.76) 240deg 300deg,
+    rgba(18, 28, 39, 0.88) 300deg 360deg
+  );
   mask-image: radial-gradient(circle, transparent 0 55%, #000 56%);
   pointer-events: none;
 }
@@ -308,7 +339,11 @@ body.is-map-leaving .hero__content {
   padding: 0;
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: 50%;
-  background: color-mix(in srgb, var(--md-sys-color-surface-container-highest) 96%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container-highest) 96%,
+    transparent
+  );
   color: var(--md-sys-color-on-surface);
   box-shadow: var(--md-elevation-3);
   cursor: ew-resize;
@@ -347,7 +382,12 @@ body.is-map-leaving .hero__content {
   line-height: 0;
   border: 1px solid var(--map-ui-outline, var(--md-sys-color-outline-variant));
   border-radius: 18px;
-  background: color-mix(in srgb, var(--map-ui-surface-strong, var(--md-sys-color-surface-container-highest)) 92%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--map-ui-surface-strong, var(--md-sys-color-surface-container-highest))
+      92%,
+    transparent
+  );
   box-shadow: var(--md-elevation-2);
   color: var(--map-ui-on-surface, var(--md-sys-color-on-surface));
   cursor: pointer;
@@ -377,7 +417,12 @@ body.is-map-leaving .hero__content {
   padding: 8px;
   border-radius: 18px;
   border: 1px solid var(--map-ui-outline, var(--md-sys-color-outline-variant));
-  background: color-mix(in srgb, var(--map-ui-surface-strong, var(--md-sys-color-surface-container-highest)) 96%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--map-ui-surface-strong, var(--md-sys-color-surface-container-highest))
+      96%,
+    transparent
+  );
   box-shadow: var(--md-elevation-3);
 }
 
@@ -404,8 +449,14 @@ body.is-map-leaving .hero__content {
 }
 
 .map-language__option.is-active {
-  background: var(--map-ui-secondary-container, var(--md-sys-color-secondary-container));
-  color: var(--map-ui-on-secondary-container, var(--md-sys-color-on-secondary-container));
+  background: var(
+    --map-ui-secondary-container,
+    var(--md-sys-color-secondary-container)
+  );
+  color: var(
+    --map-ui-on-secondary-container,
+    var(--md-sys-color-on-secondary-container)
+  );
 }
 
 .map-attribution {
@@ -566,7 +617,11 @@ body.is-map-leaving .hero__content {
   color: var(--map-ui-on-surface);
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
 }
 
 .map-mode-switch__button svg {
@@ -601,7 +656,10 @@ body.is-map-leaving .hero__content {
   border: 0;
   border-radius: 12px;
   background: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container, var(--md-sys-color-on-surface));
+  color: var(
+    --md-sys-color-on-secondary-container,
+    var(--md-sys-color-on-surface)
+  );
   box-shadow: var(--md-elevation-1);
   cursor: pointer;
   opacity: 0;
@@ -629,8 +687,10 @@ body.is-map-leaving .hero__content {
   transform: translateX(0) scale(1);
 }
 
-.map-mode-switch__single-group.is-expanded .map-mode-switch__button[data-display-mode="single"],
-.map-mode-switch__scratch-group.is-expanded .map-mode-switch__button[data-display-mode="scratch"] {
+.map-mode-switch__single-group.is-expanded
+  .map-mode-switch__button[data-display-mode="single"],
+.map-mode-switch__scratch-group.is-expanded
+  .map-mode-switch__button[data-display-mode="scratch"] {
   box-shadow: var(--md-elevation-2);
 }
 
@@ -749,7 +809,8 @@ body.is-map-leaving .hero__content {
 .is-clock-active .map-clock {
   background: color-mix(
     in srgb,
-    var(--md-sys-color-surface-container-highest) calc((1 - var(--clock-night-ratio)) * 100%),
+    var(--md-sys-color-surface-container-highest)
+      calc((1 - var(--clock-night-ratio)) * 100%),
     rgba(35, 49, 66, 0.96)
   );
 }

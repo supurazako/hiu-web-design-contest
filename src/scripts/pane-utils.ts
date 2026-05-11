@@ -38,20 +38,29 @@ export const setMaskReference = (pane: HTMLElement, maskId: string) => {
   pane.style.webkitMaskPosition = "0 0";
 };
 
-export const setPaneState = (pane: HTMLElement, options: { visible: boolean; clipPath: string }) => {
+export const setPaneState = (
+  pane: HTMLElement,
+  options: { visible: boolean; clipPath: string },
+) => {
   const nextOpacity = options.visible ? "1" : "0";
   const nextVisibility = options.visible ? "visible" : "hidden";
   const nextClipPath = options.visible ? options.clipPath : "none";
   if (pane.style.opacity !== nextOpacity) pane.style.opacity = nextOpacity;
-  if (pane.style.visibility !== nextVisibility) pane.style.visibility = nextVisibility;
+  if (pane.style.visibility !== nextVisibility)
+    pane.style.visibility = nextVisibility;
   if (pane.style.clipPath !== nextClipPath) pane.style.clipPath = nextClipPath;
 };
 
-export const setBlendPaneState = (pane: HTMLElement, opacity: number, clipPath = "none") => {
+export const setBlendPaneState = (
+  pane: HTMLElement,
+  opacity: number,
+  clipPath = "none",
+) => {
   const nextOpacity = String(opacity);
   const nextVisibility = opacity > 0 ? "visible" : "hidden";
   if (pane.style.opacity !== nextOpacity) pane.style.opacity = nextOpacity;
-  if (pane.style.visibility !== nextVisibility) pane.style.visibility = nextVisibility;
+  if (pane.style.visibility !== nextVisibility)
+    pane.style.visibility = nextVisibility;
   if (pane.style.clipPath !== clipPath) pane.style.clipPath = clipPath;
 };
 

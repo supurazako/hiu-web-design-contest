@@ -109,7 +109,8 @@ export const uiCopy = {
     diaryDiscoveredLabel: "Found",
     diaryUndiscoveredLabel: "Undiscovered",
     diaryHintLabel: "Hint",
-    diaryFallbackHint: "Open the spots that catch your eye as you explore the hot spring town",
+    diaryFallbackHint:
+      "Open the spots that catch your eye as you explore the hot spring town",
     diaryLockedBody: "This page is still closed.",
     diaryToastTitle: "Diary discovered",
     diaryToastBody: "You can read it from the spot card.",
@@ -125,13 +126,15 @@ export const uiCopy = {
       },
       {
         imageSrc: "/features/carousel2-en.png",
-        imageAlt: "Screen showing a selected map spot with its detail card open",
+        imageAlt:
+          "Screen showing a selected map spot with its detail card open",
         title: "Spot",
         body: "Select a spot to see what you can experience there, from the atmosphere to the views worth stopping for.",
       },
       {
         imageSrc: "/features/carousel4-en.png",
-        imageAlt: "Screen showing a discovered diary page in the travel diary notebook",
+        imageAlt:
+          "Screen showing a discovered diary page in the travel diary notebook",
         title: "Diary",
         body: "Discovering spots unlocks diary pages little by little. Hidden pages leave hints that point toward your next stop.",
       },

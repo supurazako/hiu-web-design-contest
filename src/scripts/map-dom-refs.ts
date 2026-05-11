@@ -96,10 +96,20 @@ export type MapDomRefs = {
 };
 
 const getLanguageSwitchers = (): LanguageSwitcherRefs[] =>
-  Array.from(document.querySelectorAll<HTMLElement>("[data-language-switcher]")).map((switcherRoot) => {
-    const trigger = switcherRoot.querySelector<HTMLButtonElement>("[data-language-menu-trigger]");
-    const menu = switcherRoot.querySelector<HTMLElement>("[data-language-menu]");
-    const options = Array.from(switcherRoot.querySelectorAll<HTMLButtonElement>("[data-language-option]"));
+  Array.from(
+    document.querySelectorAll<HTMLElement>("[data-language-switcher]"),
+  ).map((switcherRoot) => {
+    const trigger = switcherRoot.querySelector<HTMLButtonElement>(
+      "[data-language-menu-trigger]",
+    );
+    const menu = switcherRoot.querySelector<HTMLElement>(
+      "[data-language-menu]",
+    );
+    const options = Array.from(
+      switcherRoot.querySelectorAll<HTMLButtonElement>(
+        "[data-language-option]",
+      ),
+    );
     if (!trigger || !menu || options.length === 0) {
       throw new Error("Language switcher markup is incomplete.");
     }
@@ -119,7 +129,9 @@ export const getMapDomRefs = (): MapDomRefs => {
   return {
     root: requiredElement<HTMLElement>("[data-map-shell]"),
     mapElement: requiredElementById<HTMLElement>("map"),
-    openMapLink: document.querySelector("[data-open-map]") as HTMLAnchorElement | null,
+    openMapLink: document.querySelector(
+      "[data-open-map]",
+    ) as HTMLAnchorElement | null,
     controlCluster: requiredElement<HTMLElement>("[data-control-cluster]"),
     controlShell: requiredElement<HTMLElement>("[data-control-shell]"),
     timeToggleGroup: requiredElement<HTMLElement>("[data-time-toggle-group]"),
@@ -131,10 +143,14 @@ export const getMapDomRefs = (): MapDomRefs => {
     clockDial: requiredElement<HTMLButtonElement>("[data-clock-dial]"),
     clockHand: requiredElement<HTMLElement>("[data-clock-hand]"),
     clockTime: requiredElement<HTMLElement>("[data-clock-time]"),
-    scratchSurface: requiredElement<HTMLCanvasElement>("[data-scratch-surface]"),
+    scratchSurface: requiredElement<HTMLCanvasElement>(
+      "[data-scratch-surface]",
+    ),
     singleGroup: requiredElement<HTMLElement>("[data-single-group]"),
     scratchGroup: requiredElement<HTMLElement>("[data-scratch-group]"),
-    scratchResetButton: requiredElement<HTMLButtonElement>("[data-scratch-reset]"),
+    scratchResetButton: requiredElement<HTMLButtonElement>(
+      "[data-scratch-reset]",
+    ),
     zoomControls: requiredElement<HTMLElement>("[data-zoom-controls]"),
     zoomInButton: requiredElement<HTMLButtonElement>("[data-zoom-in]"),
     zoomOutButton: requiredElement<HTMLButtonElement>("[data-zoom-out]"),
@@ -152,7 +168,9 @@ export const getMapDomRefs = (): MapDomRefs => {
     spotDiaryTitle: requiredElement<HTMLElement>("[data-spot-diary-title]"),
     spotDiaryBody: requiredElement<HTMLElement>("[data-spot-diary-body]"),
     spotImage: requiredElement<HTMLImageElement>("[data-spot-image]"),
-    spotImageCredit: requiredElement<HTMLAnchorElement>("[data-spot-image-credit]"),
+    spotImageCredit: requiredElement<HTMLAnchorElement>(
+      "[data-spot-image-credit]",
+    ),
     spotEmpty: requiredElement<HTMLElement>("[data-spot-empty]"),
     spotEmptyTitle: requiredElement<HTMLElement>("[data-spot-empty-title]"),
     spotEmptyHint: requiredElement<HTMLElement>("[data-spot-empty-hint]"),
@@ -160,17 +178,31 @@ export const getMapDomRefs = (): MapDomRefs => {
     diaryToastTitle: requiredElement<HTMLElement>("[data-diary-toast-title]"),
     diaryToastName: requiredElement<HTMLElement>("[data-diary-toast-name]"),
     diaryToastBody: requiredElement<HTMLElement>("[data-diary-toast-body]"),
-    diaryNotebookOpenButton: requiredElement<HTMLButtonElement>("[data-map-diary-notebook-open]"),
-    diaryNotebookModal: requiredElement<HTMLElement>("[data-map-diary-notebook-modal]"),
-    diaryNotebookPanel: requiredElement<HTMLElement>("[data-map-diary-notebook-panel]"),
-    diaryNotebookClose: requiredElement<HTMLButtonElement>("[data-map-diary-notebook-close]"),
-    diaryNotebookTitle: requiredElement<HTMLElement>("[data-map-diary-notebook-title]"),
+    diaryNotebookOpenButton: requiredElement<HTMLButtonElement>(
+      "[data-map-diary-notebook-open]",
+    ),
+    diaryNotebookModal: requiredElement<HTMLElement>(
+      "[data-map-diary-notebook-modal]",
+    ),
+    diaryNotebookPanel: requiredElement<HTMLElement>(
+      "[data-map-diary-notebook-panel]",
+    ),
+    diaryNotebookClose: requiredElement<HTMLButtonElement>(
+      "[data-map-diary-notebook-close]",
+    ),
+    diaryNotebookTitle: requiredElement<HTMLElement>(
+      "[data-map-diary-notebook-title]",
+    ),
     backHomeButton: requiredElement<HTMLButtonElement>("[data-back-home-link]"),
     mapAttribution: requiredElement<HTMLElement>("[data-map-attribution]"),
     mapAttributionText: requiredElement<HTMLElement>(".map-attribution span"),
     displayModeGroup: requiredElement<HTMLElement>("[data-display-mode-group]"),
-    timeModeButtons: Array.from(document.querySelectorAll<HTMLElement>("[data-time-mode]")),
-    displayModeButtons: Array.from(document.querySelectorAll<HTMLElement>("[data-display-mode]")),
+    timeModeButtons: Array.from(
+      document.querySelectorAll<HTMLElement>("[data-time-mode]"),
+    ),
+    displayModeButtons: Array.from(
+      document.querySelectorAll<HTMLElement>("[data-display-mode]"),
+    ),
     landingTitle: document.querySelector<HTMLElement>("[data-landing-title]"),
     landingLead: document.querySelector<HTMLElement>("[data-landing-lead]"),
     landingCta: document.querySelector<HTMLElement>("[data-landing-cta]"),
@@ -179,17 +211,37 @@ export const getMapDomRefs = (): MapDomRefs => {
     sectionsTitle: document.querySelector<HTMLElement>("[data-sections-title]"),
     diaryTitle: document.querySelector<HTMLElement>("[data-diary-title]"),
     diaryBody: document.querySelector<HTMLElement>("[data-diary-body]"),
-    sceneLabelDay: document.querySelector<HTMLElement>('[data-scene-label="day"]'),
-    sceneLabelNight: document.querySelector<HTMLElement>('[data-scene-label="night"]'),
-    sceneMoodDay: document.querySelector<HTMLElement>('[data-scene-mood="day"]'),
-    sceneMoodNight: document.querySelector<HTMLElement>('[data-scene-mood="night"]'),
-    metaDescription: document.querySelector<HTMLMetaElement>('meta[name="description"]'),
-    ogTitle: document.querySelector<HTMLMetaElement>('meta[property="og:title"]'),
-    ogDescription: document.querySelector<HTMLMetaElement>('meta[property="og:description"]'),
-    twitterTitle: document.querySelector<HTMLMetaElement>('meta[name="twitter:title"]'),
-    twitterDescription: document.querySelector<HTMLMetaElement>('meta[name="twitter:description"]'),
+    sceneLabelDay: document.querySelector<HTMLElement>(
+      '[data-scene-label="day"]',
+    ),
+    sceneLabelNight: document.querySelector<HTMLElement>(
+      '[data-scene-label="night"]',
+    ),
+    sceneMoodDay: document.querySelector<HTMLElement>(
+      '[data-scene-mood="day"]',
+    ),
+    sceneMoodNight: document.querySelector<HTMLElement>(
+      '[data-scene-mood="night"]',
+    ),
+    metaDescription: document.querySelector<HTMLMetaElement>(
+      'meta[name="description"]',
+    ),
+    ogTitle: document.querySelector<HTMLMetaElement>(
+      'meta[property="og:title"]',
+    ),
+    ogDescription: document.querySelector<HTMLMetaElement>(
+      'meta[property="og:description"]',
+    ),
+    twitterTitle: document.querySelector<HTMLMetaElement>(
+      'meta[name="twitter:title"]',
+    ),
+    twitterDescription: document.querySelector<HTMLMetaElement>(
+      'meta[name="twitter:description"]',
+    ),
     languageSwitchers,
-    languageOptionButtons: languageSwitchers.flatMap((switcher) => switcher.options),
+    languageOptionButtons: languageSwitchers.flatMap(
+      (switcher) => switcher.options,
+    ),
     timeModeButtonByMode: {
       day: requiredElement<HTMLElement>('[data-time-mode="day"]'),
       night: requiredElement<HTMLElement>('[data-time-mode="night"]'),
@@ -197,7 +249,9 @@ export const getMapDomRefs = (): MapDomRefs => {
     displayModeButtonByMode: {
       single: requiredElement<HTMLElement>('[data-display-mode="single"]'),
       compare: requiredElement<HTMLElement>('[data-display-mode="compare"]'),
-      magnifier: requiredElement<HTMLElement>('[data-display-mode="magnifier"]'),
+      magnifier: requiredElement<HTMLElement>(
+        '[data-display-mode="magnifier"]',
+      ),
       clock: requiredElement<HTMLElement>('[data-display-mode="clock"]'),
       scratch: requiredElement<HTMLElement>('[data-display-mode="scratch"]'),
     },

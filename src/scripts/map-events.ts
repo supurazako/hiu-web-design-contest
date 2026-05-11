@@ -39,7 +39,10 @@ export const registerMapPageEvents = ({
   map: L.Map;
   scratchController: ScratchControllerForEvents;
   prefersReducedMotion: MediaQueryList;
-  syncExpandedState: (nextExpanded: boolean, options?: { updateHistory?: boolean }) => void;
+  syncExpandedState: (
+    nextExpanded: boolean,
+    options?: { updateHistory?: boolean },
+  ) => void;
   render: () => void;
   renderLanguageUI: () => void;
   ensureMagnifierPoint: () => void;
@@ -136,9 +139,20 @@ export const registerMapPageEvents = ({
   });
 
   refs.mapElement.addEventListener("pointerdown", (event) => {
-    if (!state.isExpanded || state.displayMode === "magnifier" || state.displayMode === "scratch") return;
+    if (
+      !state.isExpanded ||
+      state.displayMode === "magnifier" ||
+      state.displayMode === "scratch"
+    )
+      return;
     const target = event.target;
-    if (target instanceof Element && target.closest(".time-pin, .time-pin-wrapper, .time-cluster, .time-cluster-wrapper")) return;
+    if (
+      target instanceof Element &&
+      target.closest(
+        ".time-pin, .time-pin-wrapper, .time-cluster, .time-cluster-wrapper",
+      )
+    )
+      return;
     clearSelectedSpot();
   });
 
@@ -163,7 +177,10 @@ export const registerMapPageEvents = ({
     }
   };
   refs.magnifierOverlay.addEventListener("pointerup", releaseMagnifierPointer);
-  refs.magnifierOverlay.addEventListener("pointercancel", releaseMagnifierPointer);
+  refs.magnifierOverlay.addEventListener(
+    "pointercancel",
+    releaseMagnifierPointer,
+  );
 
   refs.clockDial.addEventListener("pointerdown", (event) => {
     if (state.displayMode !== "clock") return;
@@ -202,7 +219,8 @@ export const registerMapPageEvents = ({
   refs.languageSwitchers.forEach((switcher) => {
     switcher.trigger.addEventListener("click", (event) => {
       event.stopPropagation();
-      state.openLanguageSwitcherId = state.openLanguageSwitcherId === switcher.id ? null : switcher.id;
+      state.openLanguageSwitcherId =
+        state.openLanguageSwitcherId === switcher.id ? null : switcher.id;
       renderLanguageUI();
     });
 
@@ -270,12 +288,19 @@ export const registerMapPageEvents = ({
 
   refs.splitHandle.addEventListener("keydown", (event) => {
     if (state.displayMode !== "compare") return;
-    const isVerticalCompare = state.displayMode === "compare" && window.innerWidth < 768;
-    if ((!isVerticalCompare && event.key === "ArrowLeft") || (isVerticalCompare && event.key === "ArrowUp")) {
+    const isVerticalCompare =
+      state.displayMode === "compare" && window.innerWidth < 768;
+    if (
+      (!isVerticalCompare && event.key === "ArrowLeft") ||
+      (isVerticalCompare && event.key === "ArrowUp")
+    ) {
       event.preventDefault();
       adjustSplitRatio(-0.02);
     }
-    if ((!isVerticalCompare && event.key === "ArrowRight") || (isVerticalCompare && event.key === "ArrowDown")) {
+    if (
+      (!isVerticalCompare && event.key === "ArrowRight") ||
+      (isVerticalCompare && event.key === "ArrowDown")
+    ) {
       event.preventDefault();
       adjustSplitRatio(0.02);
     }
@@ -321,7 +346,10 @@ export const registerMapPageEvents = ({
   document.addEventListener("click", (event) => {
     const target = event.target as Node | null;
     if (!target) return;
-    if (state.openLanguageSwitcherId && !refs.languageSwitchers.some((switcher) => switcher.root.contains(target))) {
+    if (
+      state.openLanguageSwitcherId &&
+      !refs.languageSwitchers.some((switcher) => switcher.root.contains(target))
+    ) {
       state.openLanguageSwitcherId = null;
       renderLanguageUI();
     }

@@ -3,10 +3,7 @@
     "id": "spot-001",
     "categoryId": "food",
     "timeMode": "both",
-    "coordinates": [
-      42.96529,
-      141.16244
-    ],
+    "coordinates": [42.96529, 141.16244],
     "name": {
       "ja": "好吃亭（はおつーてい）",
       "en": "Hao-Tsu Tei"
@@ -38,10 +35,7 @@
     "id": "spot-002",
     "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [
-      42.96782,
-      141.16782
-    ],
+    "coordinates": [42.96782, 141.16782],
     "name": {
       "ja": "渓谷レストラン みなも",
       "en": "Valley Restaurant Minamo"
@@ -73,10 +67,7 @@
     "id": "spot-003",
     "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [
-      42.96562,
-      141.16218
-    ],
+    "coordinates": [42.96562, 141.16218],
     "name": {
       "ja": "山の味処 円旬",
       "en": "Mountain Kitchen Enjun"
@@ -108,10 +99,7 @@
     "id": "spot-004",
     "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [
-      42.9658,
-      141.15974
-    ],
+    "coordinates": [42.9658, 141.15974],
     "name": {
       "ja": "森のテラス こもれび",
       "en": "Forest Terrace Komorebi"
@@ -143,10 +131,7 @@
     "id": "spot-005",
     "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [
-      42.96533,
-      141.16236
-    ],
+    "coordinates": [42.96533, 141.16236],
     "name": {
       "ja": "Mangiare!（マンジャーレ）",
       "en": "Mangiare!"
@@ -178,10 +163,7 @@
     "id": "spot-006",
     "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [
-      42.96498,
-      141.16308
-    ],
+    "coordinates": [42.96498, 141.16308],
     "name": {
       "ja": "渓流麺屋 しぶき",
       "en": "Keiryu Menya Shibuki"
@@ -213,10 +195,7 @@
     "id": "spot-007",
     "categoryId": "food",
     "timeMode": "night",
-    "coordinates": [
-      42.96318,
-      141.16239
-    ],
+    "coordinates": [42.96318, 141.16239],
     "name": {
       "ja": "川魚酒場 定山渓",
       "en": "Jozankei River Fish Tavern"
@@ -248,10 +227,7 @@
     "id": "spot-008",
     "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [
-      42.96464,
-      141.16007
-    ],
+    "coordinates": [42.96464, 141.16007],
     "name": {
       "ja": "Deer Table",
       "en": "Deer Table"
@@ -283,10 +259,7 @@
     "id": "spot-009",
     "categoryId": "food",
     "timeMode": "night",
-    "coordinates": [
-      42.96324,
-      141.16249
-    ],
+    "coordinates": [42.96324, 141.16249],
     "name": {
       "ja": "Bar KEI",
       "en": "Bar KEI"
@@ -318,10 +291,7 @@
     "id": "spot-010",
     "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [
-      42.96572,
-      141.15963
-    ],
+    "coordinates": [42.96572, 141.15963],
     "name": {
       "ja": "梟カフェ こだま",
       "en": "Owl Cafe Kodama"
@@ -353,10 +323,7 @@
     "id": "spot-011",
     "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [
-      42.96543,
-      141.16206
-    ],
+    "coordinates": [42.96543, 141.16206],
     "name": {
       "ja": "和菓子処 ゆの花",
       "en": "Yunohana Japanese Sweets"
@@ -388,10 +355,7 @@
     "id": "spot-012",
     "categoryId": "food",
     "timeMode": "night",
-    "coordinates": [
-      42.96672,
-      141.16674
-    ],
+    "coordinates": [42.96672, 141.16674],
     "name": {
       "ja": "ジンギスカン 窪田",
       "en": "Jingisukan Kubota"
@@ -423,10 +387,7 @@
     "id": "spot-013",
     "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [
-      42.96616,
-      141.167
-    ],
+    "coordinates": [42.96616, 141.167],
     "name": {
       "ja": "珈琲 ヒロ",
       "en": "Coffee Hiro"
@@ -458,10 +419,7 @@
     "id": "spot-014",
     "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [
-      42.9655,
-      141.16193
-    ],
+    "coordinates": [42.9655, 141.16193],
     "name": {
       "ja": "そば処 時",
       "en": "Soba Tokijikan"
@@ -493,10 +451,7 @@
     "id": "spot-015",
     "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [
-      42.96486,
-      141.16569
-    ],
+    "coordinates": [42.96486, 141.16569],
     "name": {
       "ja": "手打ちうどん 麦食",
       "en": "Handmade Udon Mugishoku"
@@ -528,10 +483,7 @@
     "id": "spot-016",
     "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [
-      42.96636,
-      141.16389
-    ],
+    "coordinates": [42.96636, 141.16389],
     "name": {
       "ja": "BETRINKEN（ベトリンケン）",
       "en": "BETRINKEN"
@@ -563,10 +515,7 @@
     "id": "spot-017",
     "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [
-      42.96651,
-      141.16688
-    ],
+    "coordinates": [42.96651, 141.16688],
     "name": {
       "ja": "朝霧ベーカリー",
       "en": "Asagiri Bakery"
@@ -612,10 +561,7 @@
     "id": "spot-018",
     "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [
-      42.96734,
-      141.16242
-    ],
+    "coordinates": [42.96734, 141.16242],
     "name": {
       "ja": "石窯ピッツァ 谷の音",
       "en": "Stone-Oven Pizza Taninone"
@@ -647,10 +593,7 @@
     "id": "spot-019",
     "categoryId": "food",
     "timeMode": "night",
-    "coordinates": [
-      42.96506,
-      141.16319
-    ],
+    "coordinates": [42.96506, 141.16319],
     "name": {
       "ja": "湯の坂らぁめん",
       "en": "Yunosaka Ramen"
@@ -682,10 +625,7 @@
     "id": "spot-020",
     "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [
-      42.9654,
-      141.16228
-    ],
+    "coordinates": [42.9654, 141.16228],
     "name": {
       "ja": "茶房 こはるとゆき",
       "en": "Tea Room Koharu to Yuki"
@@ -717,10 +657,7 @@
     "id": "spot-021",
     "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [
-      42.96476,
-      141.16327
-    ],
+    "coordinates": [42.96476, 141.16327],
     "name": {
       "ja": "湯けむり菓子舗",
       "en": "Yukemuri Confectionery"
@@ -752,10 +689,7 @@
     "id": "spot-022",
     "categoryId": "food",
     "timeMode": "night",
-    "coordinates": [
-      42.9631,
-      141.1623
-    ],
+    "coordinates": [42.9631, 141.1623],
     "name": {
       "ja": "炉端 山灯り",
       "en": "Robata Yamadori"
@@ -787,10 +721,7 @@
     "id": "spot-023",
     "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [
-      42.96773,
-      141.16239
-    ],
+    "coordinates": [42.96773, 141.16239],
     "name": {
       "ja": "渓谷そば 霧音",
       "en": "Valley Soba Kirine"
@@ -822,10 +753,7 @@
     "id": "spot-024",
     "categoryId": "food",
     "timeMode": "day",
-    "coordinates": [
-      42.96588,
-      141.16137
-    ],
+    "coordinates": [42.96588, 141.16137],
     "name": {
       "ja": "こもれびブレッド",
       "en": "Komorebi Bread"
@@ -857,10 +785,7 @@
     "id": "spot-025",
     "categoryId": "food",
     "timeMode": "night",
-    "coordinates": [
-      42.96623,
-      141.16398
-    ],
+    "coordinates": [42.96623, 141.16398],
     "name": {
       "ja": "定山渓ブリューハウス",
       "en": "Jozankei Brewhouse"
@@ -906,10 +831,7 @@
     "id": "spot-026",
     "categoryId": "sightseeing",
     "timeMode": "both",
-    "coordinates": [
-      42.96386,
-      141.15815
-    ],
+    "coordinates": [42.96386, 141.15815],
     "name": {
       "ja": "翡翠川",
       "en": "Hisui River"
@@ -941,10 +863,7 @@
     "id": "spot-027",
     "categoryId": "sightseeing",
     "timeMode": "both",
-    "coordinates": [
-      42.96904,
-      141.16981
-    ],
+    "coordinates": [42.96904, 141.16981],
     "name": {
       "ja": "糸雨の滝",
       "en": "Itoame Falls"
@@ -976,10 +895,7 @@
     "id": "spot-028",
     "categoryId": "sightseeing",
     "timeMode": "both",
-    "coordinates": [
-      42.9667,
-      141.15246
-    ],
+    "coordinates": [42.9667, 141.15246],
     "name": {
       "ja": "錦重ね山",
       "en": "Nishikigasane Mountain"
@@ -1011,10 +927,7 @@
     "id": "spot-029",
     "categoryId": "sightseeing",
     "timeMode": "both",
-    "coordinates": [
-      42.96074,
-      141.17464
-    ],
+    "coordinates": [42.96074, 141.17464],
     "name": {
       "ja": "月見の高台",
       "en": "Tsukimi Lookout"
@@ -1046,10 +959,7 @@
     "id": "spot-030",
     "categoryId": "sightseeing",
     "timeMode": "both",
-    "coordinates": [
-      42.96412,
-      141.15938
-    ],
+    "coordinates": [42.96412, 141.15938],
     "name": {
       "ja": "鏡葉の渕",
       "en": "Kagamiha Pool"
@@ -1081,10 +991,7 @@
     "id": "spot-031",
     "categoryId": "sightseeing",
     "timeMode": "both",
-    "coordinates": [
-      42.97216,
-      141.17422
-    ],
+    "coordinates": [42.97216, 141.17422],
     "name": {
       "ja": "ゆらぎ橋",
       "en": "Yuragi Bridge"
@@ -1116,10 +1023,7 @@
     "id": "spot-032",
     "categoryId": "sightseeing",
     "timeMode": "day",
-    "coordinates": [
-      42.97006,
-      141.17122
-    ],
+    "coordinates": [42.97006, 141.17122],
     "name": {
       "ja": "浅霧川",
       "en": "Asagiri River"
@@ -1165,10 +1069,7 @@
     "id": "spot-033",
     "categoryId": "sightseeing",
     "timeMode": "both",
-    "coordinates": [
-      42.965,
-      141.16296
-    ],
+    "coordinates": [42.965, 141.16296],
     "name": {
       "ja": "こだま滝",
       "en": "Kodama Falls"
@@ -1200,10 +1101,7 @@
     "id": "spot-034",
     "categoryId": "sightseeing",
     "timeMode": "both",
-    "coordinates": [
-      42.96446,
-      141.1581
-    ],
+    "coordinates": [42.96446, 141.1581],
     "name": {
       "ja": "静音の渓谷",
       "en": "Silent Valley"
@@ -1235,10 +1133,7 @@
     "id": "spot-035",
     "categoryId": "sightseeing",
     "timeMode": "night",
-    "coordinates": [
-      42.96092,
-      141.17482
-    ],
+    "coordinates": [42.96092, 141.17482],
     "name": {
       "ja": "星待ち展望台",
       "en": "Hoshimachi Observatory"
@@ -1284,10 +1179,7 @@
     "id": "spot-036",
     "categoryId": "onsen",
     "timeMode": "day",
-    "coordinates": [
-      42.96493,
-      141.1633
-    ],
+    "coordinates": [42.96493, 141.1633],
     "name": {
       "ja": "せせらぎ足湯",
       "en": "Seseragi Footbath"
@@ -1333,10 +1225,7 @@
     "id": "spot-037",
     "categoryId": "onsen",
     "timeMode": "night",
-    "coordinates": [
-      42.96521,
-      141.16518
-    ],
+    "coordinates": [42.96521, 141.16518],
     "name": {
       "ja": "湯けむり足湯",
       "en": "Yukemuri Footbath"
@@ -1382,10 +1271,7 @@
     "id": "spot-039",
     "categoryId": "stay",
     "timeMode": "night",
-    "coordinates": [
-      42.9679,
-      141.16871
-    ],
+    "coordinates": [42.9679, 141.16871],
     "name": {
       "ja": "山灯りの宿",
       "en": "Yamaakari Inn"
@@ -1431,10 +1317,7 @@
     "id": "spot-040",
     "categoryId": "stay",
     "timeMode": "both",
-    "coordinates": [
-      42.96582,
-      141.16313
-    ],
+    "coordinates": [42.96582, 141.16313],
     "name": {
       "ja": "湯守の宿 まつかぜ",
       "en": "Yumori Inn Matsukaze"
@@ -1466,10 +1349,7 @@
     "id": "spot-041",
     "categoryId": "stay",
     "timeMode": "day",
-    "coordinates": [
-      42.96778,
-      141.16862
-    ],
+    "coordinates": [42.96778, 141.16862],
     "name": {
       "ja": "渓泉楼",
       "en": "Keisenro"
@@ -1515,10 +1395,7 @@
     "id": "spot-042",
     "categoryId": "stay",
     "timeMode": "both",
-    "coordinates": [
-      42.96932,
-      141.16737
-    ],
+    "coordinates": [42.96932, 141.16737],
     "name": {
       "ja": "ホテル水音",
       "en": "Hotel Mizune"
@@ -1550,10 +1427,7 @@
     "id": "spot-043",
     "categoryId": "stay",
     "timeMode": "both",
-    "coordinates": [
-      42.96589,
-      141.16201
-    ],
+    "coordinates": [42.96589, 141.16201],
     "name": {
       "ja": "花霞の宿",
       "en": "Hanagasumi Inn"
@@ -1585,10 +1459,7 @@
     "id": "spot-044",
     "categoryId": "stay",
     "timeMode": "day",
-    "coordinates": [
-      42.96568,
-      141.16116
-    ],
+    "coordinates": [42.96568, 141.16116],
     "name": {
       "ja": "民宿こまどり",
       "en": "Komadori Guesthouse"
@@ -1620,10 +1491,7 @@
     "id": "spot-045",
     "categoryId": "stay",
     "timeMode": "both",
-    "coordinates": [
-      42.9705,
-      141.1647
-    ],
+    "coordinates": [42.9705, 141.1647],
     "name": {
       "ja": "森のコテージ ノカ",
       "en": "Forest Cottage Noka"
@@ -1655,10 +1523,7 @@
     "id": "spot-046",
     "categoryId": "stay",
     "timeMode": "both",
-    "coordinates": [
-      42.96649,
-      141.16969
-    ],
+    "coordinates": [42.96649, 141.16969],
     "name": {
       "ja": "渓谷リゾートホテル",
       "en": "Valley Resort Hotel"
@@ -1690,10 +1555,7 @@
     "id": "spot-047",
     "categoryId": "onsen",
     "timeMode": "day",
-    "coordinates": [
-      42.96297,
-      141.15855
-    ],
+    "coordinates": [42.96297, 141.15855],
     "name": {
       "ja": "湯の庭",
       "en": "Yunoniwa"
@@ -1739,10 +1601,7 @@
     "id": "spot-048",
     "categoryId": "onsen",
     "timeMode": "both",
-    "coordinates": [
-      42.96489,
-      141.16334
-    ],
+    "coordinates": [42.96489, 141.16334],
     "name": {
       "ja": "森見の湯",
       "en": "Morimi no Yu"
@@ -1774,10 +1633,7 @@
     "id": "spot-049",
     "categoryId": "onsen",
     "timeMode": "night",
-    "coordinates": [
-      42.97211,
-      141.16617
-    ],
+    "coordinates": [42.97211, 141.16617],
     "name": {
       "ja": "星影の湯",
       "en": "Hoshikage no Yu"
@@ -1823,10 +1679,7 @@
     "id": "spot-050",
     "categoryId": "onsen",
     "timeMode": "both",
-    "coordinates": [
-      42.96519,
-      141.16515
-    ],
+    "coordinates": [42.96519, 141.16515],
     "name": {
       "ja": "源泉処 ましろ",
       "en": "Gensen-dokoro Mashiro"
@@ -1858,10 +1711,7 @@
     "id": "spot-051",
     "categoryId": "onsen",
     "timeMode": "day",
-    "coordinates": [
-      42.96483,
-      141.16013
-    ],
+    "coordinates": [42.96483, 141.16013],
     "name": {
       "ja": "こもれび温泉",
       "en": "Komorebi Onsen"
@@ -1893,10 +1743,7 @@
     "id": "spot-052",
     "categoryId": "onsen",
     "timeMode": "both",
-    "coordinates": [
-      42.96504,
-      141.16292
-    ],
+    "coordinates": [42.96504, 141.16292],
     "name": {
       "ja": "結びの湯",
       "en": "Musubi no Yu"
@@ -1928,10 +1775,7 @@
     "id": "spot-053",
     "categoryId": "onsen",
     "timeMode": "both",
-    "coordinates": [
-      42.96531,
-      141.16301
-    ],
+    "coordinates": [42.96531, 141.16301],
     "name": {
       "ja": "蒸し処 鹿火",
       "en": "Mushidokoro Shikabi"
@@ -1963,10 +1807,7 @@
     "id": "spot-054",
     "categoryId": "onsen",
     "timeMode": "both",
-    "coordinates": [
-      42.96591,
-      141.16322
-    ],
+    "coordinates": [42.96591, 141.16322],
     "name": {
       "ja": "大湯殿 ひびき",
       "en": "Oyudono Hibiki"

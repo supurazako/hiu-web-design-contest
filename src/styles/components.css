@@ -18,7 +18,10 @@
   color: var(--md-sys-color-on-surface);
   cursor: pointer;
   font-weight: 600;
-  transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .segmented-control__button svg {
@@ -30,8 +33,14 @@
 }
 
 .segmented-control__button.is-active {
-  background: var(--map-ui-secondary-container, var(--md-sys-color-secondary-container));
-  color: var(--map-ui-on-secondary-container, var(--md-sys-color-on-secondary-container, var(--md-sys-color-on-surface)));
+  background: var(
+    --map-ui-secondary-container,
+    var(--md-sys-color-secondary-container)
+  );
+  color: var(
+    --map-ui-on-secondary-container,
+    var(--md-sys-color-on-secondary-container, var(--md-sys-color-on-surface))
+  );
   box-shadow: var(--md-elevation-1);
 }
 
@@ -44,7 +53,11 @@
 }
 
 .spot-card {
-  --spot-card-paper: linear-gradient(180deg, rgba(244, 236, 227, 0.98), rgba(234, 225, 214, 0.96));
+  --spot-card-paper: linear-gradient(
+    180deg,
+    rgba(244, 236, 227, 0.98),
+    rgba(234, 225, 214, 0.96)
+  );
   --spot-card-paper-border: rgba(196, 174, 146, 0.62);
   --spot-card-paper-shadow: rgba(45, 28, 12, 0.18);
   --spot-card-ink-strong: #2f2217;
@@ -91,7 +104,11 @@
 }
 
 .map-diary-toast {
-  --spot-card-toast-paper: linear-gradient(180deg, rgba(255, 250, 240, 0.98), rgba(246, 235, 218, 0.96));
+  --spot-card-toast-paper: linear-gradient(
+    180deg,
+    rgba(255, 250, 240, 0.98),
+    rgba(246, 235, 218, 0.96)
+  );
   position: absolute;
   top: 22px;
   left: 50%;
@@ -169,7 +186,11 @@
   padding: 24px;
   border: 1px solid rgba(188, 163, 132, 0.64);
   border-radius: 28px;
-  background: linear-gradient(180deg, rgba(255, 250, 240, 0.99), rgba(246, 235, 218, 0.97));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 250, 240, 0.99),
+    rgba(246, 235, 218, 0.97)
+  );
   box-shadow: 0 26px 68px rgba(26, 16, 7, 0.34);
   color: #2f2217;
   transform: translateY(14px) scale(0.98);
@@ -281,7 +302,11 @@
   inset: 0;
   background:
     linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.14)),
-    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.16), transparent 24%);
+    radial-gradient(
+      circle at 30% 30%,
+      rgba(255, 255, 255, 0.16),
+      transparent 24%
+    );
 }
 
 .spot-card__visual.has-image .spot-card__visual-overlay {
@@ -313,27 +338,55 @@
 
 .placeholder-river {
   background:
-    linear-gradient(150deg, rgba(182, 230, 247, 0.98), rgba(80, 160, 201, 0.56)),
-    radial-gradient(circle at 70% 40%, rgba(255, 255, 255, 0.48), transparent 20%);
+    linear-gradient(
+      150deg,
+      rgba(182, 230, 247, 0.98),
+      rgba(80, 160, 201, 0.56)
+    ),
+    radial-gradient(
+      circle at 70% 40%,
+      rgba(255, 255, 255, 0.48),
+      transparent 20%
+    );
 }
 
 .placeholder-steam {
   background:
-    linear-gradient(160deg, rgba(255, 231, 204, 0.98), rgba(226, 175, 130, 0.48)),
-    radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.68), transparent 22%);
+    linear-gradient(
+      160deg,
+      rgba(255, 231, 204, 0.98),
+      rgba(226, 175, 130, 0.48)
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(255, 255, 255, 0.68),
+      transparent 22%
+    );
 }
 
 .placeholder-forest {
   background:
     linear-gradient(160deg, rgba(181, 224, 188, 0.98), rgba(61, 124, 93, 0.54)),
-    radial-gradient(circle at 65% 30%, rgba(255, 255, 255, 0.42), transparent 20%);
+    radial-gradient(
+      circle at 65% 30%,
+      rgba(255, 255, 255, 0.42),
+      transparent 20%
+    );
 }
 
 .placeholder-light {
   background:
     linear-gradient(160deg, rgba(33, 43, 60, 0.98), rgba(20, 29, 41, 0.94)),
-    radial-gradient(circle at 35% 40%, rgba(255, 204, 122, 0.7), transparent 16%),
-    radial-gradient(circle at 60% 55%, rgba(255, 140, 102, 0.34), transparent 18%);
+    radial-gradient(
+      circle at 35% 40%,
+      rgba(255, 204, 122, 0.7),
+      transparent 16%
+    ),
+    radial-gradient(
+      circle at 60% 55%,
+      rgba(255, 140, 102, 0.34),
+      transparent 18%
+    );
 }
 
 .spot-card__meta {
@@ -382,7 +435,11 @@
   border: 1px solid rgba(188, 163, 132, 0.52);
   border-radius: 20px;
   background:
-    linear-gradient(180deg, rgba(255, 252, 245, 0.98), rgba(248, 239, 227, 0.94)),
+    linear-gradient(
+      180deg,
+      rgba(255, 252, 245, 0.98),
+      rgba(248, 239, 227, 0.94)
+    ),
     repeating-linear-gradient(
       180deg,
       transparent 0,
@@ -454,7 +511,11 @@
 
 .leaflet-control-zoom a {
   color: var(--md-sys-color-on-surface);
-  background: color-mix(in srgb, var(--md-sys-color-surface-container-high) 92%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container-high) 92%,
+    transparent
+  );
   border-bottom-color: var(--md-sys-color-outline-variant);
 }
 
@@ -469,7 +530,10 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    filter 180ms ease;
 }
 
 .time-pin {
@@ -477,10 +541,13 @@
   height: 36px;
   border: 3px solid var(--pin-color);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 250, 252, 0.9)),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.96),
+      rgba(247, 250, 252, 0.9)
+    ),
     var(--md-sys-color-surface);
-  box-shadow:
-    0 5px 14px rgba(20, 24, 32, 0.28);
+  box-shadow: 0 5px 14px rgba(20, 24, 32, 0.28);
   cursor: default;
 }
 
@@ -507,7 +574,12 @@
   min-height: 42px;
   border: 3px solid var(--cluster-color);
   background:
-    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.98), rgba(247, 250, 252, 0.9) 56%, rgba(232, 238, 244, 0.94)),
+    radial-gradient(
+      circle at 35% 30%,
+      rgba(255, 255, 255, 0.98),
+      rgba(247, 250, 252, 0.9) 56%,
+      rgba(232, 238, 244, 0.94)
+    ),
     var(--md-sys-color-surface);
   box-shadow:
     0 0 0 6px color-mix(in srgb, var(--cluster-color) 18%, transparent),

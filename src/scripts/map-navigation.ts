@@ -45,29 +45,42 @@ export const createMapNavigationController = ({
   const clearMapTransitionClasses = () => {
     root.classList.remove("is-map-entering", "is-map-leaving");
     document.body.classList.remove("is-map-entering", "is-map-leaving");
-    document.documentElement.classList.remove("is-map-entering", "is-map-leaving");
+    document.documentElement.classList.remove(
+      "is-map-entering",
+      "is-map-leaving",
+    );
     if (transitionCleanupTimer !== null) {
       window.clearTimeout(transitionCleanupTimer);
       transitionCleanupTimer = null;
     }
   };
 
-  const setMapTransitionDirection = (direction: "entering" | "leaving" | null) => {
+  const setMapTransitionDirection = (
+    direction: "entering" | "leaving" | null,
+  ) => {
     clearMapTransitionClasses();
     if (!direction) return;
 
-    const className = direction === "entering" ? "is-map-entering" : "is-map-leaving";
+    const className =
+      direction === "entering" ? "is-map-entering" : "is-map-leaving";
     root.classList.add(className);
     document.body.classList.add(className);
     document.documentElement.classList.add(className);
-    transitionCleanupTimer = window.setTimeout(clearMapTransitionClasses, mapTransitionDuration);
+    transitionCleanupTimer = window.setTimeout(
+      clearMapTransitionClasses,
+      mapTransitionDuration,
+    );
   };
 
   const getFitBoundsPadding = () => {
     const isMobile = isMobileViewport();
-    const sheetRect = state.isExpanded ? floatingSheet.getBoundingClientRect() : new DOMRect(0, 0, 0, 0);
+    const sheetRect = state.isExpanded
+      ? floatingSheet.getBoundingClientRect()
+      : new DOMRect(0, 0, 0, 0);
     const attributionHeight = isMobile
-      ? getMobileAttributionHeight() + mobileAttributionBottomInset + mobileAttributionGap
+      ? getMobileAttributionHeight() +
+        mobileAttributionBottomInset +
+        mobileAttributionGap
       : 0;
 
     return {
@@ -89,13 +102,23 @@ export const createMapNavigationController = ({
   const setMapToTownCenter = () => {
     const zoom = isMobileViewport() ? townZoomMobile : townZoomDesktop;
     const padding = getFitBoundsPadding();
-    const offsetX = (padding.paddingBottomRight[0] - padding.paddingTopLeft[0]) / 2;
-    const offsetY = (padding.paddingBottomRight[1] - padding.paddingTopLeft[1]) / 2;
-    const targetPoint = map.project(townCenter, zoom).subtract([offsetX, offsetY]);
+    const offsetX =
+      (padding.paddingBottomRight[0] - padding.paddingTopLeft[0]) / 2;
+    const offsetY =
+      (padding.paddingBottomRight[1] - padding.paddingTopLeft[1]) / 2;
+    const targetPoint = map
+      .project(townCenter, zoom)
+      .subtract([offsetX, offsetY]);
     map.setView(map.unproject(targetPoint, zoom), zoom);
   };
 
-  const invalidateMapLayout = ({ recenter, invalidateSize }: { recenter: boolean; invalidateSize: boolean }) => {
+  const invalidateMapLayout = ({
+    recenter,
+    invalidateSize,
+  }: {
+    recenter: boolean;
+    invalidateSize: boolean;
+  }) => {
     if (invalidateSize) {
       map.invalidateSize();
     }
@@ -110,13 +133,24 @@ export const createMapNavigationController = ({
     applyPaneVisibility();
   };
 
-  const syncExpandedState = (nextExpanded: boolean, options: { updateHistory?: boolean } = {}) => {
-    if (state.isExpanded === nextExpanded && window.location.hash === (nextExpanded ? "#map" : "")) {
+  const syncExpandedState = (
+    nextExpanded: boolean,
+    options: { updateHistory?: boolean } = {},
+  ) => {
+    if (
+      state.isExpanded === nextExpanded &&
+      window.location.hash === (nextExpanded ? "#map" : "")
+    ) {
       return;
     }
 
     const wasExpanded = state.isExpanded;
-    const transitionDirection = wasExpanded === nextExpanded ? null : nextExpanded ? "entering" : "leaving";
+    const transitionDirection =
+      wasExpanded === nextExpanded
+        ? null
+        : nextExpanded
+          ? "entering"
+          : "leaving";
     setMapTransitionDirection(transitionDirection);
 
     if (wasExpanded && !nextExpanded && state.displayMode === "scratch") {
@@ -133,7 +167,11 @@ export const createMapNavigationController = ({
       if (nextExpanded) {
         window.history.pushState({ mapExpanded: true }, "", "#map");
       } else {
-        window.history.pushState({ mapExpanded: false }, "", window.location.pathname);
+        window.history.pushState(
+          { mapExpanded: false },
+          "",
+          window.location.pathname,
+        );
       }
     }
 

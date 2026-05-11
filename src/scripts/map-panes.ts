@@ -2,7 +2,13 @@ import type L from "leaflet";
 import { mapBackgroundForMode } from "./map-style";
 import type { ComparePaneSide, MapPageState, TimeMode } from "./map-types";
 import { clamp, nightRatioForHour, oppositeTimeMode } from "./map-utils";
-import { applyInverseCircleMask, clearMaskStyles, clipPathForCircle, setBlendPaneState, setPaneState } from "./pane-utils";
+import {
+  applyInverseCircleMask,
+  clearMaskStyles,
+  clipPathForCircle,
+  setBlendPaneState,
+  setPaneState,
+} from "./pane-utils";
 
 type MapPaneSet = {
   geo: HTMLElement;
@@ -132,10 +138,22 @@ export const createPaneVisibilityController = ({
     if (state.displayMode === "single") {
       const activeMode = state.timeMode;
       const inactiveMode: TimeMode = activeMode === "day" ? "night" : "day";
-      setPaneState(paneByMode[activeMode].geo, { visible: true, clipPath: "none" });
-      setPaneState(paneByMode[activeMode].marker, { visible: true, clipPath: "none" });
-      setPaneState(paneByMode[inactiveMode].geo, { visible: false, clipPath: "none" });
-      setPaneState(paneByMode[inactiveMode].marker, { visible: false, clipPath: "none" });
+      setPaneState(paneByMode[activeMode].geo, {
+        visible: true,
+        clipPath: "none",
+      });
+      setPaneState(paneByMode[activeMode].marker, {
+        visible: true,
+        clipPath: "none",
+      });
+      setPaneState(paneByMode[inactiveMode].geo, {
+        visible: false,
+        clipPath: "none",
+      });
+      setPaneState(paneByMode[inactiveMode].marker, {
+        visible: false,
+        clipPath: "none",
+      });
       return;
     }
 
@@ -143,24 +161,60 @@ export const createPaneVisibilityController = ({
       ensureMagnifierPoint();
       const activeMode = state.timeMode;
       const revealMode = oppositeTimeMode(activeMode);
-      const radius = Number.parseFloat(getComputedStyle(root).getPropertyValue("--magnifier-radius")) || 90;
-      const revealClipPath = clipPathForCircle(mapElement, paneByMode[revealMode].geo, state.magnifierPoint, radius);
-      const revealMarkerClipPath = clipPathForCircle(mapElement, paneByMode[revealMode].marker, state.magnifierPoint, radius);
-      const backgroundClipPath = clipPathForCircle(mapElement, magnifierBackgroundPane, state.magnifierPoint, radius);
+      const radius =
+        Number.parseFloat(
+          getComputedStyle(root).getPropertyValue("--magnifier-radius"),
+        ) || 90;
+      const revealClipPath = clipPathForCircle(
+        mapElement,
+        paneByMode[revealMode].geo,
+        state.magnifierPoint,
+        radius,
+      );
+      const revealMarkerClipPath = clipPathForCircle(
+        mapElement,
+        paneByMode[revealMode].marker,
+        state.magnifierPoint,
+        radius,
+      );
+      const backgroundClipPath = clipPathForCircle(
+        mapElement,
+        magnifierBackgroundPane,
+        state.magnifierPoint,
+        radius,
+      );
       paneByMode[activeMode].geo.style.zIndex = "340";
       magnifierBackgroundPane.style.zIndex = "341";
       paneByMode[revealMode].geo.style.zIndex = "342";
       paneByMode[activeMode].marker.style.zIndex = "620";
       paneByMode[revealMode].marker.style.zIndex = "621";
-      magnifierBackgroundPane.style.background = mapBackgroundForMode(revealMode);
+      magnifierBackgroundPane.style.background =
+        mapBackgroundForMode(revealMode);
       magnifierBackgroundPane.style.opacity = "1";
       magnifierBackgroundPane.style.visibility = "visible";
       magnifierBackgroundPane.style.clipPath = backgroundClipPath;
-      setPaneState(paneByMode[activeMode].geo, { visible: true, clipPath: "none" });
-      setPaneState(paneByMode[activeMode].marker, { visible: true, clipPath: "none" });
-      setPaneState(paneByMode[revealMode].geo, { visible: true, clipPath: revealClipPath });
-      setPaneState(paneByMode[revealMode].marker, { visible: true, clipPath: revealMarkerClipPath });
-      applyInverseCircleMask(mapElement, paneByMode[activeMode].marker, state.magnifierPoint, radius);
+      setPaneState(paneByMode[activeMode].geo, {
+        visible: true,
+        clipPath: "none",
+      });
+      setPaneState(paneByMode[activeMode].marker, {
+        visible: true,
+        clipPath: "none",
+      });
+      setPaneState(paneByMode[revealMode].geo, {
+        visible: true,
+        clipPath: revealClipPath,
+      });
+      setPaneState(paneByMode[revealMode].marker, {
+        visible: true,
+        clipPath: revealMarkerClipPath,
+      });
+      applyInverseCircleMask(
+        mapElement,
+        paneByMode[activeMode].marker,
+        state.magnifierPoint,
+        radius,
+      );
       return;
     }
 
@@ -169,7 +223,8 @@ export const createPaneVisibilityController = ({
       magnifierBackgroundPane.style.zIndex = "341";
       magnifierBackgroundPane.style.background = mapBackgroundForMode("night");
       magnifierBackgroundPane.style.opacity = String(nightRatio);
-      magnifierBackgroundPane.style.visibility = nightRatio > 0 ? "visible" : "hidden";
+      magnifierBackgroundPane.style.visibility =
+        nightRatio > 0 ? "visible" : "hidden";
       magnifierBackgroundPane.style.clipPath = "none";
       paneByMode.day.geo.style.zIndex = "340";
       paneByMode.night.geo.style.zIndex = "342";
@@ -193,7 +248,10 @@ export const createPaneVisibilityController = ({
       magnifierBackgroundPane.style.visibility = "visible";
       magnifierBackgroundPane.style.clipPath = "none";
       setPaneState(paneByMode.night.geo, { visible: true, clipPath: "none" });
-      setPaneState(paneByMode.night.marker, { visible: true, clipPath: "none" });
+      setPaneState(paneByMode.night.marker, {
+        visible: true,
+        clipPath: "none",
+      });
       setPaneState(paneByMode.day.geo, { visible: true, clipPath: "none" });
       setPaneState(paneByMode.day.marker, { visible: true, clipPath: "none" });
       scratchController.applyMask();
@@ -204,11 +262,16 @@ export const createPaneVisibilityController = ({
 
     const mapRect = mapElement.getBoundingClientRect();
     const isVerticalCompare = isVerticalCompareMode();
-    const splitWithinMap = (isVerticalCompare ? mapRect.height : mapRect.width) * state.splitRatio;
+    const splitWithinMap =
+      (isVerticalCompare ? mapRect.height : mapRect.width) * state.splitRatio;
     const clipPathForPane = (pane: HTMLElement, side: ComparePaneSide) => {
       const paneRect = pane.getBoundingClientRect();
       if (isVerticalCompare) {
-        const dividerWithinPane = clamp(mapRect.top - paneRect.top + splitWithinMap, 0, paneRect.height);
+        const dividerWithinPane = clamp(
+          mapRect.top - paneRect.top + splitWithinMap,
+          0,
+          paneRect.height,
+        );
         if (side === "day") {
           const bottomInset = Math.max(0, paneRect.height - dividerWithinPane);
           return `inset(0px 0px ${bottomInset}px 0px)`;
@@ -216,7 +279,11 @@ export const createPaneVisibilityController = ({
         return `inset(${dividerWithinPane}px 0px 0px 0px)`;
       }
 
-      const dividerWithinPane = clamp(mapRect.left - paneRect.left + splitWithinMap, 0, paneRect.width);
+      const dividerWithinPane = clamp(
+        mapRect.left - paneRect.left + splitWithinMap,
+        0,
+        paneRect.width,
+      );
       if (side === "day") {
         const rightInset = Math.max(0, paneRect.width - dividerWithinPane);
         return `inset(0px ${rightInset}px 0px 0px)`;
@@ -228,14 +295,29 @@ export const createPaneVisibilityController = ({
     magnifierBackgroundPane.style.background = mapBackgroundForMode("night");
     magnifierBackgroundPane.style.opacity = "1";
     magnifierBackgroundPane.style.visibility = "visible";
-    magnifierBackgroundPane.style.clipPath = clipPathForPane(magnifierBackgroundPane, "night");
+    magnifierBackgroundPane.style.clipPath = clipPathForPane(
+      magnifierBackgroundPane,
+      "night",
+    );
     paneByMode.day.geo.style.zIndex = "340";
     paneByMode.night.geo.style.zIndex = "342";
     paneByMode.day.marker.style.zIndex = "620";
     paneByMode.night.marker.style.zIndex = "621";
-    setPaneState(paneByMode.day.geo, { visible: true, clipPath: clipPathForPane(paneByMode.day.geo, "day") });
-    setPaneState(paneByMode.day.marker, { visible: true, clipPath: clipPathForPane(paneByMode.day.marker, "day") });
-    setPaneState(paneByMode.night.geo, { visible: true, clipPath: clipPathForPane(paneByMode.night.geo, "night") });
-    setPaneState(paneByMode.night.marker, { visible: true, clipPath: clipPathForPane(paneByMode.night.marker, "night") });
+    setPaneState(paneByMode.day.geo, {
+      visible: true,
+      clipPath: clipPathForPane(paneByMode.day.geo, "day"),
+    });
+    setPaneState(paneByMode.day.marker, {
+      visible: true,
+      clipPath: clipPathForPane(paneByMode.day.marker, "day"),
+    });
+    setPaneState(paneByMode.night.geo, {
+      visible: true,
+      clipPath: clipPathForPane(paneByMode.night.geo, "night"),
+    });
+    setPaneState(paneByMode.night.marker, {
+      visible: true,
+      clipPath: clipPathForPane(paneByMode.night.marker, "night"),
+    });
   };
 };

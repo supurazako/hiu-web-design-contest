@@ -17,8 +17,16 @@ import {
 } from "./map-layers";
 import { createVisibleMarkerSelector } from "./map-marker-selection";
 import { createMapNavigationController } from "./map-navigation";
-import { createPaneBoundsSynchronizer, createPaneVisibilityController, createTimeMapPanes } from "./map-panes";
-import { featureCategory, isSpotVisibleForMode, layerStyleForMode } from "./map-style";
+import {
+  createPaneBoundsSynchronizer,
+  createPaneVisibilityController,
+  createTimeMapPanes,
+} from "./map-panes";
+import {
+  featureCategory,
+  isSpotVisibleForMode,
+  layerStyleForMode,
+} from "./map-style";
 import type { MapPageState, MarkerEntry, TimeMode } from "./map-types";
 import {
   applyTheme as applyThemeRender,
@@ -36,17 +44,14 @@ const spots = getJsonData<Spot[]>("spots-data");
 const uiCopy = getJsonData<UiCopy>("ui-data");
 const themeByMode = getJsonData<ThemeByMode>("theme-data");
 const refs = getMapDomRefs();
-const {
-  root,
-  mapElement,
-  clockDial,
-  scratchSurface,
-  floatingSheet,
-} = refs;
+const { root, mapElement, clockDial, scratchSurface, floatingSheet } = refs;
 
-const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)",
+);
 const isMobileViewport = () => window.innerWidth < 768;
-const isVerticalCompareMode = () => state.displayMode === "compare" && isMobileViewport();
+const isVerticalCompareMode = () =>
+  state.displayMode === "compare" && isMobileViewport();
 
 const state: MapPageState = {
   locale: "ja",
@@ -79,7 +84,8 @@ const map = L.map(mapElement, {
   maxZoom: 20,
 });
 
-const { paneByMode, magnifierBackgroundPane, customPanes, clippedCustomPanes } = createTimeMapPanes(map);
+const { paneByMode, magnifierBackgroundPane, customPanes, clippedCustomPanes } =
+  createTimeMapPanes(map);
 
 const scratchMaskTargets = () => [
   paneByMode.night.geo,
@@ -87,9 +93,7 @@ const scratchMaskTargets = () => [
   magnifierBackgroundPane,
 ];
 
-const inverseScratchMaskTargets = () => [
-  paneByMode.day.marker,
-];
+const inverseScratchMaskTargets = () => [paneByMode.day.marker];
 
 const scratchController = createScratchController({
   map,
@@ -119,11 +123,14 @@ const geoJsonLayers: Partial<Record<TimeMode, L.GeoJSON>> = {};
 let dataBounds: L.LatLngBounds | null = null;
 let diaryToastHideTimer: number | null = null;
 const diaryToastDuration = 3200;
-const townCenter = L.latLng(42.9650, 141.16615);
+const townCenter = L.latLng(42.965, 141.16615);
 
-const getSelectedSpot = () => spots.find((spot) => spot.id === state.selectedSpotId) ?? null;
+const getSelectedSpot = () =>
+  spots.find((spot) => spot.id === state.selectedSpotId) ?? null;
 const getDiscoveredDiaryToastSpot = () =>
-  spots.find((spot) => spot.id === state.discoveredDiaryToastSpotId && spot.diary) ?? null;
+  spots.find(
+    (spot) => spot.id === state.discoveredDiaryToastSpotId && spot.diary,
+  ) ?? null;
 
 const selectSpot = (spot: Spot, mode: TimeMode) => {
   state.selectedSpotId = spot.id;
@@ -228,7 +235,12 @@ const {
 } = mapLayout;
 
 const renderDiscoveryToast = () => {
-  renderDiscoveryToastView({ refs, state, uiCopy, discoveredSpot: getDiscoveredDiaryToastSpot() });
+  renderDiscoveryToastView({
+    refs,
+    state,
+    uiCopy,
+    discoveredSpot: getDiscoveredDiaryToastSpot(),
+  });
 };
 
 const renderDiaryNotebookModal = () => {
@@ -307,25 +319,41 @@ const ensureSelectionVisibility = () => {
   const spot = getSelectedSpot();
   if (!spot) return;
 
-  if (state.displayMode === "single" && !isSpotVisibleForMode(spot, state.timeMode)) {
+  if (
+    state.displayMode === "single" &&
+    !isSpotVisibleForMode(spot, state.timeMode)
+  ) {
     state.selectedSpotId = null;
     state.selectedSpotMode = null;
   }
 
-  if (state.displayMode === "compare" && state.selectedSpotMode && !isSpotVisibleForMode(spot, state.selectedSpotMode)) {
+  if (
+    state.displayMode === "compare" &&
+    state.selectedSpotMode &&
+    !isSpotVisibleForMode(spot, state.selectedSpotMode)
+  ) {
     state.selectedSpotId = null;
     state.selectedSpotMode = null;
   }
 
-  if (state.displayMode === "scratch" && state.selectedSpotMode && !isSpotVisibleForMode(spot, state.selectedSpotMode)) {
-    state.selectedSpotMode = isSpotVisibleForMode(spot, "day") ? "day" : "night";
+  if (
+    state.displayMode === "scratch" &&
+    state.selectedSpotMode &&
+    !isSpotVisibleForMode(spot, state.selectedSpotMode)
+  ) {
+    state.selectedSpotMode = isSpotVisibleForMode(spot, "day")
+      ? "day"
+      : "night";
   }
 };
 
 const render = () => {
   root.classList.toggle("is-map-expanded", state.isExpanded);
   document.body.classList.toggle("is-map-expanded", state.isExpanded);
-  document.documentElement.classList.toggle("is-map-expanded", state.isExpanded);
+  document.documentElement.classList.toggle(
+    "is-map-expanded",
+    state.isExpanded,
+  );
   syncCustomPaneBounds();
   ensureSelectionVisibility();
   updateButtons();
@@ -392,7 +420,8 @@ const mapNavigation = createMapNavigationController({
   applyPaneVisibility,
   render,
 });
-const { invalidateMapLayout, setMapToTownCenter, syncExpandedState } = mapNavigation;
+const { invalidateMapLayout, setMapToTownCenter, syncExpandedState } =
+  mapNavigation;
 
 const initGeoJson = async () => {
   const response = await fetch("/geodata/map.geojson");
@@ -404,7 +433,8 @@ const initGeoJson = async () => {
         const category = featureCategory(feature);
         return Boolean(category) && feature?.geometry?.type !== "Point";
       },
-      style: (feature: GeoJSON.Feature | undefined) => layerStyleForMode(mode, feature, root),
+      style: (feature: GeoJSON.Feature | undefined) =>
+        layerStyleForMode(mode, feature, root),
       interactive: false,
       pane: mode === "day" ? "day-geojson-pane" : "night-geojson-pane",
       renderer: geoRendererByMode[mode],

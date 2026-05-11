@@ -34,8 +34,18 @@
   aspect-ratio: auto;
   border-radius: 0;
   background:
-    linear-gradient(90deg, rgba(255, 248, 242, 0.9) 0%, rgba(255, 248, 242, 0.7) 42%, rgba(255, 248, 242, 0.24) 78%),
-    linear-gradient(180deg, rgba(255, 248, 242, 0.28) 0%, rgba(255, 248, 242, 0.12) 56%, rgba(247, 239, 230, 0.68) 100%);
+    linear-gradient(
+      90deg,
+      rgba(255, 248, 242, 0.9) 0%,
+      rgba(255, 248, 242, 0.7) 42%,
+      rgba(255, 248, 242, 0.24) 78%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255, 248, 242, 0.28) 0%,
+      rgba(255, 248, 242, 0.12) 56%,
+      rgba(247, 239, 230, 0.68) 100%
+    );
   filter: none;
   pointer-events: none;
 }
@@ -46,8 +56,16 @@
   z-index: 0;
   overflow: hidden;
   background:
-    radial-gradient(circle at 20% 20%, var(--map-day-background-glow), transparent 20%),
-    linear-gradient(160deg, var(--map-day-background-start), var(--map-day-background-end));
+    radial-gradient(
+      circle at 20% 20%,
+      var(--map-day-background-glow),
+      transparent 20%
+    ),
+    linear-gradient(
+      160deg,
+      var(--map-day-background-start),
+      var(--map-day-background-end)
+    );
   transform: scale(1);
   transform-origin: center center;
   transition:
@@ -69,7 +87,11 @@
   z-index: 1;
   background:
     linear-gradient(90deg, rgba(255, 222, 173, 0.28) 0%, transparent 34%),
-    radial-gradient(circle at 72% 28%, rgba(255, 255, 255, 0.2), transparent 22%);
+    radial-gradient(
+      circle at 72% 28%,
+      rgba(255, 255, 255, 0.2),
+      transparent 22%
+    );
   pointer-events: none;
   transition: opacity 320ms ease;
 }
@@ -131,7 +153,11 @@ body.is-map-expanded .content-block {
 
 .hero__brand {
   margin: 0 0 16px;
-  color: color-mix(in srgb, var(--md-sys-color-on-surface) 78%, var(--md-sys-color-primary));
+  color: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface) 78%,
+    var(--md-sys-color-primary)
+  );
   font-size: clamp(0.95rem, 1.1vw, 1.15rem);
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -291,12 +317,19 @@ body.is-map-expanded .content-block {
 
 .button--tonal {
   background: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container, var(--md-sys-color-on-surface));
+  color: var(
+    --md-sys-color-on-secondary-container,
+    var(--md-sys-color-on-surface)
+  );
   border-color: transparent;
 }
 
 .button--tonal:hover {
-  background: color-mix(in srgb, var(--md-sys-color-secondary-container) 86%, var(--md-sys-color-primary));
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-secondary-container) 86%,
+    var(--md-sys-color-primary)
+  );
 }
 
 .text-link {
@@ -391,7 +424,11 @@ body.is-map-expanded .content-block {
   z-index: -1;
   border-radius: 36px;
   background:
-    radial-gradient(circle at top left, rgba(255, 228, 176, 0.52), transparent 28%),
+    radial-gradient(
+      circle at top left,
+      rgba(255, 228, 176, 0.52),
+      transparent 28%
+    ),
     linear-gradient(180deg, rgba(255, 247, 234, 0.72), rgba(246, 236, 220, 0.4));
   filter: blur(2px);
 }
@@ -450,14 +487,26 @@ body.is-map-expanded .content-block {
 
 .scene-split__panel--day {
   background:
-    linear-gradient(180deg, rgba(255, 236, 210, 0.92), rgba(255, 246, 233, 0.88)),
-    radial-gradient(circle at top right, rgba(255, 255, 255, 0.52), transparent 32%);
+    linear-gradient(
+      180deg,
+      rgba(255, 236, 210, 0.92),
+      rgba(255, 246, 233, 0.88)
+    ),
+    radial-gradient(
+      circle at top right,
+      rgba(255, 255, 255, 0.52),
+      transparent 32%
+    );
 }
 
 .scene-split__panel--night {
   background:
     linear-gradient(180deg, rgba(28, 43, 61, 0.98), rgba(16, 25, 36, 1)),
-    radial-gradient(circle at top left, rgba(152, 205, 255, 0.22), transparent 26%);
+    radial-gradient(
+      circle at top left,
+      rgba(152, 205, 255, 0.22),
+      transparent 26%
+    );
   border-color: rgba(166, 201, 255, 0.18);
   box-shadow: 0 6px 16px rgba(6, 12, 20, 0.28);
   color: #eef4fb;
@@ -616,7 +665,9 @@ body.is-map-expanded .content-block {
   border-radius: 999px;
   background: color-mix(in srgb, var(--md-sys-color-outline) 52%, transparent);
   cursor: pointer;
-  transition: transform 180ms ease, background-color 180ms ease;
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease;
 }
 
 .feature-carousel__dot.is-active {

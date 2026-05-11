@@ -18,7 +18,10 @@ export const identityTransform = (): ScratchTransform => ({
   f: 0,
 });
 
-export const multiplyTransform = (left: ScratchTransform, right: ScratchTransform): ScratchTransform => ({
+export const multiplyTransform = (
+  left: ScratchTransform,
+  right: ScratchTransform,
+): ScratchTransform => ({
   a: left.a * right.a + left.c * right.b,
   b: left.b * right.a + left.d * right.b,
   c: left.a * right.c + left.c * right.d,
@@ -45,7 +48,9 @@ export const translateTransform = (x: number, y: number): ScratchTransform => ({
   f: y,
 });
 
-export const invertTransform = (transform: ScratchTransform): ScratchTransform => {
+export const invertTransform = (
+  transform: ScratchTransform,
+): ScratchTransform => {
   const determinant = transform.a * transform.d - transform.b * transform.c;
   if (Math.abs(determinant) < 0.000001) return identityTransform();
 
@@ -59,12 +64,16 @@ export const invertTransform = (transform: ScratchTransform): ScratchTransform =
   };
 };
 
-export const applyTransformToPoint = (point: MapPoint, transform: ScratchTransform): MapPoint => ({
+export const applyTransformToPoint = (
+  point: MapPoint,
+  transform: ScratchTransform,
+): MapPoint => ({
   x: transform.a * point.x + transform.c * point.y + transform.e,
   y: transform.b * point.x + transform.d * point.y + transform.f,
 });
 
-export const getTransformScale = (transform: ScratchTransform) => Math.hypot(transform.a, transform.b);
+export const getTransformScale = (transform: ScratchTransform) =>
+  Math.hypot(transform.a, transform.b);
 
 export const serializeTransform = (transform: ScratchTransform) =>
   `matrix(${transform.a} ${transform.b} ${transform.c} ${transform.d} ${transform.e} ${transform.f})`;

@@ -3,7 +3,10 @@ import type { Spot } from "../data/spots";
 import { isSpotVisibleForMode } from "./map-style";
 import type { MapPageState, MarkerEntry, TimeMode } from "./map-types";
 
-export const timeModes = ["day", "night"] as const satisfies readonly TimeMode[];
+export const timeModes = [
+  "day",
+  "night",
+] as const satisfies readonly TimeMode[];
 
 export const markerPaneByMode = {
   day: "day-marker-pane",
@@ -59,10 +62,9 @@ const createMarkerClusterGroup = (mode: TimeMode) =>
   });
 
 export const createMarkerClusterGroups = () =>
-  Object.fromEntries(timeModes.map((mode) => [mode, createMarkerClusterGroup(mode)])) as Record<
-    TimeMode,
-    L.MarkerClusterGroup
-  >;
+  Object.fromEntries(
+    timeModes.map((mode) => [mode, createMarkerClusterGroup(mode)]),
+  ) as Record<TimeMode, L.MarkerClusterGroup>;
 
 export const createSpotMarkers = ({
   spots,
@@ -113,7 +115,8 @@ export const updateMarkerClusterVisibility = ({
 }) => {
   timeModes.forEach((mode) => {
     const clusterGroup = markerClusterGroupsByMode[mode];
-    const shouldShow = state.displayMode === "single" ? mode === state.timeMode : true;
+    const shouldShow =
+      state.displayMode === "single" ? mode === state.timeMode : true;
 
     if (shouldShow && !map.hasLayer(clusterGroup)) {
       clusterGroup.addTo(map);
@@ -137,7 +140,9 @@ export const updateMarkerSelection = ({
     if (pin) {
       const isSelected =
         state.selectedSpotId === spot.id &&
-        (state.displayMode === "single" ? mode === state.timeMode : state.selectedSpotMode === mode);
+        (state.displayMode === "single"
+          ? mode === state.timeMode
+          : state.selectedSpotMode === mode);
       pin.classList.toggle("is-selected", isSelected);
     }
   });

@@ -3,7 +3,10 @@ import type { ThemeByMode, UiCopy } from "../data/site";
 import type { MapDomRefs } from "./map-dom-refs";
 import type { MapPageState } from "./map-types";
 
-export const renderLandingTitle = (title: HTMLElement | null, lines: readonly string[]) => {
+export const renderLandingTitle = (
+  title: HTMLElement | null,
+  lines: readonly string[],
+) => {
   if (!title) return;
   title.replaceChildren(
     ...lines.map((line) => {
@@ -38,7 +41,11 @@ export const renderLandingText = ({
   if (refs.sceneLabelNight) refs.sceneLabelNight.textContent = ui.nightLabel;
   if (refs.sceneMoodDay) refs.sceneMoodDay.textContent = ui.dayMood;
   if (refs.sceneMoodNight) refs.sceneMoodNight.textContent = ui.nightMood;
-  window.dispatchEvent(new CustomEvent("time-map:locale-change", { detail: { locale: state.locale } }));
+  window.dispatchEvent(
+    new CustomEvent("time-map:locale-change", {
+      detail: { locale: state.locale },
+    }),
+  );
 };
 
 export const renderLanguageUI = ({
@@ -59,7 +66,10 @@ export const renderLanguageUI = ({
     switcher.menu.hidden = !isOpen;
     switcher.menu.classList.toggle("is-open", isOpen);
     switcher.options.forEach((button) => {
-      button.classList.toggle("is-active", button.dataset.locale === state.locale);
+      button.classList.toggle(
+        "is-active",
+        button.dataset.locale === state.locale,
+      );
     });
   });
 };
@@ -74,14 +84,17 @@ export const renderDocumentMetadata = ({
   uiCopy: UiCopy;
 }) => {
   const ui = uiCopy[state.locale];
-  const title = state.isExpanded ? `${ui.siteTitle} | ${ui.mapPageTitle}` : `${ui.siteTitle} | ${ui.siteTagline}`;
+  const title = state.isExpanded
+    ? `${ui.siteTitle} | ${ui.mapPageTitle}`
+    : `${ui.siteTitle} | ${ui.siteTagline}`;
   document.title = title;
   document.documentElement.lang = state.locale;
   if (refs.metaDescription) refs.metaDescription.content = ui.metaDescription;
   if (refs.ogTitle) refs.ogTitle.content = title;
   if (refs.ogDescription) refs.ogDescription.content = ui.metaDescription;
   if (refs.twitterTitle) refs.twitterTitle.content = title;
-  if (refs.twitterDescription) refs.twitterDescription.content = ui.metaDescription;
+  if (refs.twitterDescription)
+    refs.twitterDescription.content = ui.metaDescription;
 };
 
 export const renderStaticText = ({
@@ -122,9 +135,15 @@ export const renderStaticText = ({
   refs.clockDial.setAttribute("aria-label", ui.clockDialLabel);
   refs.scratchResetButton.setAttribute("aria-label", ui.scratchResetLabel);
   refs.scratchResetButton.setAttribute("title", ui.scratchResetLabel);
-  refs.diaryNotebookOpenButton.setAttribute("aria-label", ui.diaryNotebookOpenLabel);
+  refs.diaryNotebookOpenButton.setAttribute(
+    "aria-label",
+    ui.diaryNotebookOpenLabel,
+  );
   refs.diaryNotebookOpenButton.setAttribute("title", ui.diaryNotebookOpenLabel);
-  refs.diaryNotebookClose.setAttribute("aria-label", ui.diaryNotebookCloseLabel);
+  refs.diaryNotebookClose.setAttribute(
+    "aria-label",
+    ui.diaryNotebookCloseLabel,
+  );
   refs.diaryNotebookTitle.textContent = ui.diarySectionTitle;
   renderLandingText({ refs, state, uiCopy });
   renderLanguageUI({ refs, state, uiCopy });
@@ -144,21 +163,39 @@ export const updateButtons = ({
   minZoom: number;
 }) => {
   refs.timeModeButtons.forEach((button) => {
-    button.classList.toggle("is-active", button.dataset.timeMode === state.timeMode);
+    button.classList.toggle(
+      "is-active",
+      button.dataset.timeMode === state.timeMode,
+    );
   });
   refs.displayModeButtons.forEach((button) => {
-    button.classList.toggle("is-active", button.dataset.displayMode === state.displayMode);
+    button.classList.toggle(
+      "is-active",
+      button.dataset.displayMode === state.displayMode,
+    );
   });
   refs.languageOptionButtons.forEach((button) => {
-    button.classList.toggle("is-active", button.dataset.locale === state.locale);
+    button.classList.toggle(
+      "is-active",
+      button.dataset.locale === state.locale,
+    );
   });
 
   refs.zoomInButton.disabled = currentZoom >= maxZoom;
   refs.zoomOutButton.disabled = currentZoom <= minZoom;
 };
 
-export const renderControlCluster = ({ refs, state }: { refs: MapDomRefs; state: MapPageState }) => {
-  refs.controlCluster.classList.toggle("is-hidden-by-selection", state.selectedSpotId !== null);
+export const renderControlCluster = ({
+  refs,
+  state,
+}: {
+  refs: MapDomRefs;
+  state: MapPageState;
+}) => {
+  refs.controlCluster.classList.toggle(
+    "is-hidden-by-selection",
+    state.selectedSpotId !== null,
+  );
 };
 
 export const renderDiaryNotebookModal = ({
@@ -171,9 +208,15 @@ export const renderDiaryNotebookModal = ({
   uiCopy: UiCopy;
 }) => {
   const ui = uiCopy[state.locale];
-  refs.diaryNotebookOpenButton.setAttribute("aria-label", ui.diaryNotebookOpenLabel);
+  refs.diaryNotebookOpenButton.setAttribute(
+    "aria-label",
+    ui.diaryNotebookOpenLabel,
+  );
   refs.diaryNotebookOpenButton.setAttribute("title", ui.diaryNotebookOpenLabel);
-  refs.diaryNotebookClose.setAttribute("aria-label", ui.diaryNotebookCloseLabel);
+  refs.diaryNotebookClose.setAttribute(
+    "aria-label",
+    ui.diaryNotebookCloseLabel,
+  );
   refs.diaryNotebookTitle.textContent = ui.diarySectionTitle;
 
   if (!state.isDiaryNotebookOpen) {

@@ -6,7 +6,10 @@ export const getJsonData = <T>(id: string): T => {
   return JSON.parse(element.textContent) as T;
 };
 
-export const requiredElement = <T extends Element>(selector: string, rootNode: ParentNode = document): T => {
+export const requiredElement = <T extends Element>(
+  selector: string,
+  rootNode: ParentNode = document,
+): T => {
   const element = rootNode.querySelector<T>(selector);
   if (!element) {
     throw new Error(`Missing required element: ${selector}`);
