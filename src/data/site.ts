@@ -50,6 +50,11 @@ export const uiCopy = {
         imageAlt: "夜景や景色をイメージした仮画像",
         body: "言語を切り替えながら、現地での散策にも旅行前の計画にも使えます。",
       },
+      {
+        imageSrc: "/features/view-placeholder.svg",
+        imageAlt: "旅の日記や発見のヒントをイメージした仮画像",
+        body: "スポットを見つけると旅の日記が少しずつ開きます。未発見の日記にはヒントが残るので、次に探す場所の手がかりになります。",
+      },
     ],
     mapIntroTitle: "時間で読む、温泉街の1日",
     mapPageTitle: "Map View",
@@ -124,6 +129,11 @@ export const uiCopy = {
         imageSrc: "/features/view-placeholder.svg",
         imageAlt: "Temporary image suggesting scenic views and night lights",
         body: "Change the language at any time to use the map both while walking in town and while planning your trip in advance.",
+      },
+      {
+        imageSrc: "/features/view-placeholder.svg",
+        imageAlt: "Temporary image suggesting travel diary pages and discovery hints",
+        body: "Discovering spots unlocks travel diary pages little by little. Hidden pages leave hints, giving you clues for where to look next.",
       },
     ],
     mapIntroTitle: "A one-day story of the town",

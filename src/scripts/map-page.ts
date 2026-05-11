@@ -62,6 +62,8 @@ const spotDiary = requiredElement<HTMLElement>("[data-spot-diary]");
 const spotDiaryLabel = requiredElement<HTMLElement>("[data-spot-diary-label]");
 const spotDiaryTitle = requiredElement<HTMLElement>("[data-spot-diary-title]");
 const spotDiaryBody = requiredElement<HTMLElement>("[data-spot-diary-body]");
+const spotImage = requiredElement<HTMLImageElement>("[data-spot-image]");
+const spotImageCredit = requiredElement<HTMLAnchorElement>("[data-spot-image-credit]");
 const spotEmpty = requiredElement<HTMLElement>("[data-spot-empty]");
 const spotEmptyTitle = requiredElement<HTMLElement>("[data-spot-empty-title]");
 const spotEmptyHint = requiredElement<HTMLElement>("[data-spot-empty-hint]");
@@ -752,6 +754,27 @@ const renderCard = () => {
   spotEmpty.hidden = true;
   spotVisual.classList.remove(...placeholderClasses);
   spotVisual.classList.add(`placeholder-${spot.image.placeholderVariant}`);
+  if (spot.image_url) {
+    spotVisual.classList.add("has-image");
+    spotVisual.removeAttribute("aria-hidden");
+    spotImage.hidden = false;
+    spotImage.src = spot.image_url;
+    spotImage.alt = spot.image_alt[state.locale];
+    spotImageCredit.hidden = false;
+    spotImageCredit.href = spot.image_source_url;
+    spotImageCredit.textContent = spot.image_credit;
+    spotImageCredit.title = spot.image_license;
+  } else {
+    spotVisual.classList.remove("has-image");
+    spotVisual.setAttribute("aria-hidden", "true");
+    spotImage.hidden = true;
+    spotImage.removeAttribute("src");
+    spotImage.alt = "";
+    spotImageCredit.hidden = true;
+    spotImageCredit.removeAttribute("href");
+    spotImageCredit.textContent = "";
+    spotImageCredit.removeAttribute("title");
+  }
   spotCategory.textContent = `${ui.categoryLabel}: ${spot.category[state.locale]}`;
   spotRoute.textContent = `${ui.routeHint}: ${activeTimeLabel}`;
   spotTitle.textContent = spot.name[state.locale];

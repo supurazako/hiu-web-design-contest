@@ -16,6 +16,8 @@ export type SpotDiary = {
   unlockHint?: LocalizedText;
 };
 
+export type SpotImageSource = "Pexels" | "Unsplash" | "Pixabay";
+
 export type RawSpot = {
   id: string;
   categoryId: SpotCategoryId;
@@ -27,6 +29,12 @@ export type RawSpot = {
     src: string;
     alt: LocalizedText;
   };
+  image_url: string;
+  image_alt: LocalizedText;
+  image_source: SpotImageSource;
+  image_license: string;
+  image_credit: string;
+  image_source_url: string;
   accent: string;
   published: boolean;
   diary?: SpotDiary;
