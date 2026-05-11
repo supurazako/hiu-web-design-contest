@@ -639,19 +639,22 @@ const diaryNotebookUiCopy = {
   </main>
 
   <script
+    is:inline
     id="spots-data"
     type="application/json"
     set:html={JSON.stringify(spots)}
   />
   <script
+    is:inline
     id="ui-data"
     type="application/json"
     set:html={JSON.stringify(uiCopy)}
   />
   <script
+    is:inline
     id="theme-data"
     type="application/json"
     set:html={JSON.stringify(themeByMode)}
   />
-  <script type="module" src={mapPageScript}></script>
+  <script is:inline type="module" src={mapPageScript}></script>
 </BaseLayout>

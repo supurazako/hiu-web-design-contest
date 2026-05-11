@@ -1,15 +1,21 @@
 import { clamp } from "./map-utils";
 import type { MapPoint } from "./map-types";
 
+const webkitMaskProperties = [
+  "-webkit-mask-image",
+  "-webkit-mask-repeat",
+  "-webkit-mask-size",
+  "-webkit-mask-position",
+] as const;
+
 export const clearMaskStyles = (pane: HTMLElement) => {
   pane.style.maskImage = "";
   pane.style.maskRepeat = "";
   pane.style.maskSize = "";
   pane.style.maskPosition = "";
-  pane.style.webkitMaskImage = "";
-  pane.style.webkitMaskRepeat = "";
-  pane.style.webkitMaskSize = "";
-  pane.style.webkitMaskPosition = "";
+  webkitMaskProperties.forEach((property) => {
+    pane.style.removeProperty(property);
+  });
 };
 
 export const setMaskImage = (
@@ -20,10 +26,10 @@ export const setMaskImage = (
   pane.style.maskRepeat = options.repeat;
   pane.style.maskSize = options.size;
   pane.style.maskPosition = options.position;
-  pane.style.webkitMaskImage = options.image;
-  pane.style.webkitMaskRepeat = options.repeat;
-  pane.style.webkitMaskSize = options.size;
-  pane.style.webkitMaskPosition = options.position;
+  pane.style.setProperty("-webkit-mask-image", options.image);
+  pane.style.setProperty("-webkit-mask-repeat", options.repeat);
+  pane.style.setProperty("-webkit-mask-size", options.size);
+  pane.style.setProperty("-webkit-mask-position", options.position);
 };
 
 export const setMaskReference = (pane: HTMLElement, maskId: string) => {
@@ -32,10 +38,10 @@ export const setMaskReference = (pane: HTMLElement, maskId: string) => {
   pane.style.maskRepeat = "no-repeat";
   pane.style.maskSize = "100% 100%";
   pane.style.maskPosition = "0 0";
-  pane.style.webkitMaskImage = maskValue;
-  pane.style.webkitMaskRepeat = "no-repeat";
-  pane.style.webkitMaskSize = "100% 100%";
-  pane.style.webkitMaskPosition = "0 0";
+  pane.style.setProperty("-webkit-mask-image", maskValue);
+  pane.style.setProperty("-webkit-mask-repeat", "no-repeat");
+  pane.style.setProperty("-webkit-mask-size", "100% 100%");
+  pane.style.setProperty("-webkit-mask-position", "0 0");
 };
 
 export const setPaneState = (
