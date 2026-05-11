@@ -628,7 +628,7 @@ body.is-map-leaving .hero__content {
   min-height: 52px;
   padding: 0;
   border: 0;
-  border-radius: 18px;
+  border-radius: 26px;
   background: transparent;
   color: var(--map-ui-on-surface);
   font-weight: 700;
