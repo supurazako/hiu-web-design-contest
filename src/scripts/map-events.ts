@@ -1,4 +1,5 @@
 import type L from "leaflet";
+import { transitionDisplayMode } from "./map-display-mode-transition";
 import type { MapDomRefs } from "./map-dom-refs";
 import type { DisplayMode, Locale, MapPageState, TimeMode } from "./map-types";
 
@@ -83,24 +84,12 @@ export const registerMapPageEvents = ({
 
   refs.displayModeButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      const nextMode = button.dataset.displayMode as DisplayMode;
-      if (nextMode === "magnifier" && state.displayMode !== "magnifier") {
-        ensureMagnifierPoint();
-        state.timeMode = "day";
-      }
-      if (nextMode === "clock" && state.displayMode !== "clock") {
-        state.clockHour = 12;
-        state.timeMode = "day";
-      }
-      if (nextMode === "scratch" && state.displayMode !== "scratch") {
-        scratchController.reset();
-        state.timeMode = "day";
-        state.selectedSpotMode = state.selectedSpotMode ?? "day";
-      }
-      if (state.displayMode === "scratch" && nextMode !== "scratch") {
-        scratchController.reset();
-      }
-      state.displayMode = nextMode;
+      transitionDisplayMode({
+        state,
+        nextMode: button.dataset.displayMode as DisplayMode,
+        scratchController,
+        ensureMagnifierPoint,
+      });
       render();
     });
   });

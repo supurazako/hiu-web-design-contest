@@ -2,16 +2,16 @@ import L from "leaflet";
 import "leaflet.markercluster";
 import type { Spot } from "../data/spots";
 import type { ThemeByMode, UiCopy } from "../data/site";
-import { saveDiscoveredDiary } from "../lib/diary-storage";
 import { getJsonData } from "./dom-utils";
 import { createSpotCardRenderer } from "./map-card";
+import { createDiaryDiscoveryController } from "./map-diary-discovery";
 import { getMapDomRefs } from "./map-dom-refs";
 import { registerMapPageEvents } from "./map-events";
+import { loadTimeMapGeoJson } from "./map-geojson-loader";
 import { createMapLayoutController } from "./map-layout";
 import {
   createMarkerClusterGroups,
   createSpotMarkers,
-  timeModes,
   updateMarkerClusterVisibility,
   updateMarkerSelection,
 } from "./map-layers";
@@ -22,12 +22,8 @@ import {
   createPaneVisibilityController,
   createTimeMapPanes,
 } from "./map-panes";
-import {
-  featureCategory,
-  isSpotVisibleForMode,
-  layerStyleForMode,
-} from "./map-style";
-import type { MapPageState, MarkerEntry, TimeMode } from "./map-types";
+import { ensureSelectionVisibility } from "./map-selection-visibility";
+import type { MapPageState, MarkerEntry } from "./map-types";
 import {
   applyTheme as applyThemeRender,
   renderControlCluster as renderControlClusterView,
@@ -119,10 +115,7 @@ const geoRendererByMode = {
 
 let markerEntries = new Map<string, MarkerEntry>();
 const markerClusterGroupsByMode = createMarkerClusterGroups();
-const geoJsonLayers: Partial<Record<TimeMode, L.GeoJSON>> = {};
 let dataBounds: L.LatLngBounds | null = null;
-let diaryToastHideTimer: number | null = null;
-const diaryToastDuration = 3200;
 const townCenter = L.latLng(42.965, 141.16615);
 
 const getSelectedSpot = () =>
@@ -132,54 +125,11 @@ const getDiscoveredDiaryToastSpot = () =>
     (spot) => spot.id === state.discoveredDiaryToastSpotId && spot.diary,
   ) ?? null;
 
-const selectSpot = (spot: Spot, mode: TimeMode) => {
-  state.selectedSpotId = spot.id;
-  state.selectedSpotMode = mode;
-  if (spot.diary) {
-    const didDiscover = saveDiscoveredDiary(spot.id);
-    if (didDiscover) {
-      state.discoveredDiaryToastSpotId = spot.id;
-      if (diaryToastHideTimer !== null) {
-        window.clearTimeout(diaryToastHideTimer);
-      }
-      diaryToastHideTimer = window.setTimeout(() => {
-        state.discoveredDiaryToastSpotId = null;
-        diaryToastHideTimer = null;
-        renderDiscoveryToast();
-      }, diaryToastDuration);
-    }
-  }
-};
-
-const selectVisibleMarkerFromPointer = createVisibleMarkerSelector({
-  root,
-  mapElement,
-  map,
-  state,
-  markerClusterGroupsByMode,
-  scratchController,
-  getMarkerEntries: () => markerEntries,
-  isVerticalCompareMode,
-  selectSpot,
-  render: () => render(),
-});
-
 const clearSelectedSpot = () => {
   if (!state.selectedSpotId && !state.selectedSpotMode) return;
   state.selectedSpotId = null;
   state.selectedSpotMode = null;
   render();
-};
-
-const initMarkers = () => {
-  markerEntries = createSpotMarkers({
-    spots,
-    markerClusterGroupsByMode,
-    onSelect: (spot, mode) => {
-      selectSpot(spot, mode);
-      render();
-    },
-  });
 };
 
 const ensureMagnifierPoint = () => {
@@ -240,6 +190,35 @@ const renderDiscoveryToast = () => {
     state,
     uiCopy,
     discoveredSpot: getDiscoveredDiaryToastSpot(),
+  });
+};
+
+const diaryDiscovery = createDiaryDiscoveryController({
+  state,
+  renderDiscoveryToast,
+});
+
+const selectVisibleMarkerFromPointer = createVisibleMarkerSelector({
+  root,
+  mapElement,
+  map,
+  state,
+  markerClusterGroupsByMode,
+  scratchController,
+  getMarkerEntries: () => markerEntries,
+  isVerticalCompareMode,
+  selectSpot: diaryDiscovery.selectSpot,
+  render: () => render(),
+});
+
+const initMarkers = () => {
+  markerEntries = createSpotMarkers({
+    spots,
+    markerClusterGroupsByMode,
+    onSelect: (spot, mode) => {
+      diaryDiscovery.selectSpot(spot, mode);
+      render();
+    },
   });
 };
 
@@ -315,38 +294,6 @@ const applyScratchState = () => {
   }
 };
 
-const ensureSelectionVisibility = () => {
-  const spot = getSelectedSpot();
-  if (!spot) return;
-
-  if (
-    state.displayMode === "single" &&
-    !isSpotVisibleForMode(spot, state.timeMode)
-  ) {
-    state.selectedSpotId = null;
-    state.selectedSpotMode = null;
-  }
-
-  if (
-    state.displayMode === "compare" &&
-    state.selectedSpotMode &&
-    !isSpotVisibleForMode(spot, state.selectedSpotMode)
-  ) {
-    state.selectedSpotId = null;
-    state.selectedSpotMode = null;
-  }
-
-  if (
-    state.displayMode === "scratch" &&
-    state.selectedSpotMode &&
-    !isSpotVisibleForMode(spot, state.selectedSpotMode)
-  ) {
-    state.selectedSpotMode = isSpotVisibleForMode(spot, "day")
-      ? "day"
-      : "night";
-  }
-};
-
 const render = () => {
   root.classList.toggle("is-map-expanded", state.isExpanded);
   document.body.classList.toggle("is-map-expanded", state.isExpanded);
@@ -355,7 +302,7 @@ const render = () => {
     state.isExpanded,
   );
   syncCustomPaneBounds();
-  ensureSelectionVisibility();
+  ensureSelectionVisibility({ state, selectedSpot: getSelectedSpot() });
   updateButtons();
   renderStaticText();
   renderControlCluster();
@@ -424,25 +371,12 @@ const { invalidateMapLayout, setMapToTownCenter, syncExpandedState } =
   mapNavigation;
 
 const initGeoJson = async () => {
-  const response = await fetch("/geodata/map.geojson");
-  const data = (await response.json()) as GeoJSON.GeoJsonObject;
-
-  timeModes.forEach((mode) => {
-    const layer = L.geoJSON(data, {
-      filter: (feature: GeoJSON.Feature | undefined) => {
-        const category = featureCategory(feature);
-        return Boolean(category) && feature?.geometry?.type !== "Point";
-      },
-      style: (feature: GeoJSON.Feature | undefined) =>
-        layerStyleForMode(mode, feature, root),
-      interactive: false,
-      pane: mode === "day" ? "day-geojson-pane" : "night-geojson-pane",
-      renderer: geoRendererByMode[mode],
-    } as L.GeoJSONOptions & { renderer: L.Renderer }).addTo(map);
-    geoJsonLayers[mode] = layer;
+  const { bounds } = await loadTimeMapGeoJson({
+    map,
+    root,
+    rendererByMode: geoRendererByMode,
   });
-
-  dataBounds = geoJsonLayers.day?.getBounds() ?? null;
+  dataBounds = bounds;
   if (dataBounds?.isValid()) {
     setMapToTownCenter();
     map.setMaxBounds(dataBounds.pad(0.2));
