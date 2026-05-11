@@ -32,9 +32,14 @@ const FeatureSpotCardView = ({
     <Card className="h-full overflow-hidden rounded-[28px] border border-[color:var(--md-sys-color-outline-variant)] bg-[color:var(--md-sys-color-surface-container)] py-0 text-[color:var(--md-sys-color-on-surface)] shadow-[var(--md-elevation-2)]">
       <div className="grid h-full md:grid-cols-[minmax(0,0.95fr)_minmax(280px,1.08fr)]">
         <CardContent className="flex flex-col justify-center gap-5 px-6 py-7 md:px-8 md:py-9">
-          <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[color:var(--md-sys-color-primary-container)] text-base font-bold text-[color:var(--md-sys-color-on-primary-container)]">
-            {String(index + 1).padStart(2, "0")}
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[color:var(--md-sys-color-primary-container)] text-base font-bold text-[color:var(--md-sys-color-on-primary-container)]">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <h3 className="m-0 text-[1.35rem] font-bold leading-tight text-[color:var(--md-sys-color-on-surface)] md:text-[1.75rem]">
+              {card.title}
+            </h3>
+          </div>
           <p className="max-w-[28ch] text-sm leading-7 text-[color:var(--md-sys-color-on-surface-variant)] md:text-[1.05rem] md:leading-8">
             {card.body}
           </p>
