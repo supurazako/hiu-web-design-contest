@@ -37,6 +37,7 @@ export const renderLandingText = ({
   if (refs.sectionsTitle) refs.sectionsTitle.textContent = ui.sectionsTitle;
   if (refs.diaryTitle) refs.diaryTitle.textContent = ui.diarySectionTitle;
   if (refs.diaryBody) refs.diaryBody.textContent = ui.diarySectionBody;
+  if (refs.copyright) refs.copyright.textContent = ui.copyright;
   if (refs.sceneLabelDay) refs.sceneLabelDay.textContent = ui.dayLabel;
   if (refs.sceneLabelNight) refs.sceneLabelNight.textContent = ui.nightLabel;
   if (refs.sceneMoodDay) refs.sceneMoodDay.textContent = ui.dayMood;

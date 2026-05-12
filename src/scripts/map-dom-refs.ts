@@ -71,6 +71,7 @@ export type MapDomRefs = {
   sectionsTitle: HTMLElement | null;
   diaryTitle: HTMLElement | null;
   diaryBody: HTMLElement | null;
+  copyright: HTMLElement | null;
   sceneLabelDay: HTMLElement | null;
   sceneLabelNight: HTMLElement | null;
   sceneMoodDay: HTMLElement | null;
@@ -211,6 +212,7 @@ export const getMapDomRefs = (): MapDomRefs => {
     sectionsTitle: document.querySelector<HTMLElement>("[data-sections-title]"),
     diaryTitle: document.querySelector<HTMLElement>("[data-diary-title]"),
     diaryBody: document.querySelector<HTMLElement>("[data-diary-body]"),
+    copyright: document.querySelector<HTMLElement>("[data-copyright]"),
     sceneLabelDay: document.querySelector<HTMLElement>(
       '[data-scene-label="day"]',
     ),

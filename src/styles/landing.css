@@ -417,6 +417,26 @@ body.is-map-expanded .content-block {
   padding-bottom: 40px;
 }
 
+.site-footer {
+  position: relative;
+  z-index: 1;
+  width: min(calc(100% - 32px), 1120px);
+  margin: 8px auto 0;
+  padding: 0 0 32px;
+  color: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface-variant) 74%,
+    transparent
+  );
+  font-size: 0.82rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
 .content-block--diary::before {
   content: "";
   position: absolute;
