@@ -346,6 +346,68 @@ body.is-map-expanded .content-block {
   background: transparent;
 }
 
+.scroll-top-button {
+  position: fixed;
+  right: max(20px, env(safe-area-inset-right));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 999px;
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  box-shadow: var(--md-elevation-2);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.scroll-top-button span {
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid currentColor;
+  border-left: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.scroll-top-button.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.scroll-top-button:hover,
+.scroll-top-button:focus-visible {
+  background: var(--md-sys-color-primary-container);
+  border-color: color-mix(
+    in srgb,
+    var(--md-sys-color-primary) 40%,
+    var(--md-sys-color-outline-variant)
+  );
+  box-shadow: var(--md-elevation-3);
+}
+
+.scroll-top-button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--md-sys-color-primary) 38%, white);
+  outline-offset: 3px;
+}
+
+body.is-map-expanded .scroll-top-button {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+}
+
 .hero__card,
 .content-block,
 .map-header,

@@ -58,6 +58,7 @@ export type MapDomRefs = {
   displayModeGroup: HTMLElement;
   timeModeButtons: HTMLElement[];
   displayModeButtons: HTMLElement[];
+  scrollTopButton: HTMLButtonElement | null;
   landingTitle: HTMLElement | null;
   landingLead: HTMLElement | null;
   landingCta: HTMLElement | null;
@@ -193,6 +194,9 @@ export const getMapDomRefs = (): MapDomRefs => {
     ),
     displayModeButtons: Array.from(
       document.querySelectorAll<HTMLElement>("[data-display-mode]"),
+    ),
+    scrollTopButton: document.querySelector<HTMLButtonElement>(
+      "[data-scroll-top-button]",
     ),
     landingTitle: document.querySelector<HTMLElement>("[data-landing-title]"),
     landingLead: document.querySelector<HTMLElement>("[data-landing-lead]"),

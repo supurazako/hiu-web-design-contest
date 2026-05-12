@@ -72,6 +72,41 @@ export const registerMapPageEvents = ({
     syncExpandedState(false, { updateHistory: true });
   });
 
+  if (refs.scrollTopButton) {
+    let isScrollTopUpdateQueued = false;
+
+    const updateScrollTopButton = () => {
+      isScrollTopUpdateQueued = false;
+      const showAfter = Math.max(refs.root.offsetHeight * 0.75, 240);
+      refs.scrollTopButton?.classList.toggle(
+        "is-visible",
+        !state.isExpanded && window.scrollY > showAfter,
+      );
+    };
+
+    const requestScrollTopButtonUpdate = () => {
+      if (isScrollTopUpdateQueued) return;
+      isScrollTopUpdateQueued = true;
+      window.requestAnimationFrame(updateScrollTopButton);
+    };
+
+    refs.scrollTopButton.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: prefersReducedMotion.matches ? "auto" : "smooth",
+      });
+    });
+    window.addEventListener("scroll", requestScrollTopButtonUpdate, {
+      passive: true,
+    });
+    window.addEventListener("resize", requestScrollTopButtonUpdate);
+    prefersReducedMotion.addEventListener(
+      "change",
+      requestScrollTopButtonUpdate,
+    );
+    requestScrollTopButtonUpdate();
+  }
+
   window.addEventListener("popstate", () => {
     syncExpandedState(window.location.hash === "#map");
   });

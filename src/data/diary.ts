@@ -42,7 +42,9 @@ export const getDiaryEntries = (spots: Spot[]): DiaryNotebookEntry[] =>
     ];
   });
 
-export const getDiaryNotebookUiCopy = (uiCopy: UiCopy): DiaryNotebookUiCopy => ({
+export const getDiaryNotebookUiCopy = (
+  uiCopy: UiCopy,
+): DiaryNotebookUiCopy => ({
   ja: {
     dayLabel: uiCopy.ja.dayLabel,
     nightLabel: uiCopy.ja.nightLabel,
