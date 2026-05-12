@@ -457,14 +457,11 @@ const diaryNotebookUiCopy = getDiaryNotebookUiCopy(uiCopy);
       </div>
     </section>
 
-    <section class="content-block content-block--intro">
-      <div class="section-heading">
-        <p data-landing-lead>{ui.landingLead}</p>
-      </div>
-    </section>
-
     <section class="content-block" id="contrast">
       <div class="section-heading">
+        <p class="section-heading__lead" data-landing-lead>
+          {ui.landingLeadLines.map((line) => <span>{line}</span>)}
+        </p>
         <h2 data-concept-title>{ui.conceptTitle}</h2>
         <p data-concept-body>{ui.conceptBody}</p>
       </div>

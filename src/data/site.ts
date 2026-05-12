@@ -11,11 +11,15 @@ export const uiCopy = {
     landingTitle: "時間で表情が変わる温泉街を、ひとつの地図で。",
     landingTitleLines: ["時間で表情が変わる", "温泉街を", "ひとつの地図で。"],
     landingLead:
-      "昼は散策やご飯、夜は灯りや絶景。Jozankei Time Map は、その時間に合う温泉、ご飯、宿を地図の上で見比べながら、定山渓の楽しみ方を探せるサイトです。",
+      "昼に歩きたい場所も、夜に眺めたい景色も。今の時間に合う定山渓を、地図から見つける。",
+    landingLeadLines: [
+      "昼に歩きたい場所も、夜に眺めたい景色も。",
+      "今の時間に合う定山渓を、地図から見つける。",
+    ],
     landingPrimaryCta: "地図を見る",
     conceptTitle: "昼と夜で、同じ場所が違って見える。",
     conceptBody:
-      "その時間に合う場所をおすすめします。温泉の魅力やおいしいご飯、宿を、昼と夜それぞれの時間にあわせて紹介します。昼に食べたいご飯も、夜に見たい絶景も、この地図ひとつで見て楽しめます。",
+      "温泉、ご飯、宿、景色。昼に似合う場所と、夜に映える場所を、ひとつの地図で見比べられます。",
     dayLabel: "昼",
     nightLabel: "夜",
     bothLabel: "昼夜",
@@ -88,11 +92,15 @@ export const uiCopy = {
     landingTitle: "One map for a hot spring town that changes by the hour.",
     landingTitleLines: ["One map for", "a hot spring town", "by the hour."],
     landingLead:
-      "By day, Jozankei is made for walks, meals, and open views. By night, it turns to lights, steam, and quiet scenery. Jozankei Time Map lets you compare hot springs, food, inns, and scenic spots on one map, then choose what fits the moment.",
+      "Find the Jozankei that fits the hour, from daytime walks to night views.",
+    landingLeadLines: [
+      "Find the Jozankei that fits the hour,",
+      "from daytime walks to night views.",
+    ],
     landingPrimaryCta: "Open the map",
     conceptTitle: "The same town feels different by day and by night.",
     conceptBody:
-      "Find places that match the time you are visiting. The map highlights hot springs, local food, inns, and views for both daytime wandering and evening strolls, so a lunch stop and a night view can sit naturally in the same plan.",
+      "Compare hot springs, food, inns, and views by the time they shine, all on one map.",
     dayLabel: "Day",
     nightLabel: "Night",
     bothLabel: "Both",

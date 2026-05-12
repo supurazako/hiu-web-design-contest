@@ -371,6 +371,20 @@ body.is-map-expanded .content-block {
   margin-top: 14px;
 }
 
+.section-heading__lead {
+  max-width: 48ch;
+  margin: 0 0 24px;
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1.85;
+  text-wrap: pretty;
+}
+
+.section-heading__lead span {
+  display: block;
+}
+
 .content-block {
   width: min(calc(100% - 32px), 1120px);
   margin: 0 auto;
@@ -386,7 +400,7 @@ body.is-map-expanded .content-block {
 }
 
 .hero + .content-block {
-  margin-top: 80px;
+  margin-top: 64px;
 }
 
 .content-block + .content-block {
@@ -400,21 +414,6 @@ body.is-map-expanded .content-block {
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 24px;
-}
-
-.content-block--intro {
-  padding-bottom: 0;
-}
-
-.content-block--intro .section-heading {
-  margin-bottom: 0;
-}
-
-.content-block--intro .section-heading > p {
-  max-width: 64ch;
-  font-size: clamp(1.05rem, 1.7vw, 1.3rem);
-  font-weight: 700;
-  line-height: 1.7;
 }
 
 .content-block--diary {

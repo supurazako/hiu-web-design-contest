@@ -20,6 +20,20 @@ export const renderLandingTitle = (
   );
 };
 
+export const renderLineStack = (
+  element: HTMLElement | null,
+  lines: readonly string[],
+) => {
+  if (!element) return;
+  element.replaceChildren(
+    ...lines.map((line) => {
+      const span = document.createElement("span");
+      span.textContent = line;
+      return span;
+    }),
+  );
+};
+
 export const renderLandingText = ({
   refs,
   state,
@@ -33,7 +47,7 @@ export const renderLandingText = ({
   document.documentElement.lang = state.locale;
   document.body.dataset.locale = state.locale;
   renderLandingTitle(refs.landingTitle, ui.landingTitleLines);
-  if (refs.landingLead) refs.landingLead.textContent = ui.landingLead;
+  renderLineStack(refs.landingLead, ui.landingLeadLines);
   if (refs.landingCta) refs.landingCta.textContent = ui.landingPrimaryCta;
   if (refs.conceptTitle) refs.conceptTitle.textContent = ui.conceptTitle;
   if (refs.conceptBody) refs.conceptBody.textContent = ui.conceptBody;

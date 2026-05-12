@@ -225,7 +225,7 @@
   }
 
   .hero + .content-block {
-    margin-top: 56px;
+    margin-top: 48px;
   }
 
   .content-block + .content-block {
@@ -234,6 +234,12 @@
 
   .section-heading {
     margin-bottom: 24px;
+  }
+
+  .section-heading__lead {
+    max-width: 34ch;
+    margin-bottom: 20px;
+    font-size: clamp(1rem, 4.8vw, 1.15rem);
   }
 
   .hero__content h1 {
