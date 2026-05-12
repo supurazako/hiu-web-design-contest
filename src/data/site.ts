@@ -1,0 +1,191 @@
+export type Locale = "ja" | "en";
+export type LocalizedText = Record<Locale, string>;
+
+export const uiCopy = {
+  ja: {
+    siteTitle: "Jozankei Time Map",
+    siteTagline: "時間で巡る温泉街",
+    metaDescription:
+      "昼と夜で表情が変わる定山渓の温泉、食事、宿、景色を、ひとつの地図で見比べながら探せる時間別マップです。",
+    landingEyebrow: "定山渓を、昼と夜のリズムで旅する。",
+    landingTitle: "時間で表情が変わる温泉街を、ひとつの地図で。",
+    landingTitleLines: ["時間で表情が変わる", "温泉街を", "ひとつの地図で。"],
+    landingLead:
+      "昼は散策やご飯、夜は灯りや絶景。Jozankei Time Map は、その時間に合う温泉、ご飯、宿を地図の上で見比べながら、定山渓の楽しみ方を探せるサイトです。",
+    landingPrimaryCta: "地図を見る",
+    conceptTitle: "昼と夜で、同じ場所が違って見える。",
+    conceptBody:
+      "その時間に合う場所をおすすめします。温泉の魅力やおいしいご飯、宿を、昼と夜それぞれの時間にあわせて紹介します。昼に食べたいご飯も、夜に見たい絶景も、この地図ひとつで見て楽しめます。",
+    dayLabel: "昼",
+    nightLabel: "夜",
+    bothLabel: "昼夜",
+    dayMood: "散策・自然・カフェ・フォトスポット",
+    nightMood: "灯り・湯けむり・静けさ・余韻",
+    sectionsTitle: "Jozankei Time Mapでできること",
+    diarySectionTitle: "日記を見る",
+    diarySectionBody:
+      "スポットを見つけると、旅の断片が手帳に記録されます。見つけた日記は読めるようになり、まだ見つけていない日記には次の発見につながるヒントが残ります。",
+    diaryProgressLabel: "発見した日記",
+    diaryDiscoveredLabel: "発見済み",
+    diaryUndiscoveredLabel: "未発見",
+    diaryHintLabel: "ヒント",
+    diaryFallbackHint: "温泉街を歩きながら、気になるスポットを開いてみる",
+    diaryLockedBody: "このページはまだ閉じたままです。",
+    diaryToastTitle: "日記を発見",
+    diaryToastBody: "スポットカードでそのまま読めます。",
+    diaryCardLabel: "見つけた日記",
+    diaryNotebookOpenLabel: "日記手帳を開く",
+    diaryNotebookCloseLabel: "日記手帳を閉じる",
+    featureCards: [
+      {
+        imageSrc: "/features/carousel1.png",
+        imageAlt: "昼と夜の地図を左右で比較している画面",
+        title: "地図",
+        body: "昼と夜を切り替えながら、その時間に合う温泉やご飯、宿をひとつの地図で見つけられます。",
+      },
+      {
+        imageSrc: "/features/carousel2.png",
+        imageAlt: "地図上のスポットを選び詳細カードを表示している画面",
+        title: "スポット",
+        body: "気になるスポットを選ぶと、その場所で楽しめる体験や景色をカードで確認できます。",
+      },
+      {
+        imageSrc: "/features/carousel4.png",
+        imageAlt: "発見した日記を日記手帳で表示している画面",
+        title: "日記",
+        body: "スポットを見つけると旅の日記が少しずつ開きます。未発見の日記にはヒントが残るので、次に探す場所の手がかりになります。",
+      },
+    ],
+    mapIntroTitle: "時間で読む、温泉街の1日",
+    mapPageTitle: "地図ビュー",
+    languageLabel: "言語",
+    zoomControlsLabel: "地図の拡大縮小",
+    zoomInLabel: "拡大",
+    zoomOutLabel: "縮小",
+    displayModeLabel: "表示モード",
+    singleModeLabel: "単独表示モード",
+    compareModeLabel: "比較表示モード",
+    magnifierModeLabel: "虫眼鏡表示モード",
+    clockModeLabel: "時計表示モード",
+    clockDialLabel: "時刻を調整",
+    scratchModeLabel: "スクラッチ表示モード",
+    compareHandleLabel: "昼夜比較の境界を動かす",
+    scratchResetLabel: "スクラッチをリセット",
+    timeLabel: "時間帯",
+    viewMap: "地図を見る",
+    backHome: "トップへ戻る",
+    mapDataAttribution: "地図データ: OpenStreetMap contributors / Geofabrik",
+    cardEmptyTitle: "ピンを選択",
+    cardEmptyHint: "気になるスポットをひとつ選ぶと、ここに体験が表示されます。",
+    detailsLabel: "体験メモ",
+    routeHint: "この時間に表示中",
+    categoryLabel: "カテゴリ",
+    exploreLabel: "魅力",
+  },
+  en: {
+    siteTitle: "Jozankei Time Map",
+    siteTagline: "Explore the hot spring town by time of day",
+    metaDescription:
+      "Explore Jozankei by day and night on one map, comparing hot springs, food, inns, and scenic spots by the time they shine.",
+    landingEyebrow: "See Jozankei in the rhythm of day and night.",
+    landingTitle: "One map for a hot spring town that changes by the hour.",
+    landingTitleLines: ["One map for", "a hot spring town", "by the hour."],
+    landingLead:
+      "By day, Jozankei is made for walks, meals, and open views. By night, it turns to lights, steam, and quiet scenery. Jozankei Time Map lets you compare hot springs, food, inns, and scenic spots on one map, then choose what fits the moment.",
+    landingPrimaryCta: "Open the map",
+    conceptTitle: "The same town feels different by day and by night.",
+    conceptBody:
+      "Find places that match the time you are visiting. The map highlights hot springs, local food, inns, and views for both daytime wandering and evening strolls, so a lunch stop and a night view can sit naturally in the same plan.",
+    dayLabel: "Day",
+    nightLabel: "Night",
+    bothLabel: "Both",
+    dayMood: "Walks, nature, cafes, photo spots",
+    nightMood: "Lights, steam, stillness, lingering views",
+    sectionsTitle: "What Jozankei Time Map Helps You Do",
+    diarySectionTitle: "Travel Diary",
+    diarySectionBody:
+      "When you discover a spot, a small travel note is added to the notebook. Found pages become readable, while hidden pages leave hints for where to look next.",
+    diaryProgressLabel: "Diary pages discovered",
+    diaryDiscoveredLabel: "Found",
+    diaryUndiscoveredLabel: "Undiscovered",
+    diaryHintLabel: "Hint",
+    diaryFallbackHint:
+      "Open the spots that catch your eye as you explore the hot spring town",
+    diaryLockedBody: "This page is still closed.",
+    diaryToastTitle: "Diary discovered",
+    diaryToastBody: "You can read it from the spot card.",
+    diaryCardLabel: "Discovered diary",
+    diaryNotebookOpenLabel: "Open travel diary",
+    diaryNotebookCloseLabel: "Close travel diary",
+    featureCards: [
+      {
+        imageSrc: "/features/carousel1.png",
+        imageAlt: "Screen showing the day and night maps compared side by side",
+        title: "Map",
+        body: "Switch between day and night to find hot springs, food, and inns that suit the time you are exploring.",
+      },
+      {
+        imageSrc: "/features/carousel2-en.png",
+        imageAlt:
+          "Screen showing a selected map spot with its detail card open",
+        title: "Spot",
+        body: "Select a spot to see what you can experience there, from the atmosphere to the views worth stopping for.",
+      },
+      {
+        imageSrc: "/features/carousel4-en.png",
+        imageAlt:
+          "Screen showing a discovered diary page in the travel diary notebook",
+        title: "Diary",
+        body: "Discovering spots unlocks diary pages little by little. Hidden pages leave hints that point toward your next stop.",
+      },
+    ],
+    mapIntroTitle: "A day in the hot spring town, told by time",
+    mapPageTitle: "Map View",
+    languageLabel: "Language",
+    zoomControlsLabel: "Zoom controls",
+    zoomInLabel: "Zoom in",
+    zoomOutLabel: "Zoom out",
+    displayModeLabel: "Display mode",
+    singleModeLabel: "Single map view",
+    compareModeLabel: "Day-night comparison",
+    magnifierModeLabel: "Magnifier view",
+    clockModeLabel: "Clock view",
+    clockDialLabel: "Adjust time",
+    scratchModeLabel: "Scratch view mode",
+    compareHandleLabel: "Move the day-night comparison divider",
+    scratchResetLabel: "Reset scratch view",
+    timeLabel: "Time",
+    viewMap: "View map",
+    backHome: "Back to home",
+    mapDataAttribution: "Map data: OpenStreetMap contributors / Geofabrik",
+    cardEmptyTitle: "Select a pin",
+    cardEmptyHint: "Choose a visible spot to see its experience here.",
+    detailsLabel: "Experience note",
+    routeHint: "Visible at this time",
+    categoryLabel: "Category",
+    exploreLabel: "Explore",
+  },
+} as const;
+
+export const themeByMode = {
+  day: {
+    className: "theme-day",
+    glow: "rgba(255, 191, 102, 0.24)",
+  },
+  night: {
+    className: "theme-night",
+    glow: "rgba(93, 168, 255, 0.18)",
+  },
+  compare: {
+    className: "theme-compare",
+    glow: "rgba(162, 185, 212, 0.2)",
+  },
+  scratch: {
+    className: "theme-scratch",
+    glow: "rgba(129, 176, 237, 0.16)",
+  },
+} as const;
+
+export type UiCopy = typeof uiCopy;
+export type UiText = UiCopy[Locale];
+export type ThemeByMode = typeof themeByMode;

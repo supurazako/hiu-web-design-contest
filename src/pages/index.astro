@@ -1,0 +1,538 @@
+---
+import "leaflet/dist/leaflet.css";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import LanguageSwitcher from "../components/LanguageSwitcher.astro";
+import SceneSplit from "../components/SceneSplit.astro";
+import TimeToggle from "../components/TimeToggle.astro";
+import FeatureSpotCarousel from "../components/FeatureSpotCarousel";
+import DiaryNotebook from "../components/DiaryNotebook";
+import mapPageScript from "../scripts/map-page.ts?url";
+import { getDiaryEntries, getDiaryNotebookUiCopy } from "../data/diary";
+import { themeByMode, uiCopy } from "../data/site";
+import { spots } from "../data/spots";
+
+const locale = "ja";
+const initialMode = "day";
+const ui = uiCopy[locale];
+const featureCardsByLocale = {
+  ja: uiCopy.ja.featureCards,
+  en: uiCopy.en.featureCards,
+};
+const diaryEntries = getDiaryEntries(spots);
+const diaryNotebookUiCopy = getDiaryNotebookUiCopy(uiCopy);
+---
+
+<BaseLayout
+  title={`${ui.siteTitle} | ${ui.siteTagline}`}
+  description={ui.metaDescription}
+  locale={locale}
+>
+  <main class="page-shell landing-shell theme-day">
+    <section class="hero">
+      <div
+        class={`map-shell hero__map-background ${themeByMode[initialMode].className}`}
+        data-map-shell
+      >
+        <div
+          id="map"
+          class="map-canvas hero__map-canvas"
+          aria-label={ui.mapPageTitle}
+        >
+        </div>
+        <canvas
+          class="map-scratch-surface"
+          data-scratch-surface
+          hidden
+          aria-hidden="true"></canvas>
+
+        <div class="map-overlay">
+          <div class="map-compare" data-compare-overlay hidden>
+            <div class="map-compare__divider" data-split-divider>
+              <div class="map-compare__line" aria-hidden="true"></div>
+              <button
+                class="map-compare__handle"
+                type="button"
+                data-split-handle
+                aria-label={ui.compareHandleLabel}
+                aria-orientation="horizontal"
+                aria-valuemin="10"
+                aria-valuemax="90"
+                aria-valuenow="50"
+                aria-valuetext="50%"
+                role="slider"
+              >
+                <span aria-hidden="true">↔</span>
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="map-magnifier"
+            data-magnifier-overlay
+            hidden
+            aria-hidden="true"
+          >
+          </div>
+
+          <div class="map-clock" data-clock-panel hidden>
+            <button
+              class="map-clock__dial"
+              type="button"
+              data-clock-dial
+              aria-label={ui.clockDialLabel}
+              aria-valuemin="0"
+              aria-valuemax="24"
+              aria-valuenow="12"
+              aria-valuetext="12:00"
+              role="slider"
+            >
+              <span class="map-clock__hand" data-clock-hand aria-hidden="true"
+              ></span>
+              <span class="map-clock__center" aria-hidden="true"></span>
+            </button>
+            <span class="map-clock__time" data-clock-time>12:00</span>
+          </div>
+
+          <div class="map-back">
+            <button
+              class="map-toolbar__button"
+              type="button"
+              data-back-home-link
+              aria-label={ui.backHome}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#1f1f1f"
+                ><path
+                  d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"
+                ></path></svg
+              >
+            </button>
+          </div>
+
+          <LanguageSwitcher className="map-language" switcherId="map" ui={ui} />
+
+          <div class="map-control-cluster" data-control-cluster>
+            <div
+              class="map-diary-stack"
+              role="group"
+              aria-label={ui.diaryNotebookOpenLabel}
+            >
+              <button
+                class="map-toolbar__button map-toolbar__button--stacked"
+                type="button"
+                data-map-diary-notebook-open
+                aria-label={ui.diaryNotebookOpenLabel}
+                title={ui.diaryNotebookOpenLabel}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  width="24px"
+                  aria-hidden="true"
+                  ><path
+                    d="M300-80q-58 0-99-41t-41-99v-520q0-58 41-99t99-41h500v600q-25 0-42.5 17.5T740-220q0 25 17.5 42.5T800-160v80H300Zm-60-267q14-7 29-10t31-3h20v-440h-20q-25 0-42.5 17.5T240-740v393Zm160-13h320v-440H400v440Zm-160 13v-453 453Zm60 187h373q-6-14-9.5-28.5T660-220q0-16 3-31t10-29H300q-26 0-43 17.5T240-220q0 26 17 43t43 17Z"
+                  ></path></svg
+                >
+              </button>
+            </div>
+            <div
+              class="map-zoom-stack"
+              role="group"
+              aria-label={ui.zoomControlsLabel}
+              data-zoom-controls
+            >
+              <div class="map-zoom-stack__section">
+                <button
+                  class="map-toolbar__button map-toolbar__button--stacked"
+                  type="button"
+                  data-zoom-in
+                  aria-label={ui.zoomInLabel}
+                  title={ui.zoomInLabel}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                    aria-hidden="true"
+                    ><path
+                      d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"
+                    ></path></svg
+                  >
+                </button>
+              </div>
+              <div class="map-zoom-stack__section">
+                <button
+                  class="map-toolbar__button map-toolbar__button--stacked"
+                  type="button"
+                  data-zoom-out
+                  aria-label={ui.zoomOutLabel}
+                  title={ui.zoomOutLabel}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                    aria-hidden="true"
+                    ><path d="M200-440v-80h560v80H200Z"></path></svg
+                  >
+                </button>
+              </div>
+            </div>
+            <div class="map-control-stack" data-control-shell>
+              <div
+                class="map-control-stack__section map-control-stack__section--mode"
+              >
+                <div
+                  class="map-mode-switch"
+                  role="group"
+                  aria-label={ui.displayModeLabel}
+                  data-display-mode-group
+                >
+                  <div
+                    class="map-mode-switch__single-group is-expanded"
+                    data-single-group
+                  >
+                    <button
+                      class="map-mode-switch__button is-active"
+                      type="button"
+                      data-display-mode="single"
+                      aria-label={ui.singleModeLabel}
+                      title={ui.singleModeLabel}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        aria-hidden="true"
+                        ><path
+                          d="M480-118 120-398l66-50 294 228 294-228 66 50-360 280Zm0-202L120-600l360-280 360 280-360 280Zm0-280Zm0 178 230-178-230-178-230 178 230 178Z"
+                        ></path></svg
+                      >
+                    </button>
+                    <div class="map-time-toggle" data-time-toggle-group>
+                      <TimeToggle mode={initialMode} ui={ui} />
+                    </div>
+                  </div>
+                  <button
+                    class="map-mode-switch__button"
+                    type="button"
+                    data-display-mode="compare"
+                    aria-label={ui.compareModeLabel}
+                    title={ui.compareModeLabel}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24px"
+                      viewBox="0 -960 960 960"
+                      width="24px"
+                      aria-hidden="true"
+                      ><path
+                        d="M200-160q-33 0-56.5-23.5T120-240v-480q0-33 23.5-56.5T200-800h160v80H200v480h160v80H200Zm240 80v-800h80v80h240q33 0 56.5 23.5T840-720v480q0 33-23.5 56.5T760-160H520v80h-80Zm80-160h240v-480H520v480Zm-320 0v-480 480Zm560 0v-480 480Z"
+                      ></path></svg
+                    >
+                  </button>
+                  <button
+                    class="map-mode-switch__button"
+                    type="button"
+                    data-display-mode="magnifier"
+                    aria-label={ui.magnifierModeLabel}
+                    title={ui.magnifierModeLabel}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24px"
+                      viewBox="0 -960 960 960"
+                      width="24px"
+                      aria-hidden="true"
+                      ><path
+                        d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"
+                      ></path></svg
+                    >
+                  </button>
+                  <button
+                    class="map-mode-switch__button"
+                    type="button"
+                    data-display-mode="clock"
+                    aria-label={ui.clockModeLabel}
+                    title={ui.clockModeLabel}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24px"
+                      viewBox="0 -960 960 960"
+                      width="24px"
+                      aria-hidden="true"
+                      ><path
+                        d="M520-494v-206h-80v240l200 120 40-68-160-86ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"
+                      ></path></svg
+                    >
+                  </button>
+                  <div
+                    class="map-mode-switch__scratch-group"
+                    data-scratch-group
+                  >
+                    <button
+                      class="map-mode-switch__button"
+                      type="button"
+                      data-display-mode="scratch"
+                      aria-label={ui.scratchModeLabel}
+                      title={ui.scratchModeLabel}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#1f1f1f"
+                        aria-hidden="true"
+                        ><path
+                          d="M80-80v-60h81q-59-72-90-159T40-480q0-94 31-181t90-159H80v-60h200v200h-60v-116q-58 66-89 147t-31 169q0 88 31 169t89 147v-116h60v200H80Zm578-47q-23 8-46.5 7.5T566-131L304-253l18-40q10-20 28-32.5t40-14.5l68-5-112-307q-6-16 1-30.5t23-20.5q16-6 30.5 1t20.5 23l148 407-100 7 131 61q7 3 15 3.5t15-1.5l157-57q31-11 45-41.5t3-61.5l-55-150q-6-16 1-30.5t23-20.5q16-6 30.5 1t20.5 23l55 150q23 63-4.5 122.5T815-184l-157 57Zm-90-265-54-151q-6-16 1-30.5t23-20.5q16-6 30.5 1t20.5 23l55 150-76 28Zm113-41-41-113q-6-16 1-30.5t23-20.5q16-6 30.5 1t20.5 23l41 112-75 28Zm8 88Z"
+                        ></path></svg
+                      >
+                    </button>
+                    <button
+                      class="map-scratch-reset"
+                      type="button"
+                      data-scratch-reset
+                      aria-label={ui.scratchResetLabel}
+                      title={ui.scratchResetLabel}
+                      aria-hidden="true"
+                      tabindex="-1"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#1f1f1f"
+                        aria-hidden="true"
+                        ><path
+                          d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"
+                        ></path></svg
+                      >
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sheet-host sheet-host--floating">
+            <section
+              class="spot-card is-empty-sheet"
+              id="spot-card"
+              data-spot-card
+              hidden
+            >
+              <div
+                class="spot-card__visual placeholder-river"
+                data-spot-visual
+                aria-hidden="true"
+                hidden
+              >
+                <img
+                  class="spot-card__visual-image"
+                  data-spot-image
+                  alt=""
+                  hidden
+                />
+                <div class="spot-card__visual-overlay"></div>
+                <a
+                  class="spot-card__image-credit"
+                  data-spot-image-credit
+                  target="_blank"
+                  rel="noreferrer"
+                  hidden></a>
+              </div>
+              <div class="spot-card__body">
+                <div class="spot-card__meta" data-spot-meta hidden>
+                  <span class="spot-card__pill" data-spot-category></span>
+                  <span class="spot-card__pill" data-spot-route></span>
+                </div>
+                <h2 data-spot-title hidden></h2>
+                <p data-spot-description hidden></p>
+                <p
+                  class="spot-card__detail-label"
+                  data-spot-detail-label
+                  hidden
+                >
+                </p>
+                <section class="spot-card__diary" data-spot-diary hidden>
+                  <p class="spot-card__diary-label" data-spot-diary-label></p>
+                  <h3 class="spot-card__diary-title" data-spot-diary-title></h3>
+                  <p class="spot-card__diary-body" data-spot-diary-body></p>
+                </section>
+                <div data-spot-empty>
+                  <p class="spot-card__empty-title" data-spot-empty-title>
+                    {ui.cardEmptyTitle}
+                  </p>
+                  <p data-spot-empty-hint>{ui.cardEmptyHint}</p>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div
+            class="map-diary-toast"
+            data-diary-toast
+            hidden
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            <p class="map-diary-toast__eyebrow" data-diary-toast-title>
+              {ui.diaryToastTitle}
+            </p>
+            <h3 class="map-diary-toast__name" data-diary-toast-name></h3>
+            <p class="map-diary-toast__body" data-diary-toast-body>
+              {ui.diaryToastBody}
+            </p>
+          </div>
+
+          <div
+            class="map-diary-notebook-modal"
+            data-map-diary-notebook-modal
+            hidden
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="map-diary-notebook-title"
+          >
+            <div
+              class="map-diary-notebook-modal__panel"
+              data-map-diary-notebook-panel
+            >
+              <div class="map-diary-notebook-modal__header">
+                <h2 id="map-diary-notebook-title" data-map-diary-notebook-title>
+                  {ui.diarySectionTitle}
+                </h2>
+                <button
+                  class="map-diary-notebook-modal__close"
+                  type="button"
+                  data-map-diary-notebook-close
+                  aria-label={ui.diaryNotebookCloseLabel}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 -960 960 960"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+              <DiaryNotebook
+                client:load
+                entries={diaryEntries}
+                initialLocale={locale}
+                uiCopy={diaryNotebookUiCopy}
+              />
+            </div>
+          </div>
+
+          <div class="map-attribution" data-map-attribution>
+            <span>{ui.mapDataAttribution}</span>
+            <a
+              href="https://www.openstreetmap.org/copyright"
+              target="_blank"
+              rel="noreferrer">ODbL</a
+            >
+          </div>
+        </div>
+      </div>
+      <LanguageSwitcher
+        className="landing-language"
+        switcherId="landing"
+        ui={ui}
+      />
+      <div class="hero__content">
+        <p class="hero__brand">Jozankei Time Map</p>
+        <h1 data-landing-title>
+          {ui.landingTitleLines.map((line) => <span>{line}</span>)}
+        </h1>
+        <div class="hero__actions">
+          <a
+            class="button button--primary"
+            href="#map"
+            data-open-map
+            data-landing-cta>{ui.landingPrimaryCta}</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="content-block content-block--intro">
+      <div class="section-heading">
+        <p data-landing-lead>{ui.landingLead}</p>
+      </div>
+    </section>
+
+    <section class="content-block" id="contrast">
+      <div class="section-heading">
+        <h2 data-concept-title>{ui.conceptTitle}</h2>
+        <p data-concept-body>{ui.conceptBody}</p>
+      </div>
+      <SceneSplit
+        dayLabel={ui.dayLabel}
+        nightLabel={ui.nightLabel}
+        dayMood={ui.dayMood}
+        nightMood={ui.nightMood}
+      />
+    </section>
+
+    <section class="content-block">
+      <div class="feature-carousel__header">
+        <div class="section-heading">
+          <h2 data-sections-title>{ui.sectionsTitle}</h2>
+        </div>
+      </div>
+      <FeatureSpotCarousel
+        client:visible
+        cardsByLocale={featureCardsByLocale}
+        initialLocale={locale}
+      />
+    </section>
+
+    <section class="content-block content-block--diary" id="diary">
+      <div class="section-heading section-heading--diary">
+        <h2 data-diary-title>{ui.diarySectionTitle}</h2>
+        <p data-diary-body>{ui.diarySectionBody}</p>
+      </div>
+      <DiaryNotebook
+        client:visible
+        entries={diaryEntries}
+        initialLocale={locale}
+        uiCopy={diaryNotebookUiCopy}
+      />
+    </section>
+  </main>
+
+  <script
+    is:inline
+    id="spots-data"
+    type="application/json"
+    set:html={JSON.stringify(spots)}
+  />
+  <script
+    is:inline
+    id="ui-data"
+    type="application/json"
+    set:html={JSON.stringify(uiCopy)}
+  />
+  <script
+    is:inline
+    id="theme-data"
+    type="application/json"
+    set:html={JSON.stringify(themeByMode)}
+  />
+  <script is:inline type="module" src={mapPageScript}></script>
+</BaseLayout>

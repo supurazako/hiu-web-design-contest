@@ -1,0 +1,35 @@
+---
+import TimeModeIcon from "./TimeModeIcon.astro";
+
+type Props = {
+  mode: "day" | "night";
+  ui: {
+    dayLabel: string;
+    nightLabel: string;
+    timeLabel: string;
+  };
+};
+
+const { mode, ui } = Astro.props;
+---
+
+<div class="segmented-control" role="group" aria-label={ui.timeLabel}>
+  <button
+    class:list={["segmented-control__button", mode === "day" && "is-active"]}
+    data-time-mode="day"
+    type="button"
+    aria-label={ui.dayLabel}
+    title={ui.dayLabel}
+  >
+    <TimeModeIcon mode="day" />
+  </button>
+  <button
+    class:list={["segmented-control__button", mode === "night" && "is-active"]}
+    data-time-mode="night"
+    type="button"
+    aria-label={ui.nightLabel}
+    title={ui.nightLabel}
+  >
+    <TimeModeIcon mode="night" />
+  </button>
+</div>

@@ -1,0 +1,52 @@
+# Based on github/gitignore Node.gitignore
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+
+# Astro generated files
+.astro/
+
+# Coverage
+coverage/
+*.lcov
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Runtime files
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Tool caches
+.cache
+.parcel-cache
+.eslintcache
+.stylelintcache
+.vite/
+.npm
+.pnpm-store
+
+# OS / editor files
+.DS_Store
+.vscode-test
+
+# Geodata
+*.osm.pbf
