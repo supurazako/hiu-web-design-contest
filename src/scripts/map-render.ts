@@ -3,6 +3,9 @@ import type { ThemeByMode, UiCopy } from "../data/site";
 import type { MapDomRefs } from "./map-dom-refs";
 import type { MapPageState } from "./map-types";
 
+const diaryToastExitDuration = 260;
+let diaryToastHideTimer: number | null = null;
+
 export const renderLandingTitle = (
   title: HTMLElement | null,
   lines: readonly string[],
@@ -248,12 +251,24 @@ export const renderDiscoveryToast = ({
   const ui = uiCopy[state.locale];
 
   if (!discoveredSpot?.diary) {
-    refs.diaryToast.hidden = true;
     refs.diaryToast.classList.remove("is-visible");
-    refs.diaryToastName.textContent = "";
+    if (diaryToastHideTimer !== null) {
+      window.clearTimeout(diaryToastHideTimer);
+    }
+    diaryToastHideTimer = window.setTimeout(() => {
+      if (!refs.diaryToast.classList.contains("is-visible")) {
+        refs.diaryToast.hidden = true;
+        refs.diaryToastName.textContent = "";
+      }
+      diaryToastHideTimer = null;
+    }, diaryToastExitDuration);
     return;
   }
 
+  if (diaryToastHideTimer !== null) {
+    window.clearTimeout(diaryToastHideTimer);
+    diaryToastHideTimer = null;
+  }
   refs.diaryToast.hidden = false;
   refs.diaryToast.classList.add("is-visible");
   refs.diaryToastTitle.textContent = ui.diaryToastTitle;
