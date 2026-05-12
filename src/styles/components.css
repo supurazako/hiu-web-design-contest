@@ -586,7 +586,7 @@
     0 8px 18px rgba(20, 24, 32, 0.3);
   color: color-mix(in srgb, var(--cluster-color) 72%, #161b22);
   font-size: 0.86rem;
-  font-weight: 800;
+  font-weight: 900;
   line-height: 1;
 }
 
