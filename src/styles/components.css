@@ -232,12 +232,14 @@
 
 @media (max-width: 767px) {
   .map-diary-notebook-modal {
-    align-items: end;
-    padding: 12px;
+    align-items: stretch;
+    padding: 84px 8px 8px;
   }
 
   .map-diary-notebook-modal__panel {
-    max-height: min(84vh, 720px);
+    width: 100%;
+    height: calc(100dvh - 92px);
+    max-height: none;
     padding: 18px 14px;
     border-radius: 24px;
   }

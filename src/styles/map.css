@@ -521,6 +521,7 @@ body.is-map-leaving .hero__content {
 }
 
 .is-diary-notebook-open .map-zoom-stack,
+.is-diary-notebook-open .map-diary-stack,
 .is-diary-notebook-open .map-control-stack,
 .is-diary-notebook-open .sheet-host--floating,
 .is-diary-notebook-open .map-attribution,
