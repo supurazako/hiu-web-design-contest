@@ -113,6 +113,11 @@
     bottom: var(--map-attribution-safe-offset);
   }
 
+  .map-diary-toast {
+    top: 80px;
+    width: min(calc(100% - 32px), 340px);
+  }
+
   .map-control-cluster.is-hidden-by-selection {
     opacity: 0;
     visibility: hidden;

@@ -838,17 +838,10 @@ body.is-map-leaving .hero__content {
   color: var(--clock-on-surface);
 }
 
-.is-clock-active .sheet-host--floating .spot-card p,
-.is-clock-active .sheet-host--floating .spot-card__pill {
+.is-clock-active .sheet-host--floating .spot-card p {
   color: var(--clock-on-surface-variant);
 }
 
-.is-clock-active .sheet-host--floating .spot-card__pill {
-  background: var(--clock-surface-low);
-  border-color: var(--clock-outline-variant);
-}
-
-.is-clock-active .sheet-host--floating .spot-card__detail-label,
 .is-clock-active .sheet-host--floating .spot-card__empty-title {
   color: var(--clock-primary);
 }
@@ -862,9 +855,7 @@ body.is-map-leaving .hero__content {
 .is-clock-active .sheet-host--floating .spot-card p,
 .theme-night .sheet-host--floating .spot-card p,
 .is-clock-active .sheet-host--floating .spot-card__body.is-empty p,
-.theme-night .sheet-host--floating .spot-card__body.is-empty p,
-.is-clock-active .sheet-host--floating .spot-card__pill,
-.theme-night .sheet-host--floating .spot-card__pill {
+.theme-night .sheet-host--floating .spot-card__body.is-empty p {
   color: var(--spot-card-ink);
 }
 
@@ -873,14 +864,6 @@ body.is-map-leaving .hero__content {
   color: var(--spot-card-ink-strong);
 }
 
-.is-clock-active .sheet-host--floating .spot-card__pill,
-.theme-night .sheet-host--floating .spot-card__pill {
-  background: var(--spot-card-pill-bg);
-  border-color: var(--spot-card-pill-border);
-}
-
-.is-clock-active .sheet-host--floating .spot-card__detail-label,
-.theme-night .sheet-host--floating .spot-card__detail-label,
 .is-clock-active .sheet-host--floating .spot-card__empty-title,
 .theme-night .sheet-host--floating .spot-card__empty-title {
   color: var(--spot-card-accent);

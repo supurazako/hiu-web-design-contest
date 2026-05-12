@@ -83,24 +83,11 @@ export const createSpotCardRenderer = ({
     }
 
     show();
-    const activeTimeMode =
-      state.displayMode === "single"
-        ? state.timeMode
-        : (state.selectedSpotMode ?? state.timeMode);
-    const activeTimeLabel =
-      activeTimeMode === "day"
-        ? ui.dayLabel
-        : activeTimeMode === "night"
-          ? ui.nightLabel
-          : ui.bothLabel;
-
     refs.spotCard.classList.add("is-selected-sheet");
     refs.spotCard.classList.remove("is-empty-sheet");
     refs.spotVisual.hidden = false;
-    refs.spotMeta.hidden = false;
     refs.spotTitle.hidden = false;
     refs.spotDescription.hidden = false;
-    refs.spotDetailLabel.hidden = false;
     refs.spotDiary.hidden = true;
     refs.spotEmpty.hidden = true;
     refs.spotVisual.classList.remove(...placeholderClasses);
@@ -130,11 +117,8 @@ export const createSpotCardRenderer = ({
       refs.spotImageCredit.removeAttribute("title");
     }
 
-    refs.spotCategory.textContent = `${ui.categoryLabel}: ${spot.category[state.locale]}`;
-    refs.spotRoute.textContent = `${ui.routeHint}: ${activeTimeLabel}`;
     refs.spotTitle.textContent = spot.name[state.locale];
     refs.spotDescription.textContent = spot.description[state.locale];
-    refs.spotDetailLabel.textContent = ui.detailsLabel;
 
     if (spot.diary && isDiaryDiscovered(spot.id)) {
       refs.spotDiary.hidden = false;

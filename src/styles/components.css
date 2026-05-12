@@ -148,13 +148,6 @@
   line-height: 1.3;
 }
 
-.map-diary-toast__body {
-  margin: 8px 0 0;
-  color: #5c4a38;
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
 .map-diary-notebook-modal {
   position: absolute;
   inset: 0;
@@ -389,26 +382,6 @@
     );
 }
 
-.spot-card__meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.spot-card__pill {
-  display: inline-flex;
-  align-items: center;
-  min-height: 32px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: var(--spot-card-pill-bg);
-  border: 1px solid var(--spot-card-pill-border);
-  color: var(--spot-card-ink-soft);
-  font-size: 0.8125rem;
-}
-
-.spot-card__detail-label,
 .spot-card__empty-title {
   color: var(--spot-card-accent);
 }
@@ -420,11 +393,6 @@
 .spot-card p,
 .spot-card__body.is-empty p {
   color: var(--spot-card-ink);
-}
-
-.spot-card__detail-label {
-  margin-top: 14px;
-  font-weight: 600;
 }
 
 .spot-card__diary {

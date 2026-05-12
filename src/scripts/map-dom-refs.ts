@@ -33,12 +33,8 @@ export type MapDomRefs = {
   floatingSheet: HTMLElement;
   spotCard: HTMLElement;
   spotVisual: HTMLElement;
-  spotMeta: HTMLElement;
-  spotCategory: HTMLElement;
-  spotRoute: HTMLElement;
   spotTitle: HTMLElement;
   spotDescription: HTMLElement;
-  spotDetailLabel: HTMLElement;
   spotDiary: HTMLElement;
   spotDiaryLabel: HTMLElement;
   spotDiaryTitle: HTMLElement;
@@ -51,7 +47,6 @@ export type MapDomRefs = {
   diaryToast: HTMLElement;
   diaryToastTitle: HTMLElement;
   diaryToastName: HTMLElement;
-  diaryToastBody: HTMLElement;
   diaryNotebookOpenButton: HTMLButtonElement;
   diaryNotebookModal: HTMLElement;
   diaryNotebookPanel: HTMLElement;
@@ -158,12 +153,8 @@ export const getMapDomRefs = (): MapDomRefs => {
     floatingSheet: requiredElement<HTMLElement>(".sheet-host--floating"),
     spotCard: requiredElement<HTMLElement>("[data-spot-card]"),
     spotVisual: requiredElement<HTMLElement>("[data-spot-visual]"),
-    spotMeta: requiredElement<HTMLElement>("[data-spot-meta]"),
-    spotCategory: requiredElement<HTMLElement>("[data-spot-category]"),
-    spotRoute: requiredElement<HTMLElement>("[data-spot-route]"),
     spotTitle: requiredElement<HTMLElement>("[data-spot-title]"),
     spotDescription: requiredElement<HTMLElement>("[data-spot-description]"),
-    spotDetailLabel: requiredElement<HTMLElement>("[data-spot-detail-label]"),
     spotDiary: requiredElement<HTMLElement>("[data-spot-diary]"),
     spotDiaryLabel: requiredElement<HTMLElement>("[data-spot-diary-label]"),
     spotDiaryTitle: requiredElement<HTMLElement>("[data-spot-diary-title]"),
@@ -178,7 +169,6 @@ export const getMapDomRefs = (): MapDomRefs => {
     diaryToast: requiredElement<HTMLElement>("[data-diary-toast]"),
     diaryToastTitle: requiredElement<HTMLElement>("[data-diary-toast-title]"),
     diaryToastName: requiredElement<HTMLElement>("[data-diary-toast-name]"),
-    diaryToastBody: requiredElement<HTMLElement>("[data-diary-toast-body]"),
     diaryNotebookOpenButton: requiredElement<HTMLButtonElement>(
       "[data-map-diary-notebook-open]",
     ),

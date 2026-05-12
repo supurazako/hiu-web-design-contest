@@ -258,7 +258,6 @@ export const renderDiscoveryToast = ({
   refs.diaryToast.classList.add("is-visible");
   refs.diaryToastTitle.textContent = ui.diaryToastTitle;
   refs.diaryToastName.textContent = discoveredSpot.diary.title[state.locale];
-  refs.diaryToastBody.textContent = ui.diaryToastBody;
 };
 
 export const applyTheme = ({
