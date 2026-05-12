@@ -240,6 +240,22 @@
     white-space: normal;
   }
 
+  .hero__actions {
+    left: 0;
+    transform: none;
+    margin-top: 40px;
+    width: 100%;
+  }
+
+  .hero__actions .button--primary,
+  .hero__content .button--primary {
+    width: min(100%, 340px);
+    min-width: 0;
+    min-height: 72px;
+    padding: 18px 42px;
+    font-size: 1.16rem;
+  }
+
   .feature-carousel__track {
     gap: 16px;
   }

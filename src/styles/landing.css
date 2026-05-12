@@ -242,18 +242,23 @@ body.is-map-expanded .content-block {
 }
 
 .hero__actions {
-  justify-content: flex-start;
+  position: relative;
+  left: calc(50vw - clamp(28px, 8vw, 140px));
+  transform: translateX(-50%);
+  justify-content: center;
+  margin-top: 72px;
+  width: fit-content;
 }
 
 .hero__actions .button--primary {
-  min-height: 56px;
-  padding: 14px 32px;
-  font-size: 1.05rem;
+  min-height: 88px;
+  padding: 24px 76px;
+  font-size: 1.34rem;
 }
 
 .hero__content .button--primary {
-  min-width: 220px;
-  min-height: 64px;
+  min-width: 420px;
+  min-height: 88px;
   border-radius: 999px;
   background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
