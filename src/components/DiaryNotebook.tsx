@@ -263,15 +263,15 @@ export default function DiaryNotebook({
 
       <div className="flex flex-col gap-4 rounded-[24px] border border-[rgba(141,105,52,0.2)] bg-[linear-gradient(180deg,rgba(255,251,244,0.96),rgba(247,238,224,0.92))] px-5 py-5 shadow-[0_18px_48px_rgba(78,52,24,0.1)] sm:flex-row sm:items-center sm:justify-between sm:px-7">
         <div className="space-y-1.5">
-          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-[color:var(--md-sys-color-primary)]">
+          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-[#6d4b07]">
             {localizedUi.diaryProgressLabel}
           </p>
-          <p className="text-2xl font-semibold text-[color:var(--md-sys-color-on-surface)]">
+          <p className="text-2xl font-semibold text-[#3f2e20]">
             {foundCount} / {entries.length}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(126,87,0,0.12)] bg-white/65 px-4 py-2 text-sm text-[color:var(--md-sys-color-on-surface-variant)] shadow-[0_10px_24px_rgba(85,61,35,0.08)]">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(126,87,0,0.12)] bg-white/65 px-4 py-2 text-sm text-[#5c4a38] shadow-[0_10px_24px_rgba(85,61,35,0.08)]">
             <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#d68729]" />
             <span>
               {localizedUi.diaryDiscoveredLabel} {foundCount} /{" "}
