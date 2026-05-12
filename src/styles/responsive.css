@@ -221,15 +221,19 @@
 
   .content-block {
     width: min(calc(100% - 24px), 1120px);
-    padding-bottom: 20px;
+    padding-bottom: 32px;
   }
 
   .hero + .content-block {
-    margin-top: 32px;
+    margin-top: 56px;
   }
 
   .content-block + .content-block {
-    margin-top: 32px;
+    margin-top: 56px;
+  }
+
+  .section-heading {
+    margin-bottom: 24px;
   }
 
   .hero__content h1 {
@@ -257,7 +261,7 @@
   }
 
   .feature-carousel__track {
-    gap: 16px;
+    gap: 20px;
   }
 
   .feature-card {
@@ -265,7 +269,7 @@
   }
 
   .feature-card__body {
-    padding: 20px;
+    padding: 28px 24px;
   }
 
   .map-layout {

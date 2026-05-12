@@ -359,7 +359,7 @@ body.is-map-expanded .content-block {
 
 .section-heading {
   max-width: 960px;
-  margin-bottom: 18px;
+  margin-bottom: 32px;
 }
 
 .section-heading > p:not(.eyebrow) {
@@ -386,11 +386,11 @@ body.is-map-expanded .content-block {
 }
 
 .hero + .content-block {
-  margin-top: 40px;
+  margin-top: 80px;
 }
 
 .content-block + .content-block {
-  margin-top: 40px;
+  margin-top: 96px;
 }
 
 .content-block--cta {
@@ -419,15 +419,15 @@ body.is-map-expanded .content-block {
 
 .content-block--diary {
   position: relative;
-  padding-bottom: 40px;
+  padding-bottom: 64px;
 }
 
 .site-footer {
   position: relative;
   z-index: 1;
   width: min(calc(100% - 32px), 1120px);
-  margin: 8px auto 0;
-  padding: 0 0 32px;
+  margin: 32px auto 0;
+  padding: 0 0 48px;
   color: color-mix(
     in srgb,
     var(--md-sys-color-on-surface-variant) 74%,
@@ -460,19 +460,19 @@ body.is-map-expanded .content-block {
 
 .section-heading--diary {
   max-width: 780px;
-  margin-bottom: 24px;
+  margin-bottom: 40px;
 }
 
 .scene-split,
 .steps-grid {
   display: grid;
-  gap: 16px;
+  gap: 24px;
 }
 
 .scene-split__panel,
 .step-card {
   min-height: 180px;
-  padding: 24px;
+  padding: 32px;
   border-radius: 24px;
   border: 1px solid var(--md-sys-color-outline-variant);
   box-shadow: var(--md-elevation-1);
@@ -549,7 +549,7 @@ body.is-map-expanded .content-block {
 }
 
 .feature-carousel__header {
-  margin-bottom: 18px;
+  margin-bottom: 32px;
 }
 
 .feature-carousel__header .section-heading {
@@ -602,7 +602,7 @@ body.is-map-expanded .content-block {
 }
 
 .feature-card__body {
-  padding: 24px;
+  padding: 32px;
 }
 
 .feature-card__body span {
@@ -654,7 +654,7 @@ body.is-map-expanded .content-block {
     flex-direction: column;
     justify-content: center;
     order: 1;
-    padding: 40px 44px;
+    padding: 48px 56px;
   }
 
   .feature-card__visual {
