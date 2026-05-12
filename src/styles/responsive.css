@@ -263,7 +263,8 @@
     min-width: 0;
     min-height: 72px;
     padding: 18px 42px;
-    font-size: 1.16rem;
+    font-size: 1.26rem;
+    font-weight: 700;
   }
 
   .feature-carousel__track {

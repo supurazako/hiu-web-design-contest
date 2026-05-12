@@ -253,7 +253,8 @@ body.is-map-expanded .content-block {
 .hero__actions .button--primary {
   min-height: 88px;
   padding: 24px 76px;
-  font-size: 1.34rem;
+  font-size: 1.52rem;
+  font-weight: 700;
 }
 
 .hero__content .button--primary {
