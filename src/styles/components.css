@@ -83,7 +83,7 @@
   top: auto;
   right: auto;
   left: 50%;
-  bottom: 0;
+  bottom: 20px;
   display: flex;
   justify-content: center;
   width: min(100%, 560px);
@@ -92,8 +92,7 @@
 
 .sheet-host--floating .spot-card {
   width: 100%;
-  border-radius: 28px 28px 0 0;
-  border-bottom: 0;
+  border-radius: 28px;
   box-shadow: 0 -12px 28px var(--spot-card-paper-shadow);
   opacity: 0;
   pointer-events: none;

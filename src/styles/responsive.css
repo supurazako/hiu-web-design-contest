@@ -63,7 +63,7 @@
     right: auto;
     left: 50%;
     align-items: flex-end;
-    bottom: 0;
+    bottom: 24px;
     width: min(100%, 560px);
     translate: -50% 0;
   }
@@ -291,13 +291,13 @@
     top: auto;
     right: auto;
     left: 50%;
-    bottom: 0;
+    bottom: max(16px, env(safe-area-inset-bottom));
     width: 100%;
     translate: -50% 0;
   }
 
   .sheet-host--floating .spot-card {
-    border-radius: 28px 28px 0 0;
+    border-radius: 28px;
     box-shadow: 0 -10px 24px rgba(20, 24, 32, 0.18);
   }
 
