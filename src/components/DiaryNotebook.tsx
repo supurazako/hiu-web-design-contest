@@ -18,6 +18,7 @@ import { useDiaryNotebookState } from "./useDiaryNotebookState";
 type DiaryNotebookProps = {
   entries: DiaryNotebookEntry[];
   initialLocale: Locale;
+  layout?: "page" | "modal";
   unlockMode?: "discovered" | "all";
   uiCopy: DiaryNotebookUiCopy;
 };
@@ -124,7 +125,7 @@ const DiaryPage = ({
   return (
     <article
       className={cn(
-        "relative flex min-h-[430px] flex-col overflow-hidden border border-[rgba(127,96,55,0.2)] bg-[#fffaf0] px-5 py-5 shadow-[0_18px_38px_rgba(73,48,22,0.13)] sm:px-7 sm:py-7",
+        "diary-page relative flex min-h-[430px] flex-col overflow-hidden border border-[rgba(127,96,55,0.2)] bg-[#fffaf0] px-5 py-5 shadow-[0_18px_38px_rgba(73,48,22,0.13)] sm:px-7 sm:py-7",
         side === "left" && "rounded-l-[24px] rounded-r-[10px]",
         side === "right" && "rounded-l-[10px] rounded-r-[24px]",
         side === "single" && "rounded-[24px]",
@@ -139,9 +140,9 @@ const DiaryPage = ({
       <div className="pointer-events-none absolute left-[44px] top-0 h-full w-px bg-[rgba(196,73,73,0.32)]" />
       <div className="pointer-events-none absolute right-5 top-0 h-11 w-14 rounded-b-[14px] bg-[linear-gradient(180deg,#d79f3b,#b97b1e)] opacity-90 shadow-[0_8px_18px_rgba(119,77,16,0.2)]" />
 
-      <div className="relative z-10 flex h-full flex-col gap-5 pl-7">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="space-y-2">
+      <div className="diary-page__content relative z-10 flex h-full flex-col gap-5 pl-7">
+        <div className="diary-page__header flex flex-wrap items-start justify-between gap-3">
+          <div className="diary-page__meta space-y-2">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full bg-[rgba(255,255,255,0.72)] px-2.5 py-1 text-[0.7rem] font-semibold tracking-[0.12em] text-[#6f604e]">
                 {String(index + 1).padStart(2, "0")}
@@ -167,28 +168,28 @@ const DiaryPage = ({
         </div>
 
         {isDiscovered ? (
-          <div className="flex flex-1 flex-col justify-between gap-6">
-            <div className="space-y-4">
+          <div className="diary-page__discovered flex flex-1 flex-col justify-between gap-6">
+            <div className="diary-page__text space-y-4">
               <h3
-                className="text-[1.7rem] leading-tight text-[#3f2e20]"
+                className="diary-page__title text-[1.7rem] leading-tight text-[#3f2e20]"
                 style={{ fontFamily: "var(--font-diary)" }}
               >
                 {entry.title[locale]}
               </h3>
               <p
-                className="text-[1.08rem] leading-9 text-[#564536]"
+                className="diary-page__body text-[1.08rem] leading-9 text-[#564536]"
                 style={{ fontFamily: "var(--font-diary)" }}
               >
                 {entry.body[locale]}
               </p>
             </div>
-            <p className="self-end text-[0.72rem] font-semibold tracking-[0.12em] text-[rgba(83,62,41,0.48)]">
+            <p className="diary-page__number self-end text-[0.72rem] font-semibold tracking-[0.12em] text-[rgba(83,62,41,0.48)]">
               PAGE {String(index + 1).padStart(2, "0")}
             </p>
           </div>
         ) : (
-          <div className="flex flex-1 flex-col justify-between gap-5">
-            <div className="rounded-[20px] border border-dashed border-[rgba(117,101,80,0.26)] bg-[rgba(255,255,255,0.42)] px-4 py-5">
+          <div className="diary-page__locked flex flex-1 flex-col justify-between gap-5">
+            <div className="diary-page__locked-body rounded-[20px] border border-dashed border-[rgba(117,101,80,0.26)] bg-[rgba(255,255,255,0.42)] px-4 py-5">
               <p
                 className="text-[1.42rem] text-[rgba(84,71,58,0.58)]"
                 style={{ fontFamily: "var(--font-diary)" }}
@@ -199,7 +200,7 @@ const DiaryPage = ({
                 {localizedUi.diaryLockedBody}
               </p>
             </div>
-            <div className="rounded-[18px] bg-[linear-gradient(180deg,#f7d873,#efc654)] px-4 py-4 text-[#5b410d] shadow-[0_10px_20px_rgba(145,106,24,0.16)]">
+            <div className="diary-page__hint rounded-[18px] bg-[linear-gradient(180deg,#f7d873,#efc654)] px-4 py-4 text-[#5b410d] shadow-[0_10px_20px_rgba(145,106,24,0.16)]">
               <p className="text-[0.72rem] font-semibold uppercase tracking-[0.14em]">
                 {localizedUi.diaryHintLabel}
               </p>
@@ -215,6 +216,7 @@ const DiaryPage = ({
 export default function DiaryNotebook({
   entries,
   initialLocale,
+  layout = "page",
   unlockMode = "discovered",
   uiCopy,
 }: DiaryNotebookProps) {
@@ -406,9 +408,15 @@ export default function DiaryNotebook({
       clearWheelResetTimer();
     };
   }, [clearWheelResetTimer, handleWheel]);
+  const isModalLayout = layout === "modal";
 
   return (
-    <div className="space-y-6">
+    <div
+      className={cn(
+        "diary-notebook",
+        isModalLayout ? "diary-notebook--modal" : "space-y-6",
+      )}
+    >
       <style>{`
         @keyframes diary-page-next {
           0% { opacity: 0.84; transform: rotateY(-18deg) translateX(18px); }
@@ -432,6 +440,155 @@ export default function DiaryNotebook({
           transform-style: preserve-3d;
         }
 
+        @media (min-width: 768px) {
+          .diary-notebook--modal {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 100%;
+            min-height: 0;
+          }
+
+          .diary-notebook--modal .diary-notebook__summary {
+            flex: 0 0 auto;
+            gap: 12px;
+            padding: 12px 18px;
+            border-radius: 20px;
+          }
+
+          .diary-notebook--modal .diary-notebook__summary-count {
+            font-size: 1.35rem;
+            line-height: 1.1;
+          }
+
+          .diary-notebook--modal .diary-notebook__summary-meta {
+            gap: 8px;
+          }
+
+          .diary-notebook--modal .diary-notebook__summary-pill {
+            padding: 6px 12px;
+            font-size: 0.78rem;
+          }
+
+          .diary-notebook--modal .diary-book-stage {
+            display: flex;
+            flex: 1 1 auto;
+            min-height: 0;
+          }
+
+          .diary-notebook--modal .diary-book-swipe-area {
+            display: flex;
+            flex: 1 1 auto;
+            min-height: 0;
+            width: 100%;
+            padding: 10px;
+            border-radius: 24px;
+          }
+
+          .diary-notebook--modal .diary-book-pages {
+            flex: 1 1 auto;
+            min-height: 0;
+            height: 100%;
+            width: 100%;
+          }
+
+          .diary-notebook--modal .diary-page {
+            min-height: 0;
+            height: 100%;
+            padding: 18px 20px;
+          }
+
+          .diary-notebook--modal .diary-page__content {
+            gap: 12px;
+            padding-left: 22px;
+          }
+
+          .diary-notebook--modal .diary-page__header {
+            gap: 10px;
+          }
+
+          .diary-notebook--modal .diary-page__meta {
+            gap: 6px;
+          }
+
+          .diary-notebook--modal .diary-page__meta > p {
+            font-size: 0.82rem;
+            line-height: 1.35;
+          }
+
+          .diary-notebook--modal .diary-page__discovered,
+          .diary-notebook--modal .diary-page__locked {
+            gap: 12px;
+          }
+
+          .diary-notebook--modal .diary-page__text {
+            gap: 10px;
+          }
+
+          .diary-notebook--modal .diary-page__title {
+            font-size: 1.34rem;
+            line-height: 1.08;
+          }
+
+          .diary-notebook--modal .diary-page__body {
+            font-size: 0.96rem;
+            line-height: 1.75;
+          }
+
+          .diary-notebook--modal .diary-page__locked-body {
+            padding: 14px;
+            border-radius: 16px;
+          }
+
+          .diary-notebook--modal .diary-page__hint {
+            padding: 12px 14px;
+            border-radius: 16px;
+          }
+
+          .diary-notebook--modal .diary-page__hint p:last-child {
+            margin-top: 6px;
+            font-size: 0.88rem;
+            line-height: 1.6;
+          }
+
+          .diary-notebook--modal .diary-page__number {
+            font-size: 0.66rem;
+          }
+
+          .diary-notebook--modal .diary-notebook__nav {
+            flex: 0 0 auto;
+            gap: 10px;
+          }
+
+          .diary-notebook--modal .diary-notebook__nav-button {
+            width: 40px;
+            height: 40px;
+          }
+        }
+
+        @media (min-width: 768px) and (max-height: 760px) {
+          .diary-notebook--modal {
+            gap: 10px;
+          }
+
+          .diary-notebook--modal .diary-notebook__summary {
+            padding: 10px 16px;
+          }
+
+          .diary-notebook--modal .diary-page {
+            padding: 16px 18px;
+          }
+
+          .diary-notebook--modal .diary-page__title {
+            font-size: 1.24rem;
+          }
+
+          .diary-notebook--modal .diary-page__body {
+            font-size: 0.9rem;
+            line-height: 1.62;
+          }
+        }
+
         .diary-book-pages.is-turning-next {
           animation: diary-page-next 520ms cubic-bezier(.2,.74,.21,1);
           transform-origin: right center;
@@ -450,24 +607,24 @@ export default function DiaryNotebook({
         }
       `}</style>
 
-      <div className="flex flex-col gap-4 rounded-[24px] border border-[rgba(141,105,52,0.2)] bg-[linear-gradient(180deg,rgba(255,251,244,0.96),rgba(247,238,224,0.92))] px-5 py-5 shadow-[0_18px_48px_rgba(78,52,24,0.1)] sm:flex-row sm:items-center sm:justify-between sm:px-7">
+      <div className="diary-notebook__summary flex flex-col gap-4 rounded-[24px] border border-[rgba(141,105,52,0.2)] bg-[linear-gradient(180deg,rgba(255,251,244,0.96),rgba(247,238,224,0.92))] px-5 py-5 shadow-[0_18px_48px_rgba(78,52,24,0.1)] sm:flex-row sm:items-center sm:justify-between sm:px-7">
         <div className="space-y-1.5">
           <p className="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-[#6d4b07]">
             {localizedUi.diaryProgressLabel}
           </p>
-          <p className="text-2xl font-semibold text-[#3f2e20]">
+          <p className="diary-notebook__summary-count text-2xl font-semibold text-[#3f2e20]">
             {foundCount} / {entries.length}
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(126,87,0,0.12)] bg-white/65 px-4 py-2 text-sm text-[#5c4a38] shadow-[0_10px_24px_rgba(85,61,35,0.08)]">
+        <div className="diary-notebook__summary-meta flex flex-wrap items-center gap-3">
+          <div className="diary-notebook__summary-pill inline-flex items-center gap-2 rounded-full border border-[rgba(126,87,0,0.12)] bg-white/65 px-4 py-2 text-sm text-[#5c4a38] shadow-[0_10px_24px_rgba(85,61,35,0.08)]">
             <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#d68729]" />
             <span>
               {localizedUi.diaryDiscoveredLabel} {foundCount} /{" "}
               {localizedUi.diaryUndiscoveredLabel} {hiddenCount}
             </span>
           </div>
-          <span className="rounded-full bg-[rgba(84,71,58,0.08)] px-4 py-2 text-sm font-semibold text-[#5c4a38]">
+          <span className="diary-notebook__summary-pill rounded-full bg-[rgba(84,71,58,0.08)] px-4 py-2 text-sm font-semibold text-[#5c4a38]">
             {visiblePageCount === 1
               ? `${safeCurrentPage + 1} / ${entries.length}`
               : `${safeCurrentPage + 1}-${safeCurrentPage + visibleEntries.length} / ${entries.length}`}
@@ -549,12 +706,12 @@ export default function DiaryNotebook({
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-3">
+      <div className="diary-notebook__nav flex items-center justify-between gap-3">
         <button
           type="button"
           onClick={() => turnPage("previous")}
           disabled={!canGoPrevious}
-          className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(126,87,0,0.18)] bg-white/78 text-[#6d4b07] shadow-[0_10px_24px_rgba(85,61,35,0.1)] transition hover:bg-[#fff6df] disabled:cursor-not-allowed disabled:opacity-35"
+          className="diary-notebook__nav-button inline-flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(126,87,0,0.18)] bg-white/78 text-[#6d4b07] shadow-[0_10px_24px_rgba(85,61,35,0.1)] transition hover:bg-[#fff6df] disabled:cursor-not-allowed disabled:opacity-35"
           aria-label="Previous diary page"
         >
           <PageTurnIcon direction="previous" />
@@ -590,7 +747,7 @@ export default function DiaryNotebook({
           type="button"
           onClick={() => turnPage("next")}
           disabled={!canGoNext}
-          className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(126,87,0,0.18)] bg-white/78 text-[#6d4b07] shadow-[0_10px_24px_rgba(85,61,35,0.1)] transition hover:bg-[#fff6df] disabled:cursor-not-allowed disabled:opacity-35"
+          className="diary-notebook__nav-button inline-flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(126,87,0,0.18)] bg-white/78 text-[#6d4b07] shadow-[0_10px_24px_rgba(85,61,35,0.1)] transition hover:bg-[#fff6df] disabled:cursor-not-allowed disabled:opacity-35"
           aria-label="Next diary page"
         >
           <PageTurnIcon direction="next" />

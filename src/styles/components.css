@@ -229,6 +229,32 @@
   fill: currentColor;
 }
 
+@media (min-width: 768px) {
+  .map-diary-notebook-modal__panel {
+    display: flex;
+    flex-direction: column;
+    width: min(100%, 1000px);
+    height: min(820px, calc(100dvh - 40px));
+    max-height: none;
+    overflow: hidden;
+    padding: 20px;
+  }
+
+  .map-diary-notebook-modal__header {
+    flex: 0 0 auto;
+    margin-bottom: 12px;
+  }
+
+  .map-diary-notebook-modal__header h2 {
+    font-size: clamp(1.25rem, 2.2vw, 1.8rem);
+  }
+
+  .map-diary-notebook-modal__panel > .diary-notebook {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+}
+
 @media (max-width: 767px) {
   .map-diary-notebook-modal {
     align-items: stretch;
