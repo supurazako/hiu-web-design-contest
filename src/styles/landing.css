@@ -454,6 +454,52 @@ body.is-map-expanded .scroll-top-button {
   margin-bottom: 32px;
 }
 
+.section-heading--intro {
+  position: relative;
+  isolation: isolate;
+  padding: 38px 0 18px;
+}
+
+.section-heading--intro > :not(.intro-ornaments) {
+  position: relative;
+  z-index: 1;
+}
+
+.intro-ornaments {
+  position: absolute;
+  inset: -18px -42px -10px;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.intro-ornament-image {
+  position: absolute;
+  display: block;
+  right: -34px;
+  bottom: -112px;
+  width: min(76vw, 760px);
+  max-width: none;
+  opacity: 0.74;
+  mix-blend-mode: multiply;
+  -webkit-mask-image: radial-gradient(
+    ellipse at 64% 54%,
+    #000 0%,
+    #000 54%,
+    transparent 82%
+  );
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-image: radial-gradient(
+    ellipse at 64% 54%,
+    #000 0%,
+    #000 54%,
+    transparent 82%
+  );
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+}
+
 .section-heading > p:not(.eyebrow) {
   max-width: 72ch;
   text-wrap: pretty;

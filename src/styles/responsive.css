@@ -248,6 +248,33 @@
     margin-bottom: 24px;
   }
 
+  .section-heading--intro {
+    padding: 28px 0 10px;
+  }
+
+  .intro-ornaments {
+    inset: -14px -12px -8px;
+  }
+
+  .intro-ornament-image {
+    right: 0;
+    bottom: -58px;
+    width: 360px;
+    opacity: 0.6;
+    -webkit-mask-image: radial-gradient(
+      ellipse at 62% 52%,
+      #000 0%,
+      #000 48%,
+      transparent 78%
+    );
+    mask-image: radial-gradient(
+      ellipse at 62% 52%,
+      #000 0%,
+      #000 48%,
+      transparent 78%
+    );
+  }
+
   .section-heading__lead {
     max-width: 34ch;
     margin-bottom: 20px;

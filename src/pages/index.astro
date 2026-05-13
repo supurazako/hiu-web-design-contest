@@ -459,7 +459,15 @@ const diaryNotebookUiCopy = getDiaryNotebookUiCopy(uiCopy);
     </section>
 
     <section class="content-block" id="contrast">
-      <div class="section-heading">
+      <div class="section-heading section-heading--intro">
+        <div class="intro-ornaments" aria-hidden="true">
+          <img
+            class="intro-ornament-image"
+            src="/ornaments/intro-time-map.png"
+            alt=""
+            loading="lazy"
+          />
+        </div>
         <p class="section-heading__lead" data-landing-lead>
           {ui.landingLeadLines.map((line) => <span>{line}</span>)}
         </p>
