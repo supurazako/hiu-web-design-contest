@@ -1,3 +1,12 @@
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  type KeyboardEvent,
+  type MouseEvent,
+  type PointerEvent,
+} from "react";
+
 import type { Locale } from "@/data/site";
 import { cn } from "@/lib/utils";
 import type {
@@ -85,6 +94,11 @@ const PageTurnIcon = ({ direction }: { direction: "previous" | "next" }) => (
     )}
   </svg>
 );
+
+const swipeThresholdPx = 56;
+const swipeAxisRatio = 1.35;
+const wheelSnapThreshold = 64;
+const wheelGestureIdleMs = 180;
 
 type DiaryPageProps = {
   entry: DiaryNotebookEntry;
@@ -221,6 +235,177 @@ export default function DiaryNotebook({
     goToEntryIndex,
   } = useDiaryNotebookState({ entries, initialLocale, unlockMode });
   const localizedUi = uiCopy[locale] ?? uiCopy.ja;
+  const pointerStartRef = useRef<{
+    x: number;
+    y: number;
+    pointerId: number;
+  } | null>(null);
+  const suppressAreaClickRef = useRef(false);
+  const swipeAreaRef = useRef<HTMLDivElement | null>(null);
+  const wheelDeltaRef = useRef(0);
+  const wheelLockedRef = useRef(false);
+  const wheelResetTimerRef = useRef<number | null>(null);
+
+  const turnToDirection = useCallback(
+    (direction: "previous" | "next") => {
+      if (direction === "previous" && !canGoPrevious) return;
+      if (direction === "next" && !canGoNext) return;
+      turnPage(direction);
+    },
+    [canGoNext, canGoPrevious, turnPage],
+  );
+
+  const suppressClickAfterSwipe = useCallback(() => {
+    suppressAreaClickRef.current = true;
+    window.setTimeout(() => {
+      suppressAreaClickRef.current = false;
+    }, 0);
+  }, []);
+
+  const handlePointerDown = useCallback(
+    (event: PointerEvent<HTMLDivElement>) => {
+      if (!event.isPrimary) return;
+      pointerStartRef.current = {
+        x: event.clientX,
+        y: event.clientY,
+        pointerId: event.pointerId,
+      };
+      event.currentTarget.setPointerCapture(event.pointerId);
+    },
+    [],
+  );
+
+  const releasePointerCapture = useCallback(
+    (event: PointerEvent<HTMLDivElement>) => {
+      if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+        event.currentTarget.releasePointerCapture(event.pointerId);
+      }
+    },
+    [],
+  );
+
+  const handlePointerUp = useCallback(
+    (event: PointerEvent<HTMLDivElement>) => {
+      const pointerStart = pointerStartRef.current;
+      pointerStartRef.current = null;
+      releasePointerCapture(event);
+
+      if (!pointerStart || pointerStart.pointerId !== event.pointerId) return;
+
+      const deltaX = event.clientX - pointerStart.x;
+      const deltaY = event.clientY - pointerStart.y;
+      const isHorizontalSwipe =
+        Math.abs(deltaX) >= swipeThresholdPx &&
+        Math.abs(deltaX) > Math.abs(deltaY) * swipeAxisRatio;
+
+      if (!isHorizontalSwipe) return;
+
+      event.preventDefault();
+      suppressClickAfterSwipe();
+      turnToDirection(deltaX < 0 ? "next" : "previous");
+    },
+    [releasePointerCapture, suppressClickAfterSwipe, turnToDirection],
+  );
+
+  const handlePointerCancel = useCallback(
+    (event: PointerEvent<HTMLDivElement>) => {
+      pointerStartRef.current = null;
+      releasePointerCapture(event);
+    },
+    [releasePointerCapture],
+  );
+
+  const handlePageAreaClick = useCallback(
+    (
+      event: MouseEvent<HTMLButtonElement>,
+      direction: "previous" | "next",
+    ) => {
+      if (suppressAreaClickRef.current) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+
+      turnToDirection(direction);
+    },
+    [turnToDirection],
+  );
+
+  const clearWheelResetTimer = useCallback(() => {
+    if (wheelResetTimerRef.current === null) return;
+    window.clearTimeout(wheelResetTimerRef.current);
+    wheelResetTimerRef.current = null;
+  }, []);
+
+  const resetWheelGesture = useCallback(() => {
+    wheelDeltaRef.current = 0;
+    wheelLockedRef.current = false;
+    wheelResetTimerRef.current = null;
+  }, []);
+
+  const scheduleWheelReset = useCallback(() => {
+    clearWheelResetTimer();
+    wheelResetTimerRef.current = window.setTimeout(
+      resetWheelGesture,
+      wheelGestureIdleMs,
+    );
+  }, [clearWheelResetTimer, resetWheelGesture]);
+
+  const handleWheel = useCallback(
+    (event: WheelEvent) => {
+      if (Math.abs(event.deltaX) < 4) return;
+      if (Math.abs(event.deltaX) <= Math.abs(event.deltaY) * swipeAxisRatio) {
+        return;
+      }
+
+      event.preventDefault();
+      wheelDeltaRef.current += event.deltaX;
+
+      if (wheelLockedRef.current) {
+        scheduleWheelReset();
+        return;
+      }
+
+      if (wheelDeltaRef.current >= wheelSnapThreshold) {
+        wheelLockedRef.current = true;
+        turnToDirection("next");
+        scheduleWheelReset();
+        return;
+      }
+
+      if (wheelDeltaRef.current <= -wheelSnapThreshold) {
+        wheelLockedRef.current = true;
+        turnToDirection("previous");
+        scheduleWheelReset();
+        return;
+      }
+
+      scheduleWheelReset();
+    },
+    [scheduleWheelReset, turnToDirection],
+  );
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLDivElement>) => {
+      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+
+      event.preventDefault();
+      turnToDirection(event.key === "ArrowLeft" ? "previous" : "next");
+    },
+    [turnToDirection],
+  );
+
+  useEffect(() => {
+    const swipeArea = swipeAreaRef.current;
+    if (!swipeArea) return;
+
+    swipeArea.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      swipeArea.removeEventListener("wheel", handleWheel);
+      clearWheelResetTimer();
+    };
+  }, [clearWheelResetTimer, handleWheel]);
 
   return (
     <div className="space-y-6">
@@ -237,6 +422,10 @@ export default function DiaryNotebook({
 
         .diary-book-stage {
           perspective: 1500px;
+        }
+
+        .diary-book-swipe-area {
+          touch-action: pan-y;
         }
 
         .diary-book-pages {
@@ -286,8 +475,18 @@ export default function DiaryNotebook({
         </div>
       </div>
 
-      <div className="diary-book-stage">
-        <div className="relative rounded-[30px] bg-[linear-gradient(135deg,#7b4f2a,#3f2b1c)] p-3 shadow-[0_26px_68px_rgba(65,41,19,0.24)]">
+      <div
+        className="diary-book-stage"
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+      >
+        <div
+          ref={swipeAreaRef}
+          className="diary-book-swipe-area relative rounded-[30px] bg-[linear-gradient(135deg,#7b4f2a,#3f2b1c)] p-3 shadow-[0_26px_68px_rgba(65,41,19,0.24)]"
+          onPointerCancel={handlePointerCancel}
+          onPointerDown={handlePointerDown}
+          onPointerUp={handlePointerUp}
+        >
           <div className="pointer-events-none absolute inset-y-6 left-1/2 z-20 hidden w-[3px] -translate-x-1/2 rounded-full bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(72,42,18,0.34),rgba(255,255,255,0.18))] md:block" />
           <div
             className={cn(
@@ -330,7 +529,7 @@ export default function DiaryNotebook({
           <div className="absolute inset-3 z-30 grid grid-cols-2">
             <button
               type="button"
-              onClick={() => turnPage("previous")}
+              onClick={(event) => handlePageAreaClick(event, "previous")}
               disabled={!canGoPrevious}
               className="cursor-w-resize rounded-l-[24px] bg-transparent disabled:cursor-default"
               aria-label="Previous diary page"
@@ -339,7 +538,7 @@ export default function DiaryNotebook({
             </button>
             <button
               type="button"
-              onClick={() => turnPage("next")}
+              onClick={(event) => handlePageAreaClick(event, "next")}
               disabled={!canGoNext}
               className="cursor-e-resize rounded-r-[24px] bg-transparent disabled:cursor-default"
               aria-label="Next diary page"
