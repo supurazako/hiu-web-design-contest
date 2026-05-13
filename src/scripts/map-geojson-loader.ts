@@ -2,6 +2,7 @@ import L from "leaflet";
 import { timeModes } from "./map-layers";
 import { featureCategory, layerStyleForMode } from "./map-style";
 import type { TimeMode } from "./map-types";
+import { getJsonData } from "./dom-utils";
 
 export type TimeMapGeoJsonResult = {
   bounds: L.LatLngBounds | null;
@@ -17,8 +18,7 @@ export const loadTimeMapGeoJson = async ({
   root: HTMLElement;
   rendererByMode: Record<TimeMode, L.Renderer>;
 }): Promise<TimeMapGeoJsonResult> => {
-  const response = await fetch("/geodata/map.geojson");
-  const data = (await response.json()) as GeoJSON.GeoJsonObject;
+  const data = getJsonData<GeoJSON.GeoJsonObject>("map-geojson-data");
   const layers: Partial<Record<TimeMode, L.GeoJSON>> = {};
 
   timeModes.forEach((mode) => {

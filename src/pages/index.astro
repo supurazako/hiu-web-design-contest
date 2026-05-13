@@ -5,13 +5,26 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import LanguageSwitcher from "../components/LanguageSwitcher.astro";
 import SceneSplit from "../components/SceneSplit.astro";
 import TimeToggle from "../components/TimeToggle.astro";
-import FeatureSpotCarousel from "../components/FeatureSpotCarousel";
-import DiaryNotebook from "../components/DiaryNotebook";
-import mapPageScript from "../scripts/map-page.ts?url";
+import mapGeoJsonRaw from "../data/map.geojson?raw";
 import { getDiaryEntries, getDiaryNotebookUiCopy } from "../data/diary";
 import { themeByMode, uiCopy } from "../data/site";
 import { spots } from "../data/spots";
 
+const publicAsset = (path: string) => {
+  const base = import.meta.env.BASE_URL;
+  const relativeBase = base === "/" || base === "/./" ? "./" : base;
+  return `${relativeBase}${path.replace(/^\/+/, "")}`;
+};
+const withPublicAssetPath = (path: string) =>
+  path.startsWith("/") ? publicAsset(path) : path;
+const spotsForPage: typeof spots = spots.map((spot) => ({
+  ...spot,
+  image_url: withPublicAssetPath(spot.image_url),
+  image: {
+    ...spot.image,
+    src: withPublicAssetPath(spot.image.src),
+  },
+}));
 const locale = "ja";
 const initialMode = "day";
 const ui = uiCopy[locale];
@@ -19,7 +32,7 @@ const featureCardsByLocale = {
   ja: uiCopy.ja.featureCards,
   en: uiCopy.en.featureCards,
 };
-const diaryEntries = getDiaryEntries(spots);
+const diaryEntries = getDiaryEntries(spotsForPage);
 const diaryNotebookUiCopy = getDiaryNotebookUiCopy(uiCopy);
 ---
 
@@ -417,13 +430,7 @@ const diaryNotebookUiCopy = getDiaryNotebookUiCopy(uiCopy);
                   </svg>
                 </button>
               </div>
-              <DiaryNotebook
-                client:load
-                entries={diaryEntries}
-                initialLocale={locale}
-                layout="modal"
-                uiCopy={diaryNotebookUiCopy}
-              />
+              <div data-diary-notebook-root="modal"></div>
             </div>
           </div>
 
@@ -463,7 +470,7 @@ const diaryNotebookUiCopy = getDiaryNotebookUiCopy(uiCopy);
         <div class="intro-ornaments" aria-hidden="true">
           <img
             class="intro-ornament-image"
-            src="/ornaments/intro-time-map.png"
+            src={publicAsset("/ornaments/intro-time-map.png")}
             alt=""
             loading="lazy"
           />
@@ -488,11 +495,7 @@ const diaryNotebookUiCopy = getDiaryNotebookUiCopy(uiCopy);
           <h2 data-sections-title>{ui.sectionsTitle}</h2>
         </div>
       </div>
-      <FeatureSpotCarousel
-        client:visible
-        cardsByLocale={featureCardsByLocale}
-        initialLocale={locale}
-      />
+      <div data-feature-carousel-root></div>
     </section>
 
     <section class="content-block content-block--diary" id="diary">
@@ -500,12 +503,7 @@ const diaryNotebookUiCopy = getDiaryNotebookUiCopy(uiCopy);
         <h2 data-diary-title>{ui.diarySectionTitle}</h2>
         <p data-diary-body>{ui.diarySectionBody}</p>
       </div>
-      <DiaryNotebook
-        client:visible
-        entries={diaryEntries}
-        initialLocale={locale}
-        uiCopy={diaryNotebookUiCopy}
-      />
+      <div data-diary-notebook-root="page"></div>
     </section>
 
     <footer class="site-footer">
@@ -527,7 +525,7 @@ const diaryNotebookUiCopy = getDiaryNotebookUiCopy(uiCopy);
     is:inline
     id="spots-data"
     type="application/json"
-    set:html={JSON.stringify(spots)}
+    set:html={JSON.stringify(spotsForPage)}
   />
   <script
     is:inline
@@ -541,5 +539,29 @@ const diaryNotebookUiCopy = getDiaryNotebookUiCopy(uiCopy);
     type="application/json"
     set:html={JSON.stringify(themeByMode)}
   />
-  <script is:inline type="module" src={mapPageScript}></script>
+  <script
+    is:inline
+    id="feature-cards-data"
+    type="application/json"
+    set:html={JSON.stringify(featureCardsByLocale)}
+  />
+  <script
+    is:inline
+    id="diary-entries-data"
+    type="application/json"
+    set:html={JSON.stringify(diaryEntries)}
+  />
+  <script
+    is:inline
+    id="diary-notebook-ui-data"
+    type="application/json"
+    set:html={JSON.stringify(diaryNotebookUiCopy)}
+  />
+  <script
+    is:inline
+    id="map-geojson-data"
+    type="application/json"
+    set:html={mapGeoJsonRaw}
+  />
+  <script is:inline src="./app.iife.js"></script>
 </BaseLayout>

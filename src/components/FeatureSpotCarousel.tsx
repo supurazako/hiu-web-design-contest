@@ -24,6 +24,10 @@ const localeChangeEventName = "time-map:locale-change";
 const autoplayResumeDelayMs = 3200;
 const wheelSnapThreshold = 48;
 const wheelGestureIdleMs = 220;
+const publicAsset = (path: string) =>
+  path.startsWith("/")
+    ? `${import.meta.env.BASE_URL === "/" || import.meta.env.BASE_URL === "/./" ? "./" : import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`
+    : path;
 
 const FeatureSpotCardView = ({
   card,
@@ -51,7 +55,7 @@ const FeatureSpotCardView = ({
 
         <div className="relative min-h-[240px] overflow-hidden bg-[color:var(--md-sys-color-surface-container-high)] md:min-h-full">
           <img
-            src={card.imageSrc}
+            src={publicAsset(card.imageSrc)}
             alt={card.imageAlt}
             loading="lazy"
             className="absolute inset-0 h-full w-full object-cover"

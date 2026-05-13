@@ -52,5 +52,5 @@ pids
 *.osm.pbf
 
 # 応募関係書類
-wdc_entry.doc
+*.doc
 
