@@ -440,6 +440,10 @@ export default function DiaryNotebook({
           transform-style: preserve-3d;
         }
 
+        .diary-notebook--modal .diary-notebook__nav {
+          margin-top: 16px;
+        }
+
         @media (min-width: 768px) {
           .diary-notebook--modal {
             display: flex;
@@ -550,6 +554,7 @@ export default function DiaryNotebook({
           .diary-notebook--modal .diary-notebook__nav {
             flex: 0 0 auto;
             gap: 10px;
+            margin-top: 0;
           }
 
           .diary-notebook--modal .diary-notebook__nav-button {
