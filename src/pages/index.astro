@@ -10,6 +10,7 @@ import { getDiaryEntries, getDiaryNotebookUiCopy } from "../data/diary";
 import { themeByMode, uiCopy } from "../data/site";
 import { spots } from "../data/spots";
 
+const isDev = import.meta.env.DEV;
 const publicAsset = (path: string) => {
   const base = import.meta.env.BASE_URL;
   const relativeBase = base === "/" || base === "/./" ? "./" : base;
@@ -563,5 +564,11 @@ const diaryNotebookUiCopy = getDiaryNotebookUiCopy(uiCopy);
     type="application/json"
     set:html={mapGeoJsonRaw}
   />
-  <script is:inline src="./app.iife.js"></script>
+  {
+    isDev ? (
+      <script is:inline type="module" src="/src/scripts/dev-entry.ts"></script>
+    ) : (
+      <script is:inline src="./app.iife.js"></script>
+    )
+  }
 </BaseLayout>
