@@ -79,6 +79,9 @@ export const createSpotCardRenderer = ({
       refs.spotOpeningHours.hidden = true;
       refs.spotOpeningHoursLabel.textContent = "";
       refs.spotOpeningHoursValue.textContent = "";
+      refs.spotPriceGuide.hidden = true;
+      refs.spotPriceGuideLabel.textContent = "";
+      refs.spotPriceGuideValue.textContent = "";
       refs.spotEmpty.hidden = true;
       refs.spotEmptyTitle.textContent = ui.cardEmptyTitle;
       refs.spotEmptyHint.textContent = ui.cardEmptyHint;
@@ -91,6 +94,7 @@ export const createSpotCardRenderer = ({
     refs.spotVisual.hidden = false;
     refs.spotTitle.hidden = false;
     refs.spotOpeningHours.hidden = false;
+    refs.spotPriceGuide.hidden = !spot.priceGuide;
     refs.spotDescription.hidden = false;
     refs.spotDiary.hidden = true;
     refs.spotEmpty.hidden = true;
@@ -125,6 +129,11 @@ export const createSpotCardRenderer = ({
     refs.spotOpeningHoursLabel.textContent =
       ui.openingHoursLabels[spot.categoryId];
     refs.spotOpeningHoursValue.textContent = spot.openingHours[state.locale];
+    refs.spotPriceGuideLabel.textContent = spot.priceGuide
+      ? ui.priceGuideLabel
+      : "";
+    refs.spotPriceGuideValue.textContent =
+      spot.priceGuide?.[state.locale] ?? "";
     refs.spotDescription.textContent = spot.description[state.locale];
 
     if (spot.diary && isDiaryDiscovered(spot.id)) {

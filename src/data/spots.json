@@ -33,7 +33,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Olena Bohovyk on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/"
+    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/",
+    "priceGuide": {
+      "ja": "昼 1,100-1,700円 / 夜 2,800円前後",
+      "en": "Lunch ¥1,100-1,700 / Dinner around ¥2,800"
+    }
   },
   {
     "id": "spot-002",
@@ -69,7 +73,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Olena Bohovyk on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/"
+    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/",
+    "priceGuide": {
+      "ja": "昼 1,500-2,300円",
+      "en": "Lunch ¥1,500-2,300"
+    }
   },
   {
     "id": "spot-003",
@@ -105,7 +113,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Olena Bohovyk on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/"
+    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/",
+    "priceGuide": {
+      "ja": "昼 1,200-1,900円",
+      "en": "Lunch ¥1,200-1,900"
+    }
   },
   {
     "id": "spot-004",
@@ -141,7 +153,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Olena Bohovyk on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/"
+    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/",
+    "priceGuide": {
+      "ja": "カフェ 900-1,600円",
+      "en": "Cafe ¥900-1,600"
+    }
   },
   {
     "id": "spot-005",
@@ -177,7 +193,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Alexandr Kozlenko on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/a-pizza-in-an-oven-11181966/"
+    "image_source_url": "https://www.pexels.com/photo/a-pizza-in-an-oven-11181966/",
+    "priceGuide": {
+      "ja": "ジェラート 500-900円",
+      "en": "Gelato ¥500-900"
+    }
   },
   {
     "id": "spot-006",
@@ -213,7 +233,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Nadin Sh on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/ramen-in-a-bowl-on-a-table-18743149/"
+    "image_source_url": "https://www.pexels.com/photo/ramen-in-a-bowl-on-a-table-18743149/",
+    "priceGuide": {
+      "ja": "昼 900-1,400円",
+      "en": "Lunch ¥900-1,400"
+    }
   },
   {
     "id": "spot-007",
@@ -249,7 +273,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Andrew Patrick Photo on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/glass-of-beer-15991210/"
+    "image_source_url": "https://www.pexels.com/photo/glass-of-beer-15991210/",
+    "priceGuide": {
+      "ja": "夜 2,500-4,000円",
+      "en": "Dinner ¥2,500-4,000"
+    }
   },
   {
     "id": "spot-008",
@@ -285,7 +313,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Olena Bohovyk on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/"
+    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/",
+    "priceGuide": {
+      "ja": "昼 1,300-2,000円",
+      "en": "Lunch ¥1,300-2,000"
+    }
   },
   {
     "id": "spot-009",
@@ -321,7 +353,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Andrew Patrick Photo on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/glass-of-beer-15991210/"
+    "image_source_url": "https://www.pexels.com/photo/glass-of-beer-15991210/",
+    "priceGuide": {
+      "ja": "夜 2,000-3,500円",
+      "en": "Drinks ¥2,000-3,500"
+    }
   },
   {
     "id": "spot-010",
@@ -357,7 +393,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Olena Bohovyk on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/"
+    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/",
+    "priceGuide": {
+      "ja": "カフェ 1,200-1,800円",
+      "en": "Cafe ¥1,200-1,800"
+    }
   },
   {
     "id": "spot-011",
@@ -393,7 +433,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Olena Bohovyk on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/"
+    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/",
+    "priceGuide": {
+      "ja": "甘味 500-1,200円",
+      "en": "Sweets ¥500-1,200"
+    }
   },
   {
     "id": "spot-012",
@@ -429,7 +473,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Andrew Patrick Photo on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/glass-of-beer-15991210/"
+    "image_source_url": "https://www.pexels.com/photo/glass-of-beer-15991210/",
+    "priceGuide": {
+      "ja": "夜 3,000-4,800円",
+      "en": "Dinner ¥3,000-4,800"
+    }
   },
   {
     "id": "spot-013",
@@ -465,7 +513,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Olena Bohovyk on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/"
+    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/",
+    "priceGuide": {
+      "ja": "喫茶 700-1,300円",
+      "en": "Cafe ¥700-1,300"
+    }
   },
   {
     "id": "spot-014",
@@ -501,7 +553,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by minami okamoto on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/soba-noodles-on-plate-26727317/"
+    "image_source_url": "https://www.pexels.com/photo/soba-noodles-on-plate-26727317/",
+    "priceGuide": {
+      "ja": "昼 1,000-1,600円",
+      "en": "Lunch ¥1,000-1,600"
+    }
   },
   {
     "id": "spot-015",
@@ -537,7 +593,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Lucas Durães on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/delicious-japanese-udon-noodles-with-chopsticks-31299691/"
+    "image_source_url": "https://www.pexels.com/photo/delicious-japanese-udon-noodles-with-chopsticks-31299691/",
+    "priceGuide": {
+      "ja": "昼 900-1,500円",
+      "en": "Lunch ¥900-1,500"
+    }
   },
   {
     "id": "spot-016",
@@ -573,7 +633,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Andrew Patrick Photo on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/glass-of-beer-15991210/"
+    "image_source_url": "https://www.pexels.com/photo/glass-of-beer-15991210/",
+    "priceGuide": {
+      "ja": "軽食 700-1,400円",
+      "en": "Light meal ¥700-1,400"
+    }
   },
   {
     "id": "spot-017",
@@ -623,7 +687,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Olena Bohovyk on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/"
+    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/",
+    "priceGuide": {
+      "ja": "パン 300-900円",
+      "en": "Bakery ¥300-900"
+    }
   },
   {
     "id": "spot-018",
@@ -659,7 +727,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Alexandr Kozlenko on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/a-pizza-in-an-oven-11181966/"
+    "image_source_url": "https://www.pexels.com/photo/a-pizza-in-an-oven-11181966/",
+    "priceGuide": {
+      "ja": "昼 1,400-2,300円",
+      "en": "Lunch ¥1,400-2,300"
+    }
   },
   {
     "id": "spot-019",
@@ -695,7 +767,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Nadin Sh on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/ramen-in-a-bowl-on-a-table-18743149/"
+    "image_source_url": "https://www.pexels.com/photo/ramen-in-a-bowl-on-a-table-18743149/",
+    "priceGuide": {
+      "ja": "夜 900-1,600円",
+      "en": "Dinner ¥900-1,600"
+    }
   },
   {
     "id": "spot-020",
@@ -731,7 +807,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Olena Bohovyk on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/"
+    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/",
+    "priceGuide": {
+      "ja": "甘味 800-1,500円",
+      "en": "Sweets ¥800-1,500"
+    }
   },
   {
     "id": "spot-021",
@@ -767,7 +847,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Olena Bohovyk on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/"
+    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/",
+    "priceGuide": {
+      "ja": "菓子 400-1,200円",
+      "en": "Sweets ¥400-1,200"
+    }
   },
   {
     "id": "spot-022",
@@ -803,7 +887,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Andrew Patrick Photo on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/glass-of-beer-15991210/"
+    "image_source_url": "https://www.pexels.com/photo/glass-of-beer-15991210/",
+    "priceGuide": {
+      "ja": "夜 3,200-5,000円",
+      "en": "Dinner ¥3,200-5,000"
+    }
   },
   {
     "id": "spot-023",
@@ -839,7 +927,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by minami okamoto on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/soba-noodles-on-plate-26727317/"
+    "image_source_url": "https://www.pexels.com/photo/soba-noodles-on-plate-26727317/",
+    "priceGuide": {
+      "ja": "昼 1,100-1,700円",
+      "en": "Lunch ¥1,100-1,700"
+    }
   },
   {
     "id": "spot-024",
@@ -875,7 +967,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Olena Bohovyk on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/"
+    "image_source_url": "https://www.pexels.com/photo/coffee-and-bread-12900869/",
+    "priceGuide": {
+      "ja": "パン 300-1,000円",
+      "en": "Bakery ¥300-1,000"
+    }
   },
   {
     "id": "spot-025",
@@ -925,7 +1021,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Andrew Patrick Photo on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/glass-of-beer-15991210/"
+    "image_source_url": "https://www.pexels.com/photo/glass-of-beer-15991210/",
+    "priceGuide": {
+      "ja": "夜 2,200-4,000円",
+      "en": "Drinks ¥2,200-4,000"
+    }
   },
   {
     "id": "spot-026",
@@ -1363,7 +1463,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Tobias Bjorkli on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/steam-of-water-flowing-over-stone-terrain-2714998/"
+    "image_source_url": "https://www.pexels.com/photo/steam-of-water-flowing-over-stone-terrain-2714998/",
+    "priceGuide": {
+      "ja": "足湯 無料",
+      "en": "Footbath free"
+    }
   },
   {
     "id": "spot-037",
@@ -1413,7 +1517,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Tobias Bjorkli on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/steam-of-water-flowing-over-stone-terrain-2714998/"
+    "image_source_url": "https://www.pexels.com/photo/steam-of-water-flowing-over-stone-terrain-2714998/",
+    "priceGuide": {
+      "ja": "足湯 無料",
+      "en": "Footbath free"
+    }
   },
   {
     "id": "spot-039",
@@ -1463,7 +1571,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Lisa Anna on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/window-in-a-hotel-room-19889153/"
+    "image_source_url": "https://www.pexels.com/photo/window-in-a-hotel-room-19889153/",
+    "priceGuide": {
+      "ja": "1泊 18,000円-",
+      "en": "Stay from ¥18,000"
+    }
   },
   {
     "id": "spot-040",
@@ -1499,7 +1611,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Jan van der Wolf on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/windows-of-a-hotel-10047588/"
+    "image_source_url": "https://www.pexels.com/photo/windows-of-a-hotel-10047588/",
+    "priceGuide": {
+      "ja": "1泊 16,000円-",
+      "en": "Stay from ¥16,000"
+    }
   },
   {
     "id": "spot-041",
@@ -1549,7 +1665,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Max Vakhtbovych on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/a-sauna-bath-with-a-wooden-interior-7598370/"
+    "image_source_url": "https://www.pexels.com/photo/a-sauna-bath-with-a-wooden-interior-7598370/",
+    "priceGuide": {
+      "ja": "日帰り 1,200円 / 1泊 20,000円-",
+      "en": "Day bath ¥1,200 / Stay from ¥20,000"
+    }
   },
   {
     "id": "spot-042",
@@ -1585,7 +1705,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Lisa Anna on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/window-in-a-hotel-room-19889153/"
+    "image_source_url": "https://www.pexels.com/photo/window-in-a-hotel-room-19889153/",
+    "priceGuide": {
+      "ja": "1泊 14,000円-",
+      "en": "Stay from ¥14,000"
+    }
   },
   {
     "id": "spot-043",
@@ -1621,7 +1745,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Jan van der Wolf on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/windows-of-a-hotel-10047588/"
+    "image_source_url": "https://www.pexels.com/photo/windows-of-a-hotel-10047588/",
+    "priceGuide": {
+      "ja": "1泊 22,000円-",
+      "en": "Stay from ¥22,000"
+    }
   },
   {
     "id": "spot-044",
@@ -1657,7 +1785,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Max Vakhtbovych on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/a-sauna-bath-with-a-wooden-interior-7598370/"
+    "image_source_url": "https://www.pexels.com/photo/a-sauna-bath-with-a-wooden-interior-7598370/",
+    "priceGuide": {
+      "ja": "1泊 9,000円-",
+      "en": "Stay from ¥9,000"
+    }
   },
   {
     "id": "spot-045",
@@ -1693,7 +1825,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Lisa Anna on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/window-in-a-hotel-room-19889153/"
+    "image_source_url": "https://www.pexels.com/photo/window-in-a-hotel-room-19889153/",
+    "priceGuide": {
+      "ja": "1棟 28,000円-",
+      "en": "Cottage from ¥28,000"
+    }
   },
   {
     "id": "spot-046",
@@ -1729,7 +1865,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Jan van der Wolf on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/windows-of-a-hotel-10047588/"
+    "image_source_url": "https://www.pexels.com/photo/windows-of-a-hotel-10047588/",
+    "priceGuide": {
+      "ja": "1泊 17,000円-",
+      "en": "Stay from ¥17,000"
+    }
   },
   {
     "id": "spot-047",
@@ -1779,7 +1919,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Max Vakhtbovych on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/a-sauna-bath-with-a-wooden-interior-7598370/"
+    "image_source_url": "https://www.pexels.com/photo/a-sauna-bath-with-a-wooden-interior-7598370/",
+    "priceGuide": {
+      "ja": "日帰り 900円",
+      "en": "Day bath ¥900"
+    }
   },
   {
     "id": "spot-048",
@@ -1815,7 +1959,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Max Vakhtbovych on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/a-sauna-bath-with-a-wooden-interior-7598370/"
+    "image_source_url": "https://www.pexels.com/photo/a-sauna-bath-with-a-wooden-interior-7598370/",
+    "priceGuide": {
+      "ja": "日帰り 1,100円",
+      "en": "Day bath ¥1,100"
+    }
   },
   {
     "id": "spot-049",
@@ -1865,7 +2013,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Max Vakhtbovych on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/a-sauna-bath-with-a-wooden-interior-7598370/"
+    "image_source_url": "https://www.pexels.com/photo/a-sauna-bath-with-a-wooden-interior-7598370/",
+    "priceGuide": {
+      "ja": "日帰り 1,300円",
+      "en": "Day bath ¥1,300"
+    }
   },
   {
     "id": "spot-050",
@@ -1901,7 +2053,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Max Vakhtbovych on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/a-sauna-bath-with-a-wooden-interior-7598370/"
+    "image_source_url": "https://www.pexels.com/photo/a-sauna-bath-with-a-wooden-interior-7598370/",
+    "priceGuide": {
+      "ja": "日帰り 800円",
+      "en": "Day bath ¥800"
+    }
   },
   {
     "id": "spot-051",
@@ -1937,7 +2093,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Max Vakhtbovych on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/a-sauna-bath-with-a-wooden-interior-7598370/"
+    "image_source_url": "https://www.pexels.com/photo/a-sauna-bath-with-a-wooden-interior-7598370/",
+    "priceGuide": {
+      "ja": "日帰り 950円",
+      "en": "Day bath ¥950"
+    }
   },
   {
     "id": "spot-052",
@@ -1973,7 +2133,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Max Vakhtbovych on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/a-sauna-bath-with-a-wooden-interior-7598370/"
+    "image_source_url": "https://www.pexels.com/photo/a-sauna-bath-with-a-wooden-interior-7598370/",
+    "priceGuide": {
+      "ja": "日帰り 1,000円",
+      "en": "Day bath ¥1,000"
+    }
   },
   {
     "id": "spot-053",
@@ -2009,7 +2173,11 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Max Vakhtbovych on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/an-empty-wooden-sauna-7587466/"
+    "image_source_url": "https://www.pexels.com/photo/an-empty-wooden-sauna-7587466/",
+    "priceGuide": {
+      "ja": "日帰り 1,500円",
+      "en": "Day bath ¥1,500"
+    }
   },
   {
     "id": "spot-054",
@@ -2045,6 +2213,10 @@
     "image_source": "Pexels",
     "image_license": "Pexels License - Free for commercial use, attribution not required",
     "image_credit": "Photo by Max Vakhtbovych on Pexels",
-    "image_source_url": "https://www.pexels.com/photo/a-sauna-bath-with-a-wooden-interior-7598370/"
+    "image_source_url": "https://www.pexels.com/photo/a-sauna-bath-with-a-wooden-interior-7598370/",
+    "priceGuide": {
+      "ja": "日帰り 1,200円",
+      "en": "Day bath ¥1,200"
+    }
   }
 ]

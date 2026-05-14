@@ -37,6 +37,9 @@ export type MapDomRefs = {
   spotOpeningHours: HTMLElement;
   spotOpeningHoursLabel: HTMLElement;
   spotOpeningHoursValue: HTMLElement;
+  spotPriceGuide: HTMLElement;
+  spotPriceGuideLabel: HTMLElement;
+  spotPriceGuideValue: HTMLElement;
   spotDescription: HTMLElement;
   spotDiary: HTMLElement;
   spotDiaryLabel: HTMLElement;
@@ -164,6 +167,13 @@ export const getMapDomRefs = (): MapDomRefs => {
     ),
     spotOpeningHoursValue: requiredElement<HTMLElement>(
       "[data-spot-opening-hours-value]",
+    ),
+    spotPriceGuide: requiredElement<HTMLElement>("[data-spot-price-guide]"),
+    spotPriceGuideLabel: requiredElement<HTMLElement>(
+      "[data-spot-price-guide-label]",
+    ),
+    spotPriceGuideValue: requiredElement<HTMLElement>(
+      "[data-spot-price-guide-value]",
     ),
     spotDescription: requiredElement<HTMLElement>("[data-spot-description]"),
     spotDiary: requiredElement<HTMLElement>("[data-spot-diary]"),

@@ -87,6 +87,7 @@ export const uiCopy = {
       onsen: "営業時間",
       sightseeing: "おすすめ時間",
     },
+    priceGuideLabel: "料金目安",
     exploreLabel: "魅力",
   },
   en: {
@@ -177,6 +178,7 @@ export const uiCopy = {
       onsen: "Opening hours",
       sightseeing: "Best time",
     },
+    priceGuideLabel: "Price guide",
     exploreLabel: "Explore",
   },
 } as const;
