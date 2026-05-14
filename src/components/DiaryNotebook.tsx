@@ -445,7 +445,6 @@ export default function DiaryNotebook({
             display: flex;
             flex-direction: column;
             gap: 12px;
-            height: 100%;
             min-height: 0;
           }
 
@@ -471,14 +470,10 @@ export default function DiaryNotebook({
           }
 
           .diary-notebook--modal .diary-book-stage {
-            display: flex;
-            flex: 1 1 auto;
             min-height: 0;
           }
 
           .diary-notebook--modal .diary-book-swipe-area {
-            display: flex;
-            flex: 1 1 auto;
             min-height: 0;
             width: 100%;
             padding: 10px;
@@ -486,15 +481,12 @@ export default function DiaryNotebook({
           }
 
           .diary-notebook--modal .diary-book-pages {
-            flex: 1 1 auto;
             min-height: 0;
-            height: 100%;
             width: 100%;
           }
 
           .diary-notebook--modal .diary-page {
-            min-height: 0;
-            height: 100%;
+            min-height: 340px;
             padding: 18px 20px;
           }
 
