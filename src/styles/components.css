@@ -416,9 +416,59 @@
   color: var(--spot-card-ink-strong);
 }
 
+.spot-card__body {
+  display: grid;
+  gap: 14px;
+}
+
+.spot-card__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 2px 0 0;
+  padding: 7px 11px;
+  border: 1px solid var(--spot-card-pill-border);
+  border-radius: 999px;
+  background: var(--spot-card-pill-bg);
+  color: var(--spot-card-ink-soft);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62);
+}
+
+.spot-card__meta[hidden] {
+  display: none;
+}
+
+.spot-card__meta dt,
+.spot-card__meta dd {
+  margin: 0;
+}
+
+.spot-card__meta dt {
+  color: var(--spot-card-accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.spot-card__meta dd {
+  min-width: 0;
+  color: var(--spot-card-ink);
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
 .spot-card p,
 .spot-card__body.is-empty p {
   color: var(--spot-card-ink);
+}
+
+.spot-card__body > p[data-spot-description] {
+  margin: 2px 0 0;
+  line-height: 1.72;
 }
 
 .spot-card__diary {
@@ -487,6 +537,7 @@
 
 .spot-card__body.is-empty {
   margin: 0;
+  display: block;
 }
 
 .leaflet-container {

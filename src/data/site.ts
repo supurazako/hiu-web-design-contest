@@ -81,6 +81,12 @@ export const uiCopy = {
     copyright: "© 2026 Jozankei Time Map",
     cardEmptyTitle: "ピンを選択",
     cardEmptyHint: "気になるスポットをひとつ選ぶと、ここに体験が表示されます。",
+    openingHoursLabels: {
+      food: "営業時間",
+      stay: "宿泊案内",
+      onsen: "営業時間",
+      sightseeing: "おすすめ時間",
+    },
     exploreLabel: "魅力",
   },
   en: {
@@ -165,6 +171,12 @@ export const uiCopy = {
     copyright: "© 2026 Jozankei Time Map",
     cardEmptyTitle: "Select a pin",
     cardEmptyHint: "Choose a visible spot to see its experience here.",
+    openingHoursLabels: {
+      food: "Opening hours",
+      stay: "Stay info",
+      onsen: "Opening hours",
+      sightseeing: "Best time",
+    },
     exploreLabel: "Explore",
   },
 } as const;

@@ -76,6 +76,9 @@ export const createSpotCardRenderer = ({
       hide();
       refs.spotCard.classList.add("is-empty-sheet");
       refs.spotCard.classList.remove("is-selected-sheet");
+      refs.spotOpeningHours.hidden = true;
+      refs.spotOpeningHoursLabel.textContent = "";
+      refs.spotOpeningHoursValue.textContent = "";
       refs.spotEmpty.hidden = true;
       refs.spotEmptyTitle.textContent = ui.cardEmptyTitle;
       refs.spotEmptyHint.textContent = ui.cardEmptyHint;
@@ -87,6 +90,7 @@ export const createSpotCardRenderer = ({
     refs.spotCard.classList.remove("is-empty-sheet");
     refs.spotVisual.hidden = false;
     refs.spotTitle.hidden = false;
+    refs.spotOpeningHours.hidden = false;
     refs.spotDescription.hidden = false;
     refs.spotDiary.hidden = true;
     refs.spotEmpty.hidden = true;
@@ -118,6 +122,9 @@ export const createSpotCardRenderer = ({
     }
 
     refs.spotTitle.textContent = spot.name[state.locale];
+    refs.spotOpeningHoursLabel.textContent =
+      ui.openingHoursLabels[spot.categoryId];
+    refs.spotOpeningHoursValue.textContent = spot.openingHours[state.locale];
     refs.spotDescription.textContent = spot.description[state.locale];
 
     if (spot.diary && isDiaryDiscovered(spot.id)) {

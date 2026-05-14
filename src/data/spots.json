@@ -3,6 +3,10 @@
     "id": "spot-001",
     "categoryId": "food",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "11:30-15:00 / 17:30-21:30",
+      "en": "11:30-15:00 / 17:30-21:30"
+    },
     "coordinates": [42.96529, 141.16244],
     "name": {
       "ja": "好吃亭（はおつーてい）",
@@ -35,6 +39,10 @@
     "id": "spot-002",
     "categoryId": "food",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "11:00-16:00",
+      "en": "11:00-16:00"
+    },
     "coordinates": [42.96782, 141.16782],
     "name": {
       "ja": "渓谷レストラン みなも",
@@ -67,6 +75,10 @@
     "id": "spot-003",
     "categoryId": "food",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "10:30-15:30",
+      "en": "10:30-15:30"
+    },
     "coordinates": [42.96562, 141.16218],
     "name": {
       "ja": "山の味処 円旬",
@@ -99,6 +111,10 @@
     "id": "spot-004",
     "categoryId": "food",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "9:30-16:30",
+      "en": "9:30-16:30"
+    },
     "coordinates": [42.9658, 141.15974],
     "name": {
       "ja": "森のテラス こもれび",
@@ -131,6 +147,10 @@
     "id": "spot-005",
     "categoryId": "food",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "11:00-16:00",
+      "en": "11:00-16:00"
+    },
     "coordinates": [42.96533, 141.16236],
     "name": {
       "ja": "Mangiare!（マンジャーレ）",
@@ -163,6 +183,10 @@
     "id": "spot-006",
     "categoryId": "food",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "10:30-15:00",
+      "en": "10:30-15:00"
+    },
     "coordinates": [42.96498, 141.16308],
     "name": {
       "ja": "渓流麺屋 しぶき",
@@ -195,6 +219,10 @@
     "id": "spot-007",
     "categoryId": "food",
     "timeMode": "night",
+    "openingHours": {
+      "ja": "17:00-22:30",
+      "en": "17:00-22:30"
+    },
     "coordinates": [42.96318, 141.16239],
     "name": {
       "ja": "川魚酒場 定山渓",
@@ -227,6 +255,10 @@
     "id": "spot-008",
     "categoryId": "food",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "11:00-16:30",
+      "en": "11:00-16:30"
+    },
     "coordinates": [42.96464, 141.16007],
     "name": {
       "ja": "Deer Table",
@@ -259,6 +291,10 @@
     "id": "spot-009",
     "categoryId": "food",
     "timeMode": "night",
+    "openingHours": {
+      "ja": "19:00-24:00",
+      "en": "19:00-24:00"
+    },
     "coordinates": [42.96324, 141.16249],
     "name": {
       "ja": "Bar KEI",
@@ -291,6 +327,10 @@
     "id": "spot-010",
     "categoryId": "food",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "10:00-17:00",
+      "en": "10:00-17:00"
+    },
     "coordinates": [42.96572, 141.15963],
     "name": {
       "ja": "梟カフェ こだま",
@@ -323,6 +363,10 @@
     "id": "spot-011",
     "categoryId": "food",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "9:00-17:00",
+      "en": "9:00-17:00"
+    },
     "coordinates": [42.96543, 141.16206],
     "name": {
       "ja": "和菓子処 ゆの花",
@@ -355,6 +399,10 @@
     "id": "spot-012",
     "categoryId": "food",
     "timeMode": "night",
+    "openingHours": {
+      "ja": "17:30-22:00",
+      "en": "17:30-22:00"
+    },
     "coordinates": [42.96672, 141.16674],
     "name": {
       "ja": "ジンギスカン 窪田",
@@ -387,6 +435,10 @@
     "id": "spot-013",
     "categoryId": "food",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "8:30-16:00",
+      "en": "8:30-16:00"
+    },
     "coordinates": [42.96616, 141.167],
     "name": {
       "ja": "珈琲 ヒロ",
@@ -419,6 +471,10 @@
     "id": "spot-014",
     "categoryId": "food",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "11:00-15:00",
+      "en": "11:00-15:00"
+    },
     "coordinates": [42.9655, 141.16193],
     "name": {
       "ja": "そば処 時",
@@ -451,6 +507,10 @@
     "id": "spot-015",
     "categoryId": "food",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "10:30-15:30",
+      "en": "10:30-15:30"
+    },
     "coordinates": [42.96486, 141.16569],
     "name": {
       "ja": "手打ちうどん 麦食",
@@ -483,6 +543,10 @@
     "id": "spot-016",
     "categoryId": "food",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "12:00-17:00",
+      "en": "12:00-17:00"
+    },
     "coordinates": [42.96636, 141.16389],
     "name": {
       "ja": "BETRINKEN（ベトリンケン）",
@@ -515,6 +579,10 @@
     "id": "spot-017",
     "categoryId": "food",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "7:00-14:00",
+      "en": "7:00-14:00"
+    },
     "coordinates": [42.96651, 141.16688],
     "name": {
       "ja": "朝霧ベーカリー",
@@ -561,6 +629,10 @@
     "id": "spot-018",
     "categoryId": "food",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "11:00-16:30",
+      "en": "11:00-16:30"
+    },
     "coordinates": [42.96734, 141.16242],
     "name": {
       "ja": "石窯ピッツァ 谷の音",
@@ -593,6 +665,10 @@
     "id": "spot-019",
     "categoryId": "food",
     "timeMode": "night",
+    "openingHours": {
+      "ja": "18:00-23:30",
+      "en": "18:00-23:30"
+    },
     "coordinates": [42.96506, 141.16319],
     "name": {
       "ja": "湯の坂らぁめん",
@@ -625,6 +701,10 @@
     "id": "spot-020",
     "categoryId": "food",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "10:00-16:00",
+      "en": "10:00-16:00"
+    },
     "coordinates": [42.9654, 141.16228],
     "name": {
       "ja": "茶房 こはるとゆき",
@@ -657,6 +737,10 @@
     "id": "spot-021",
     "categoryId": "food",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "9:30-17:30",
+      "en": "9:30-17:30"
+    },
     "coordinates": [42.96476, 141.16327],
     "name": {
       "ja": "湯けむり菓子舗",
@@ -689,6 +773,10 @@
     "id": "spot-022",
     "categoryId": "food",
     "timeMode": "night",
+    "openingHours": {
+      "ja": "17:30-22:30",
+      "en": "17:30-22:30"
+    },
     "coordinates": [42.9631, 141.1623],
     "name": {
       "ja": "炉端 山灯り",
@@ -721,6 +809,10 @@
     "id": "spot-023",
     "categoryId": "food",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "11:00-15:00",
+      "en": "11:00-15:00"
+    },
     "coordinates": [42.96773, 141.16239],
     "name": {
       "ja": "渓谷そば 霧音",
@@ -753,6 +845,10 @@
     "id": "spot-024",
     "categoryId": "food",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "8:00-15:00",
+      "en": "8:00-15:00"
+    },
     "coordinates": [42.96588, 141.16137],
     "name": {
       "ja": "こもれびブレッド",
@@ -785,6 +881,10 @@
     "id": "spot-025",
     "categoryId": "food",
     "timeMode": "night",
+    "openingHours": {
+      "ja": "17:00-23:00",
+      "en": "17:00-23:00"
+    },
     "coordinates": [42.96623, 141.16398],
     "name": {
       "ja": "定山渓ブリューハウス",
@@ -831,6 +931,10 @@
     "id": "spot-026",
     "categoryId": "sightseeing",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "散策目安 6:00-21:00",
+      "en": "Suggested walk 6:00-21:00"
+    },
     "coordinates": [42.96386, 141.15815],
     "name": {
       "ja": "翡翠川",
@@ -863,6 +967,10 @@
     "id": "spot-027",
     "categoryId": "sightseeing",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "散策目安 7:00-18:00",
+      "en": "Suggested walk 7:00-18:00"
+    },
     "coordinates": [42.96904, 141.16981],
     "name": {
       "ja": "糸雨の滝",
@@ -895,6 +1003,10 @@
     "id": "spot-028",
     "categoryId": "sightseeing",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "眺望目安 8:00-17:00",
+      "en": "View hours 8:00-17:00"
+    },
     "coordinates": [42.9667, 141.15246],
     "name": {
       "ja": "錦重ね山",
@@ -927,6 +1039,10 @@
     "id": "spot-029",
     "categoryId": "sightseeing",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "眺望目安 17:00-22:00",
+      "en": "View hours 17:00-22:00"
+    },
     "coordinates": [42.96074, 141.17464],
     "name": {
       "ja": "月見の高台",
@@ -959,6 +1075,10 @@
     "id": "spot-030",
     "categoryId": "sightseeing",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "散策目安 7:00-19:00",
+      "en": "Suggested walk 7:00-19:00"
+    },
     "coordinates": [42.96412, 141.15938],
     "name": {
       "ja": "鏡葉の渕",
@@ -991,6 +1111,10 @@
     "id": "spot-031",
     "categoryId": "sightseeing",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "散策目安 6:30-21:00",
+      "en": "Suggested walk 6:30-21:00"
+    },
     "coordinates": [42.97216, 141.17422],
     "name": {
       "ja": "ゆらぎ橋",
@@ -1023,6 +1147,10 @@
     "id": "spot-032",
     "categoryId": "sightseeing",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "散策目安 7:00-17:00",
+      "en": "Suggested walk 7:00-17:00"
+    },
     "coordinates": [42.97006, 141.17122],
     "name": {
       "ja": "浅霧川",
@@ -1069,6 +1197,10 @@
     "id": "spot-033",
     "categoryId": "sightseeing",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "散策目安 8:00-18:00",
+      "en": "Suggested walk 8:00-18:00"
+    },
     "coordinates": [42.965, 141.16296],
     "name": {
       "ja": "こだま滝",
@@ -1101,6 +1233,10 @@
     "id": "spot-034",
     "categoryId": "sightseeing",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "散策目安 7:00-20:00",
+      "en": "Suggested walk 7:00-20:00"
+    },
     "coordinates": [42.96446, 141.1581],
     "name": {
       "ja": "静音の渓谷",
@@ -1133,6 +1269,10 @@
     "id": "spot-035",
     "categoryId": "sightseeing",
     "timeMode": "night",
+    "openingHours": {
+      "ja": "夜景目安 18:30-22:30",
+      "en": "Night view 18:30-22:30"
+    },
     "coordinates": [42.96092, 141.17482],
     "name": {
       "ja": "星待ち展望台",
@@ -1179,6 +1319,10 @@
     "id": "spot-036",
     "categoryId": "onsen",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "8:00-17:00",
+      "en": "8:00-17:00"
+    },
     "coordinates": [42.96493, 141.1633],
     "name": {
       "ja": "せせらぎ足湯",
@@ -1225,6 +1369,10 @@
     "id": "spot-037",
     "categoryId": "onsen",
     "timeMode": "night",
+    "openingHours": {
+      "ja": "16:00-22:30",
+      "en": "16:00-22:30"
+    },
     "coordinates": [42.96521, 141.16518],
     "name": {
       "ja": "湯けむり足湯",
@@ -1271,6 +1419,10 @@
     "id": "spot-039",
     "categoryId": "stay",
     "timeMode": "night",
+    "openingHours": {
+      "ja": "チェックイン 16:00 / チェックアウト 10:00",
+      "en": "Check-in 16:00 / Check-out 10:00"
+    },
     "coordinates": [42.9679, 141.16871],
     "name": {
       "ja": "山灯りの宿",
@@ -1317,6 +1469,10 @@
     "id": "spot-040",
     "categoryId": "stay",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "チェックイン 15:00 / チェックアウト 10:00",
+      "en": "Check-in 15:00 / Check-out 10:00"
+    },
     "coordinates": [42.96582, 141.16313],
     "name": {
       "ja": "湯守の宿 まつかぜ",
@@ -1349,6 +1505,10 @@
     "id": "spot-041",
     "categoryId": "stay",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "日帰り案内 11:00-15:00 / 宿泊 15:00-",
+      "en": "Day visit 11:00-15:00 / Stay from 15:00"
+    },
     "coordinates": [42.96778, 141.16862],
     "name": {
       "ja": "渓泉楼",
@@ -1395,6 +1555,10 @@
     "id": "spot-042",
     "categoryId": "stay",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "チェックイン 15:00 / チェックアウト 11:00",
+      "en": "Check-in 15:00 / Check-out 11:00"
+    },
     "coordinates": [42.96932, 141.16737],
     "name": {
       "ja": "ホテル水音",
@@ -1427,6 +1591,10 @@
     "id": "spot-043",
     "categoryId": "stay",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "チェックイン 15:30 / チェックアウト 10:30",
+      "en": "Check-in 15:30 / Check-out 10:30"
+    },
     "coordinates": [42.96589, 141.16201],
     "name": {
       "ja": "花霞の宿",
@@ -1459,6 +1627,10 @@
     "id": "spot-044",
     "categoryId": "stay",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "日帰り案内 10:00-14:00 / 宿泊 15:00-",
+      "en": "Day visit 10:00-14:00 / Stay from 15:00"
+    },
     "coordinates": [42.96568, 141.16116],
     "name": {
       "ja": "民宿こまどり",
@@ -1491,6 +1663,10 @@
     "id": "spot-045",
     "categoryId": "stay",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "チェックイン 15:00 / チェックアウト 10:00",
+      "en": "Check-in 15:00 / Check-out 10:00"
+    },
     "coordinates": [42.9705, 141.1647],
     "name": {
       "ja": "森のコテージ ノカ",
@@ -1523,6 +1699,10 @@
     "id": "spot-046",
     "categoryId": "stay",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "チェックイン 15:00 / チェックアウト 11:00",
+      "en": "Check-in 15:00 / Check-out 11:00"
+    },
     "coordinates": [42.96649, 141.16969],
     "name": {
       "ja": "渓谷リゾートホテル",
@@ -1555,6 +1735,10 @@
     "id": "spot-047",
     "categoryId": "onsen",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "9:00-17:00",
+      "en": "9:00-17:00"
+    },
     "coordinates": [42.96297, 141.15855],
     "name": {
       "ja": "湯の庭",
@@ -1601,6 +1785,10 @@
     "id": "spot-048",
     "categoryId": "onsen",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "7:00-22:00",
+      "en": "7:00-22:00"
+    },
     "coordinates": [42.96489, 141.16334],
     "name": {
       "ja": "森見の湯",
@@ -1633,6 +1821,10 @@
     "id": "spot-049",
     "categoryId": "onsen",
     "timeMode": "night",
+    "openingHours": {
+      "ja": "15:00-23:00",
+      "en": "15:00-23:00"
+    },
     "coordinates": [42.97211, 141.16617],
     "name": {
       "ja": "星影の湯",
@@ -1679,6 +1871,10 @@
     "id": "spot-050",
     "categoryId": "onsen",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "6:30-22:00",
+      "en": "6:30-22:00"
+    },
     "coordinates": [42.96519, 141.16515],
     "name": {
       "ja": "源泉処 ましろ",
@@ -1711,6 +1907,10 @@
     "id": "spot-051",
     "categoryId": "onsen",
     "timeMode": "day",
+    "openingHours": {
+      "ja": "8:00-18:00",
+      "en": "8:00-18:00"
+    },
     "coordinates": [42.96483, 141.16013],
     "name": {
       "ja": "こもれび温泉",
@@ -1743,6 +1943,10 @@
     "id": "spot-052",
     "categoryId": "onsen",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "7:00-21:30",
+      "en": "7:00-21:30"
+    },
     "coordinates": [42.96504, 141.16292],
     "name": {
       "ja": "結びの湯",
@@ -1775,6 +1979,10 @@
     "id": "spot-053",
     "categoryId": "onsen",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "10:00-22:00",
+      "en": "10:00-22:00"
+    },
     "coordinates": [42.96531, 141.16301],
     "name": {
       "ja": "蒸し処 鹿火",
@@ -1807,6 +2015,10 @@
     "id": "spot-054",
     "categoryId": "onsen",
     "timeMode": "both",
+    "openingHours": {
+      "ja": "6:00-23:00",
+      "en": "6:00-23:00"
+    },
     "coordinates": [42.96591, 141.16322],
     "name": {
       "ja": "大湯殿 ひびき",

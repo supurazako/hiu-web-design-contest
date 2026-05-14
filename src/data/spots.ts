@@ -22,6 +22,7 @@ export type RawSpot = {
   id: string;
   categoryId: SpotCategoryId;
   timeMode: TimeMode;
+  openingHours: LocalizedText;
   coordinates: [number, number];
   name: LocalizedText;
   description: LocalizedText;
